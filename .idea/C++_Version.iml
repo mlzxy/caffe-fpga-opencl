@@ -6,7 +6,7 @@
       <sourceFolder url="file://$MODULE_DIR$/cpp/helper.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/cpp/main.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/build/resources/archive/RunOpenCL/convolution/convolution.cpp" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/build/resources/archive/RunOpenCL/convolution/convolution.h" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/build/resources/archive/RunOpenCL/convolution/pipelineDemo.h" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/cpp/helper.cpp" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/cmake/FindOpenCL.cmake" isTestSource="false" />
     </content>

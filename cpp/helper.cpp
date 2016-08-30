@@ -3,6 +3,20 @@
 //
 #include "helper.h"
 
+void split(const string &s, char delim, vector<string> &elems) {
+    stringstream ss(s);
+    string item;
+    while (getline(ss, item, delim)) {
+        elems.push_back(item);
+    }
+}
+
+string trim(string& str)
+{
+    size_t first = str.find_first_not_of(' ');
+    size_t last = str.find_last_not_of(' ');
+    return str.substr(first, (last-first+1));
+}
 
 static const pair<cl_int, std::string> map_pairs[] = {
         make_pair(CL_SUCCESS, TO_STRING(CL_SUCCESS)),
@@ -90,7 +104,12 @@ int loadFile2Memory(const char *filename, char **result)
 
 void release(oclSoftware& software)
 {
-    clReleaseKernel(software.mKernel);
+    // for loop on software.kernalMap
+    for (itKernelMap iterator = software.kernelMap->begin(); iterator!=software.kernelMap->end();
+            iterator++){
+        clReleaseKernel(iterator->second);
+    }
+    delete software.kernelMap;
     clReleaseProgram(software.mProgram);
 }
 
@@ -123,10 +142,13 @@ cl_int compileProgram(const oclHardware &hardware, oclSoftware &software)
         return err;
     }
     //kernel name must match
-    software.mKernel = clCreateKernel(software.mProgram, software.mKernelName, &err);
-    if (software.mKernel == 0)
-    {
-        REPORT_ERRM(err, "clCreateKernel");
+    for (itKernelMap iterator = software.kernelMap->begin(); iterator!=software.kernelMap->end();
+         iterator++){
+        (*software.kernelMap)[iterator->first] =  clCreateKernel(software.mProgram, iterator->first.c_str(), &err);
+        if ((*software.kernelMap)[iterator->first] == 0)
+        {
+            REPORT_ERRM(err, "clCreateKernel on "+iterator->first);
+        }
     }
     return CL_SUCCESS;
 }
@@ -261,14 +283,22 @@ oclHardware getOclHardware(cl_device_type type, const char *target_device)
 }
 
 
-oclSoftware getOclSoftware(const oclHardware &hardware, const char* kernelName, const char* kernelFileName)
+oclSoftware getOclSoftware(const oclHardware &hardware, const char* kernelNames, const char* kernelFileName)
 {
     unsigned char *kernelCode = 0;
 
     oclSoftware soft;
     std::memset(&soft, 0, sizeof(oclSoftware));
-    std::strcpy(soft.mKernelName, kernelName);
     std::strcpy(soft.mFileName, kernelFileName);
+    std::string kernelNameListString(kernelNames);
+    vector<std::string> kernelNameList;
+    split(kernelNameListString, ',', kernelNameList);
+    soft.kernelMap = new map<std::string, cl_kernel>;
+    //****************************//
+    for (size_t i = 0; i < kernelNameList.size(); i++){
+        (*soft.kernelMap)[kernelNameList[i]] = 0;
+    }
+    // std::strcpy(soft.mKernelName, kernelName);
     cl_int err;
     if (hardware.deviceType == CL_DEVICE_TYPE_CPU) {
         std::sprintf(soft.mCompileOptions, "-g");

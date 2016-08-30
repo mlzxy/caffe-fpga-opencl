@@ -13,6 +13,7 @@
 #include <cstdio>
 #include <ctime>
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <cassert>
 #include <fstream>
@@ -76,11 +77,14 @@ typedef  struct oclHardware {
 
 typedef  struct oclSoftware {
     cl_program mProgram;
-    cl_kernel mKernel;
-    char mKernelName[128];
     char mFileName[1024];
     char mCompileOptions[1024];
+    map<std::string, cl_kernel> *kernelMap;
 } oclSoftware;
+
+//cl_kernel mKernel;
+//char mKernelName[128];
+typedef std::map<std::string, cl_kernel>::iterator itKernelMap;
 
 typedef struct cmdArg{
     cl_device_type deviceType;
@@ -90,7 +94,7 @@ typedef struct cmdArg{
 } cmdArg;
 
 
-oclSoftware getOclSoftware(const oclHardware &hardware, const char* kernelName, const char* kernelFileName);
+oclSoftware getOclSoftware(const oclHardware &hardware, const char* kernelNames, const char* kernelFileName);
 
 oclHardware getOclHardware(cl_device_type type, const char *target_device);
 
@@ -114,4 +118,6 @@ typedef vector<std::string>  FileList;
 FileList ls(const std::string& pattern);
 std::string getFileName(const std::string& s);
 
+void split(const string &s, char delim, vector<string> &elems);
+string trim(string& str);
 #endif //C_VERSION_HELPER_H

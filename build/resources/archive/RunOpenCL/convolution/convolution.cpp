@@ -2,7 +2,7 @@
 // Created by 张鑫语 on 8/22/16.
 //
 
-#include "convolution.h"
+#include "pipelineDemo.h"
 #include <math.h>
 
 
