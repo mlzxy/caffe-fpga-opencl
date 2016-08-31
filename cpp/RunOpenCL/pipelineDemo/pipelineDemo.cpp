@@ -19,10 +19,10 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
     cl_int *h_output = (cl_int *) malloc(sizeof(cl_int)*MAX_REC_N);
 
 
-    cl_mem d_input    = clCreateBuffer(context, CL_MEM_READ_ONLY,  sizeof(cl_int)*MAX_REC_N, NULL, NULL);
-    cl_mem d_output   = clCreateBuffer(context, CL_MEM_WRITE_ONLY, sizeof(cl_int)*MAX_REC_N, NULL, NULL);
+    cl_mem d_input    = clCreateBuffer(hardware.mContext, CL_MEM_READ_ONLY,  sizeof(cl_int)*MAX_REC_N, NULL, NULL);
+    cl_mem d_output   = clCreateBuffer(hardware.mContext, CL_MEM_WRITE_ONLY, sizeof(cl_int)*MAX_REC_N, NULL, NULL);
     clSetKernelArg(kernel0, 0, sizeof(cl_mem), &d_input);
-    err  = clSetKernelArg(kernel1, 0, sizeof(cl_mem), &d_output);
+    cl_int err  = clSetKernelArg(kernel1, 0, sizeof(cl_mem), &d_output);
 
     for (int i = 0; i < MAX_REC_N; ++i) {
         h_input[i] = i;

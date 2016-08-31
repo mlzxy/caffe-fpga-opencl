@@ -41,20 +41,31 @@
 #define DEVICE_FPGA   CL_DEVICE_TYPE_ACCELERATOR
 #define CHOOSEN_DEVICE  ALPHA_DATA_KU3_DDR1
 
+/////////////////////////////////////////////// Customized Settings ///////////////////////////////////////////////
+#define PROJECT_NAME pipelineDemo
 
-
-
-// #define PLATFORM_FILTER APPLE_MAC
-// #define DISABLE_DEVICE_FILTER  true
-
-//#define PLATFORM_FILTER INTEL_OPENCL
-#define PLATFORM_FILTER NVIDIA_CUDA
+#define PLATFORM_FILTER APPLE_MAC
 #define DISABLE_DEVICE_FILTER  true
+
+//#define PLATFORM_FILTER NVIDIA_CUDA
+//#define DISABLE_DEVICE_FILTER  true
 
 // #define PLATFORM_FILTER XILINX_FPGA
 // #define DISABLE_DEVICE_FILTER  false
 
+//////////////////////////////////////////////////////////////////////////////// //////////////////////////////////
 
+// Macro for adding quotes
+#define STRINGIFY(X) STRINGIFY2(X)
+#define STRINGIFY2(X) #X
+
+// Macros for concatenating tokens
+#define CAT(X,Y) CAT2(X,Y)
+#define CAT2(X,Y) X##Y
+#define CAT_2 CAT
+#define CAT_3(X,Y,Z) CAT(X,CAT(Y,Z))
+#define CAT_4(A,X,Y,Z) CAT(A,CAT_3(X,Y,Z))
+#define INCLUDE_PROJECT_HEADER STRINGIFY(./RunOpenCL/PROJECT_NAME/PROJECT_NAME.h)
 
 #define TO_STRING(x) #x
 #define REPORT_ERR(x)  if(err != CL_SUCCESS) {std::cout << clErrorCode(err) << "\n"; return x;};

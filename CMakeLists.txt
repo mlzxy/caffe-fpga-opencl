@@ -18,7 +18,7 @@ include_directories( ${OPENCL_INCLUDE_DIR} )
 
 
 
-set(SOURCE_FILES cpp/main.cpp cpp/helper.cpp cpp/helper.h cpp/RunOpenCL/convolution/convolution.cpp cpp/RunOpenCL/convolution/convolution.h)
+set(SOURCE_FILES cpp/main.cpp cpp/helper.cpp cpp/helper.h cpp/RunOpenCL/pipelineDemo/pipelineDemo.cpp cpp/RunOpenCL/pipelineDemo/pipelineDemo.h)
 add_executable(opencl_learning ${SOURCE_FILES})
 
 #MESSAGE(STATUS ${OPENCL_LIBRARIES})

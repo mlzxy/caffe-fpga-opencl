@@ -325,7 +325,7 @@ oclSoftware getOclSoftware(const oclHardware &hardware, const char* kernelNames,
     }
 
     err = compileProgram(hardware, soft);
-    REPORT_ERRM(soft, "compileProgram Failure");
+    REPORT_ERRM(soft, "compileProgram Failure (ignore the success)");
     delete [] kernelCode;
     return soft;
 }

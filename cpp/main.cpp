@@ -3,7 +3,8 @@
 //
 
 #include "helper.h"
-#include "./RunOpenCL/vecAdd/vecAdd.h"
+#include INCLUDE_PROJECT_HEADER
+
 
 int main(int argc, char** argv) {
     double time = runProgram(argc, argv, run);
