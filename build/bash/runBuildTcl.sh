@@ -14,6 +14,24 @@ function test_pcie_fpga(){
 }
 
 
+function  xocc_sw(){
+	xocc -g --xdevice ${FPGA_KU3_DDR1}  -t sw_emu  -o $1.sw_emu.xclbin   $1
+}
+
+function  xocc_hwem(){
+	xocc  --xdevice ${FPGA_KU3_DDR1} -o $1.hw_emu.xclbin -t hw_emu $1
+}
+
+function  xocc_hw(){
+	xocc  --xdevice ${FPGA_KU3_DDR1} -o $1.hw.xclbin -t hw $1
+}
+
+function xocc_clean(){
+	rm -rf *.xclbin  *.dir
+}
+
+
+
 function sdaccel_time {
 	local start
 	start=$(date +%s.%N)
@@ -26,7 +44,7 @@ function sdaccel_time {
 function make_time {
 	local start
 	start=$(date +%s.%N)
-	make
+	make $1
 	local dur
 	dur=$(echo "$(date +%s.%N) - $start" | bc)
 	printf "Execution time: %.6f seconds" $dur
@@ -42,13 +60,23 @@ function runBuildTCL {
     cd ${PWD} ||  echo "cd ${PWD} failed!"
 }
 
-function runBuildMake() {
+function runBuildGPUMake() {
 	local PWD
 	PWD=`pwd`
 	cd ${RUN_BUILD_TCL_ROOT}/build/output/ ||  echo "cd ${RUN_BUILD_TCL_ROOT}/build/output/ failed!"
 	rm -rf ./*.exe
-	cp ${RUN_BUILD_TCL_ROOT}/cpp/RunOpenCL/$1/Makefile .
+	cp ${RUN_BUILD_TCL_ROOT}/cpp/RunOpenCL/$1/Makefile.gpu ./Makefile
 	make_time
+	cd ${PWD} ||  echo "cd ${PWD} failed!"
+}
+
+function runBuildFPGAMake() {
+	local PWD
+	PWD=`pwd`
+	cd ${RUN_BUILD_TCL_ROOT}/build/output/ ||  echo "cd ${RUN_BUILD_TCL_ROOT}/build/output/ failed!"
+	# rm -rf ./*.exe || :
+	cp ${RUN_BUILD_TCL_ROOT}/cpp/RunOpenCL/$1/Makefile.fpga ./Makefile
+	make_time build
 	cd ${PWD} ||  echo "cd ${PWD} failed!"
 }
 

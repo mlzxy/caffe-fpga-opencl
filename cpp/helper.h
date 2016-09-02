@@ -44,14 +44,14 @@
 /////////////////////////////////////////////// Customized Settings ///////////////////////////////////////////////
 #define PROJECT_NAME pipelineDemo
 
-#define PLATFORM_FILTER APPLE_MAC
-#define DISABLE_DEVICE_FILTER  true
+// #define PLATFORM_FILTER APPLE_MAC
+// #define DISABLE_DEVICE_FILTER  true
 
-//#define PLATFORM_FILTER NVIDIA_CUDA
-//#define DISABLE_DEVICE_FILTER  true
+// #define PLATFORM_FILTER NVIDIA_CUDA
+// #define DISABLE_DEVICE_FILTER  true
 
-// #define PLATFORM_FILTER XILINX_FPGA
-// #define DISABLE_DEVICE_FILTER  false
+#define PLATFORM_FILTER XILINX_FPGA
+#define DISABLE_DEVICE_FILTER  false
 
 //////////////////////////////////////////////////////////////////////////////// //////////////////////////////////
 
@@ -71,6 +71,10 @@
 #define REPORT_ERR(x)  if(err != CL_SUCCESS) {std::cout << clErrorCode(err) << "\n"; return x;};
 #define REPORT_ERRM(x,y)  if(err != CL_SUCCESS) {std::cout <<"ERROR: From " <<y <<" -> " << clErrorCode(err) << "\n"; return x;} else{cout<<"DEBUG: "<<y<<" -> Success"<<endl; }
 #define REPORT_ERR_NR(y)  if(err != CL_SUCCESS) {std::cout <<"ERROR: From " <<y <<" -> " << clErrorCode(err) << "\n"; }else{cout<<"DEBUG: "<<y<<" -> Success"<<endl;};
+
+#define DEBUG_LOG  cout<<"DEBUG: "
+#define ERROR_LOG  cout<<"ERROR: "
+
 using namespace cv;
 using namespace std;
 
@@ -130,5 +134,6 @@ FileList ls(const std::string& pattern);
 std::string getFileName(const std::string& s);
 
 void split(const string &s, char delim, vector<string> &elems);
+bool endsWith(const string& s, const string& suffix);
 string trim(string& str);
 #endif //C_VERSION_HELPER_H

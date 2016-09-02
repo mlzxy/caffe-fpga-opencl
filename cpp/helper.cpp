@@ -11,6 +11,11 @@ void split(const string &s, char delim, vector<string> &elems) {
     }
 }
 
+bool endsWith(const string& s, const string& suffix)
+{
+    return s.size() >= suffix.size() && s.rfind(suffix) == (s.size()-suffix.size());
+}
+
 string trim(string& str)
 {
     size_t first = str.find_first_not_of(' ');
@@ -142,12 +147,16 @@ cl_int compileProgram(const oclHardware &hardware, oclSoftware &software)
         return err;
     }
     //kernel name must match
+    cout <<"Iterating through "<<"kernelMap to create kernels, numOfKernels = "<< software.kernelMap->size() <<endl;
     for (itKernelMap iterator = software.kernelMap->begin(); iterator!=software.kernelMap->end();
          iterator++){
+           cout<<"Creating Kernel: "<<iterator->first.c_str()<<endl;
         (*software.kernelMap)[iterator->first] =  clCreateKernel(software.mProgram, iterator->first.c_str(), &err);
         if ((*software.kernelMap)[iterator->first] == 0)
         {
             REPORT_ERRM(err, "clCreateKernel on "+iterator->first);
+        } else{
+          cout<<"Creating Kernel: "<<iterator->first.c_str()<<" Successfully"<<endl;
         }
     }
     return CL_SUCCESS;
@@ -212,7 +221,7 @@ oclHardware getOclHardware(cl_device_type type, const char *target_device)
         REPORT_ERRM(hardware, "clGetPlatformInfo");
         cout<<"DEBUG: " <<"Available Platform Found: " << platformName << endl;
         cl_uint deviceCount = 0;
-        err = clGetDeviceIDs(platforms[i], type, 16, devices, &deviceCount);
+        err = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ACCELERATOR, 16, devices, &deviceCount);
         REPORT_ERRM(hardware, string("clGetDeviceIDs at platform: ") + string(platformName));
         cl_uint idev;
         for (idev=0; idev < deviceCount; idev++) {
@@ -233,7 +242,7 @@ oclHardware getOclHardware(cl_device_type type, const char *target_device)
         std::cout << "INFO: Selected platform " << platformName << std::endl;
 
         cl_uint deviceCount = 0;
-        err = clGetDeviceIDs(platforms[i], type, 16, devices, &deviceCount);
+        err = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ACCELERATOR, 16, devices, &deviceCount);
         REPORT_ERRM(hardware, string("clGetDeviceIDs:") + string(platformName));
         if (deviceCount == 0) {
             continue;
@@ -311,7 +320,7 @@ oclSoftware getOclSoftware(const oclHardware &hardware, const char* kernelNames,
         return soft;
     }
 
-    if (hardware.deviceType == CL_DEVICE_TYPE_ACCELERATOR) {
+    if (endsWith(string(soft.mFileName), ".xclbin")) {
         size_t n = size;
         soft.mProgram = clCreateProgramWithBinary(hardware.mContext, 1, &hardware.mDevice, &n,
                                                   (const unsigned char **) &kernelCode, 0, &err);
@@ -324,8 +333,9 @@ oclSoftware getOclSoftware(const oclHardware &hardware, const char* kernelNames,
         return soft;
     }
 
+    
     err = compileProgram(hardware, soft);
-    REPORT_ERRM(soft, "compileProgram Failure (ignore the success)");
+    REPORT_ERRM(soft, "compileProgram");
     delete [] kernelCode;
     return soft;
 }
@@ -395,6 +405,11 @@ double runProgram(int argc, char** argv, RunOpenCL F){
     cmdArg arg = parseCmdArg(argc, argv);
     oclHardware hardware = getOclHardware(arg.deviceType, ALPHA_DATA_KU3_DDR1);
     oclSoftware software = getOclSoftware(hardware, arg.mKernelName, arg.mFileName);
+
+    for (itKernelMap iterator = software.kernelMap->begin(); iterator!=software.kernelMap->end();
+            iterator++){
+        cout<<"Kernel: "<<iterator->first<<" "<<iterator->second<<endl;
+    }
 //    cout<<"INFO: CL_DEVICE_MAX_WORK_GROUP_SIZE = "<<CL_DEVICE_MAX_WORK_GROUP_SIZE<<endl;
 //    cout<<"INFO: CL_DEVICE_MAX_WORK_ITEM_SIZES = " <<CL_DEVICE_MAX_WORK_ITEM_SIZES<<endl;
 
