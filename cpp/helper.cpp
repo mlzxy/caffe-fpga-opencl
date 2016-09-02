@@ -154,9 +154,9 @@ cl_int compileProgram(const oclHardware &hardware, oclSoftware &software)
         (*software.kernelMap)[iterator->first] =  clCreateKernel(software.mProgram, iterator->first.c_str(), &err);
         if ((*software.kernelMap)[iterator->first] == 0)
         {
-            REPORT_ERRM(err, "clCreateKernel on "+iterator->first);
+            ERROR_LOG<<"clCreateKernel on "+iterator->first<<" failed"<<endl;
         } else{
-          cout<<"Creating Kernel: "<<iterator->first.c_str()<<" Successfully"<<endl;
+            DEBUG_LOG<<"Creating Kernel: "<<iterator->first.c_str()<<" Successfully"<<endl;
         }
     }
     return CL_SUCCESS;

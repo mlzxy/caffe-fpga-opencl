@@ -12,14 +12,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ea49119-6cb7-425f-b25b-15f82d66b3d6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/kernels/pipelineDemo/pipelineDemo.ll" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/bash/runBuildTcl.sh" afterPath="$PROJECT_DIR$/build/bash/runBuildTcl.sh" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/resources/sdaccel.env" afterPath="$PROJECT_DIR$/build/resources/sdaccel.env" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cpp/RunOpenCL/pipelineDemo/pipelineDemo.cpp" afterPath="$PROJECT_DIR$/cpp/RunOpenCL/pipelineDemo/pipelineDemo.cpp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cpp/RunOpenCL/pipelineDemo/pipelineDemo.tcl" afterPath="$PROJECT_DIR$/cpp/RunOpenCL/pipelineDemo/pipelineDemo.tcl" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cpp/helper.cpp" afterPath="$PROJECT_DIR$/cpp/helper.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cpp/helper.h" afterPath="$PROJECT_DIR$/cpp/helper.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kernels/pipelineDemo/pipelineDemo.cl" afterPath="$PROJECT_DIR$/kernels/pipelineDemo/pipelineDemo.cl" />
     </list>
     <ignored path="C++_Version.iws" />
@@ -78,21 +74,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="helper.cpp" pinned="false" current-in-tab="true">
+      <file leaf-file-name="helper.cpp" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cpp/helper.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="244" column="69" selection-start-line="244" selection-start-column="69" selection-end-line="244" selection-end-column="69" />
+            <state relative-caret-position="-1847">
+              <caret line="161" column="17" selection-start-line="161" selection-start-column="17" selection-end-line="161" selection-end-column="17" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pipelineDemo.cl" pinned="false" current-in-tab="false">
+      <file leaf-file-name="pipelineDemo.cl" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/kernels/pipelineDemo/pipelineDemo.cl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1260">
-              <caret line="90" column="0" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
+            <state relative-caret-position="392">
+              <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="pipelineDemo.cpp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cpp/RunOpenCL/pipelineDemo/pipelineDemo.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-112">
+              <caret line="15" column="56" selection-start-line="15" selection-start-column="56" selection-end-line="15" selection-end-column="56" />
               <folding />
             </state>
           </provider>
@@ -119,16 +125,16 @@
         <option value="$PROJECT_DIR$/cpp/RunOpenCL/vecAdd/vecAdd.cpp" />
         <option value="$PROJECT_DIR$/cpp/RunOpenCL/convolution/convolution.tcl" />
         <option value="$PROJECT_DIR$/cpp/RunOpenCL/convolution/convolution.cpp" />
-        <option value="$PROJECT_DIR$/kernels/pipelineDemo/pipelineDemo.cl" />
         <option value="$PROJECT_DIR$/build/bash/runBuildTcl.sh" />
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/cpp/helper_multiple_kernels.cpp" />
         <option value="$PROJECT_DIR$/cpp/RunOpenCL/pipelineDemo/convolution.cpp" />
         <option value="$PROJECT_DIR$/CMakeLists.txt" />
         <option value="$PROJECT_DIR$/cpp/main.cpp" />
-        <option value="$PROJECT_DIR$/cpp/RunOpenCL/pipelineDemo/pipelineDemo.cpp" />
         <option value="$PROJECT_DIR$/cpp/helper.h" />
+        <option value="$PROJECT_DIR$/cpp/RunOpenCL/pipelineDemo/pipelineDemo.cpp" />
         <option value="$PROJECT_DIR$/cpp/helper.cpp" />
+        <option value="$PROJECT_DIR$/kernels/pipelineDemo/pipelineDemo.cl" />
       </list>
     </option>
   </component>
@@ -196,7 +202,47 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="kernels" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pipelineDemo" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="C++_Version" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="C++_Version" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="C++_Version" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="C++_Version" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RunOpenCL" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="pipelineDemo" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -516,12 +562,12 @@
       <workItem from="1472529194100" duration="5261000" />
       <workItem from="1472584564067" duration="3974000" />
       <workItem from="1472703827891" duration="2073000" />
-      <workItem from="1472848194886" duration="2261000" />
+      <workItem from="1472848194886" duration="4202000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="56057000" />
+    <option name="totallyTimeSpent" value="57998000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="808" extended-state="6" />
@@ -892,14 +938,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cpp/RunOpenCL/pipelineDemo/pipelineDemo.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="21" column="17" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -916,14 +954,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kernels/pipelineDemo/pipelineDemo.cl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1260">
-          <caret line="90" column="0" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cpp/helper.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1582">
@@ -934,10 +964,26 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/cpp/RunOpenCL/pipelineDemo/pipelineDemo.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-112">
+          <caret line="15" column="56" selection-start-line="15" selection-start-column="56" selection-end-line="15" selection-end-column="56" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/cpp/helper.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="244" column="69" selection-start-line="244" selection-start-column="69" selection-end-line="244" selection-end-column="69" />
+        <state relative-caret-position="-1847">
+          <caret line="161" column="17" selection-start-line="161" selection-start-column="17" selection-end-line="161" selection-end-column="17" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kernels/pipelineDemo/pipelineDemo.cl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="392">
+          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
           <folding />
         </state>
       </provider>

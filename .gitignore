@@ -36,3 +36,7 @@ sdaccel.log
 .Xil
 
 build/output/
+
+*.ll
+
+*.xml
