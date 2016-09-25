@@ -4,6 +4,7 @@
 # cd ${DIR} || echo "cd ${DIR} failed!" && exit
 # now figure out why! oh yeah
 RUN_BUILD_TCL_ROOT=/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version
+ROOT=$HOME/Dropbox/Centos_WorkSpace/OpenCL/C++_Version
 
 function gen_ku3_driver(){
 	xbinst -x $FPGA_KU3_DDR1 -d $1
@@ -86,6 +87,10 @@ function gpu_env() {
 
 function fpga_env(){
 	source ${RUN_BUILD_TCL_ROOT}/build/resources/sdaccel.env
+}
+
+function convert_net(){
+    python2.7 ${ROOT}/convertor/src/convert.py  -m ${ROOT}/convertor/data/${1}/model.caffemodel  -p ${ROOT}/convertor/data/${1}/train.prototxt  -o ${ROOT}/convertor/output  -n ${1}
 }
 
 

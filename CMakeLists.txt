@@ -3,7 +3,7 @@ project(opencl_learning)
 
 
 ## Set
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread -std=c++11")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 
@@ -18,7 +18,7 @@ include_directories( ${OPENCL_INCLUDE_DIR} )
 
 
 
-set(SOURCE_FILES cpp/main.cpp cpp/helper.cpp cpp/helper.h cpp/RunOpenCL/pipelineDemo/pipelineDemo.cpp cpp/RunOpenCL/pipelineDemo/pipelineDemo.h)
+set(SOURCE_FILES cpp/main.cpp cpp/helper.cpp cpp/helper.h cpp/json.hpp)
 add_executable(opencl_learning ${SOURCE_FILES})
 
 #MESSAGE(STATUS ${OPENCL_LIBRARIES})

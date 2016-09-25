@@ -1,0 +1,45 @@
+#### NOT WORKING FOR EMULATION ####
+# The tutorial pipe connected kernel is correctly compiled
+
+FLOW:=hw_emu  # sw_emu, hw, hw_emu
+PROJECT:=pipelineDemo
+KernelArg:=kernel0,kernel1
+
+####
+Device:=xilinx:adm-pcie-ku3:1ddr:2.1
+Root=../..
+BaseSrc=$(Root)/cpp/main.cpp $(Root)/cpp/helper.cpp
+BaseHeader=$(Root)/cpp/helper.h
+
+# Source Code
+SRC=$(BaseSrc) $(Root)/cpp/RunOpenCL/$(PROJECT)/$(PROJECT).cpp
+HEADER=$(BaseHeader)  $(Root)/cpp/RunOpenCL/$(PROJECT)/$(PROJECT).h
+CLSRC=$(Root)/kernels/$(PROJECT)/$(PROJECT).cl
+
+## Library
+
+
+# Tool
+CC=$(XILINX_SDACCEL)/lnx64/tools/gcc/bin/g++
+HOST_CFLAGS = -DFPGA_DEVICE -g -Wall -I$(XILINX_SDACCEL)/runtime/include/1_2   		-I$(XILINX_SDACCEL)/include
+HOST_LFLAGS = -L$(XILINX_OPENCL)/runtime/lib/x86_64  -L$(XILINX_SDACCEL)/lnx64/tools/opencv  -lxilinxopencl  -lopencv_core -lopencv_highgui -lopencv_imgproc -lavcodec -lavformat -lavutil -lswscale
+EXE = $(PROJECT).$(strip $(FLOW)).exe
+
+CLCC=xocc
+CLBIN=$(PROJECT).$(strip $(FLOW)).xclbin
+CLCC_FLAGS= --xdevice $(Device) -t $(FLOW)
+ifeq (${FLOW}, sw_emu)
+	CLCC_FLAGS += -g
+endif
+
+
+build: host xclbin
+
+run:
+	./$(EXE) -f $(CLBIN) -k $(KernelArg)
+
+host:
+	$(CC) $(HOST_CFLAGS) $(HOST_LFLAGS) $(SRC) -o $(EXE)
+
+xclbin:
+	$(CLCC) $(CLCC_FLAGS) -o $(CLBIN)  $(CLSRC)

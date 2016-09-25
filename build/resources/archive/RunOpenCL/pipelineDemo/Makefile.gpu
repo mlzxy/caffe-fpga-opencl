@@ -1,0 +1,41 @@
+CPP := g++
+
+ROOT := ../../
+PROJECT_NAME := pipelineDemo
+
+SOURCES := $(ROOT)/cpp/main.cpp $(ROOT)/cpp/helper.cpp $(ROOT)/cpp/helper.h $(ROOT)/cpp/RunOpenCL/$(PROJECT_NAME)/$(PROJECT_NAME).cpp   $(ROOT)/cpp/RunOpenCL/$(PROJECT_NAME)/$(PROJECT_NAME).h
+
+kernelFile := $(ROOT)kernels/$(PROJECT_NAME)/$(PROJECT_NAME).cl
+
+
+CUDA := /usr/local/cuda
+OPENCL_INC := $(CUDA)/include
+OPENCL_LIB := $(CUDA)/lib64
+OPENCV_LIB := /opt/lib
+OPENCV_INC := /opt/include
+AV_LIB := /usr/local/lib
+LINK_FLAGS := -lopencv_core -lopencv_highgui -lopencv_imgproc -lavcodec -lavformat -lavutil -lswscale -lOpenCL
+
+CXX_FLAGS := -Wall -Werror -fpermissive
+NOW := $(shell date +"%c" | tr ' :' '__')
+OUTPUT := $(PROJECT_NAME)
+
+
+
+
+.PHONY: all
+
+
+
+all: exe
+
+	# export LD_LIBRARY_PATH="" -> this is for runtime!!!!!!!
+exe:
+	$(CPP) $(CXX_FLAGS) -I$(OPENCL_INC) -I$(OPENCV_INC) -L$(OPENCL_LIB) -L$(OPENCV_LIB) -L$(AV_LIB)  $(LINK_FLAGS) $(SOURCES) -o $(OUTPUT).exe
+
+
+run:
+	./$(OUTPUT).exe  -k kernel0,kernel1  -f $(kernelFile) -d gpu
+
+clean:
+	rm -rf *.exe *.o

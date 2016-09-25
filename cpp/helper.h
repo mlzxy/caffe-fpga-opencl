@@ -19,6 +19,7 @@
 #include <fstream>
 #include <glob.h>
 #include <opencv2/highgui/highgui.hpp>
+#include "json.hpp"
 
 #ifdef __APPLE__
 #include <OpenCL/cl.h>
@@ -42,16 +43,16 @@
 #define CHOOSEN_DEVICE  ALPHA_DATA_KU3_DDR1
 
 /////////////////////////////////////////////// Customized Settings ///////////////////////////////////////////////
-#define PROJECT_NAME pipelineDemo
+#define PROJECT_NAME convolutionLayer
 
-// #define PLATFORM_FILTER APPLE_MAC
-// #define DISABLE_DEVICE_FILTER  true
+#define PLATFORM_FILTER APPLE_MAC
+#define DISABLE_DEVICE_FILTER  true
 
 // #define PLATFORM_FILTER NVIDIA_CUDA
 // #define DISABLE_DEVICE_FILTER  true
 
-#define PLATFORM_FILTER XILINX_FPGA
-#define DISABLE_DEVICE_FILTER  false
+//#define PLATFORM_FILTER XILINX_FPGA
+//#define DISABLE_DEVICE_FILTER  false
 
 //////////////////////////////////////////////////////////////////////////////// //////////////////////////////////
 
@@ -77,7 +78,7 @@
 
 using namespace cv;
 using namespace std;
-
+using json = nlohmann::json;
 
 
 typedef  struct oclHardware {

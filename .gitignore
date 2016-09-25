@@ -40,3 +40,6 @@ build/output/
 *.ll
 
 *.xml
+
+
+convertor/output/_output
