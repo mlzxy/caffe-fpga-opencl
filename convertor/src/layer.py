@@ -8,11 +8,14 @@ class Layer:
         self.type = type
         self.bias = empty
         self.weight = empty
-        self.info = 'Layer {0}'.format(type)
         self.blob = data['blob']
         self.model_param = data['model_param']
         self.proto_param = data['proto_param']
-        self.param = defaultdict(lambda:0)
+        layer_name = ''
+        if self.proto_param:
+            layer_name = ':'+self.proto_param.name
+        self.info = 'Layer {0}{1}'.format(type, layer_name)
+        self.param = defaultdict(lambda:int(0))
         if self.model_param:
             self.param['output_channel'] = self.model_param.channels
             self.param['output_width'] = self.model_param.width
@@ -52,7 +55,7 @@ class Layer:
             },
             'info':self.info,
             'param':{
-                'scale':self.param['scale'],
+                'scale': self.param['scale'],
                 'max_pool':self.param['max_pool'],
                 'ave_pool': self.param['ave_pool'],
                 'stride': self.param['stride'],
@@ -82,12 +85,14 @@ class Convolution(Layer):
         self.param['stride'] = conv_param.stride[0]
         if len(conv_param.dilation) > 0:
             self.param['dilation'] = conv_param.dilation[0]
+        else:
+            self.param['dilation'] = 1
         if len(conv_param.pad) > 0:
             self.param['pad'] = conv_param.pad[0]
 
-        self.info = "{0} - Kernel [{1},{1}], Pad {2}, Stride {3} - Output Information: channel {4}, width {5}, height {6}"\
-            .format(self.info, self.param['kernel_size'], self.param['pad'], self.param['stride'],
-                    self.model_param.channels, self.model_param.width, self.model_param.height)
+        self.info = "{0} - Kernel [{1},{1}], Pad {2}, Stride {3}, Dilation {4} - Output Information: channel {5}, width {6}, height {7}"\
+            .format(self.info, self.param['kernel_size'], self.param['pad'], self.param['stride'], self.param['dilation'],
+                    self.param['output_channel'], self.param['output_width'], self.param['output_height'])
         self.weight = self.blob[0].data
         self.bias = self.blob[1].data
 
@@ -102,8 +107,9 @@ class Pooling(Layer):
             self.param['max_pool'] = 1
         self.param['stride'] = pooling_param.stride
         self.param['kernel_size'] = pooling_param.kernel_size
-        self.info = "{0} - Kernel [{1},{1}], Stride {2} - Output Information: channel {3}, width {4}, height {5}" \
-            .format(self.info, self.param['kernel_size'], self.param['stride'],self.model_param.channels, self.model_param.width, self.model_param.height)
+        self.info = "{0} - Kernel [{1},{1}], Pad {3}, Stride {2} - Output Information: channel {4}, width {5}, height {6}" \
+            .format(self.info, self.param['kernel_size'], self.param['stride'], self.param['pad'],
+                    self.param['output_channel'], self.param['output_width'], self.param['output_height'])
 
 
 class Data(Layer):
@@ -112,8 +118,6 @@ class Data(Layer):
         self.info = "{0} - Output Information: channel {1}, width {2}, height {3}"\
             .format(self.info, self.model_param.channels, self.model_param.width, self.model_param.height)
         self.param['scale'] = self.proto_param.transform_param.scale
-
-
 
 lt.connect(lt.Relu, Activation)
 lt.connect(lt.Pooling, Pooling)

@@ -14,7 +14,7 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
     char *netJson = 0;
     INFO_LOG<<"Start to read "<<arg.network<<endl;
     int jsonSize = loadFile2Memory(arg.network, &netJson);
-    INFO_LOG<<"Read "<<arg.network<<"finished"<<endl;
+    INFO_LOG<<"Read network json "<<arg.network<<" finished"<<endl;
     if(jsonSize < 0){
         ERROR_LOG<<"Fail to load "<<arg.network<<endl;
     }
@@ -28,13 +28,12 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
     Net *net = new Net(netRoot);
     INFO_LOG<<"Net build finished."<<endl;
 
-    map<std::string, int> dataParam = net->layers[0]->param;
+    NetParam dataParam = (*(net->layers))[0]->param;
+    NetParam labelParam = (*(net->layers))[net->num_layers-1]->param;
 
-
-    cl_mem input_image = clCreateBuffer(hardware.mContext, CL_MEM_READ_ONLY,
-                                        dataParam["channel"]*dataParam["height"]* dataParam["width"], NULL, &err);
+    cl_mem input_image = clCreateBuffer(hardware.mContext, CL_MEM_READ_ONLY, dataParam["output_fm_data_num"], NULL, &err);
     ERR(0.0);
-    cl_mem output_label = clCreateBuffer(hardware.mContext, CL_MEM_WRITE_ONLY, 10, NULL, &err);
+    cl_mem output_label = clCreateBuffer(hardware.mContext, CL_MEM_WRITE_ONLY, labelParam["output_fm_data_num"], NULL, &err);
     ERR(0.0);
     for(int i = 0; i<MNIST_TEST_NUM; i++){
         //TODO

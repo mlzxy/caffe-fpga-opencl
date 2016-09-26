@@ -142,6 +142,8 @@ void split(const string &s, char delim, vector<string> &elems);
 bool endsWith(const string& s, const string& suffix);
 string trim(string& str);
 
+typedef std::map<std::string, double> NetParam;
+
 enum LayerType {Convolution, Relu, Data, Split, Pooling, Accuracy, SoftmaxWithLoss};
 
 class Layer {
@@ -158,14 +160,14 @@ public:
     int weight_data_num;
     int bias_data_num;
     int output_fm_data_num;
-    map<std::string, int> param;
+    NetParam param;
     std::string info;
 };
 
 
 class Net{
 public:
-    std::vector<Layer*> layers;
+    std::vector<Layer*> *layers;
     int num_layers;
     int max_weight_data_num;
     int max_bias_data_num;

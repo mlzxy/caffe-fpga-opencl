@@ -504,7 +504,7 @@ Layer::Layer(Json::Value data){
     }
 
     for( Json::ValueIterator itr = data["param"].begin() ; itr !=  data["param"].end() ; itr++ ) {
-        param[itr.key().asString()] = (*itr).asInt();
+        param[itr.key().asString()] = (*itr).asDouble();
     }
 
     output_fm_data_num = data["output_fm_data_num"].asInt();
@@ -522,15 +522,18 @@ Net::Net(Json::Value data){
     max_output_fm_data_num = data["max_output_fm_data_num"].asInt();
     max_weight_data_num = data["max_weight_data_num"].asInt();
     max_bias_data_num = data["max_bias_data_num"].asInt();
+    layers = new std::vector<Layer*>(num_layers);
     for(int i = 0; i < num_layers; i++){
-        layers[i] = new Layer(data["layers"][i]);
+        cout<<"Construct Layer -> "<<data["layers"][i]["info"].asString()<<endl;
+        (*layers)[i] = new Layer(data["layers"][i]);
     }
 }
 
 Net::~Net() {
-    for (std::vector< Layer* >::iterator it = layers.begin() ; it != layers.end(); ++it)
+    for (std::vector< Layer* >::iterator it = layers->begin() ; it != layers->end(); ++it)
     {
         delete (*it);
     }
-    layers.clear();
+    layers->clear();
+    delete layers;
 }
