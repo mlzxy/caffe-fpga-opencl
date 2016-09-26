@@ -359,6 +359,7 @@ cmdArg parseCmdArg(int argc, char** argv){
             {"device",      required_argument, 0, 'd'},
             {"kernel_name", required_argument, 0, 'k'},
             {"kernel_file", required_argument, 0, 'f'},
+            {"network",     optional_argument, 0, 'n'},
             {"data_dir",    optional_argument,  0, 'i'},
             {"help",        no_argument,       0, 'h'},
             {0, 0, 0, 0}
@@ -390,6 +391,9 @@ cmdArg parseCmdArg(int argc, char** argv){
                     printHelp();
                     exit(1);
                 }
+                break;
+            case 'n':
+                strcpy(arg.network, optarg);
                 break;
             case 'h':
             default:
@@ -458,4 +462,74 @@ std::string getFileName(const std::string& s) {
         return(s.substr(i+1, s.length() - i));
     }
     return("");
+}
+
+Layer::Layer(Json::Value data){
+    string ts = data.get("type", "" ).asString();
+    if(ts == "Convolution"){
+        type = Convolution;
+    }else if(ts == "ReLU"){
+        type = Relu;
+    } else if(ts == "Data"){
+        type = Data;
+    } else if(ts == "Pooling"){
+        type = Pooling;
+    } else{
+        ERROR_LOG<<"Unknown Layer Type: "<<ts<<endl;
+        return;
+    }
+    weight_dims = data["weight"]["num_dim"].asInt();
+    bias_dims = data["bias"]["num_dim"].asInt();
+    weightShape = new int[weight_dims];
+    biasShape = new int[bias_dims];
+    for(int i = 0; i<weight_dims; i++){
+        weightShape[i] = data["weight"]["shape"][i].asInt();
+    }
+    for(int i = 0; i<bias_dims; i++){
+        biasShape[i] = data["bias"]["shape"][i].asInt();
+    }
+    info = data["info"].asString();
+
+    //weight, bias
+    weight_data_num = data["weight"]["num_data"].asInt();
+    bias_data_num = data["bias"]["num_data"].asInt();
+    weight = new dataType[weight_data_num];
+    for (int i = 0; i<weight_data_num;i++){
+        weight[i] = (dataType)data["weight"]["data"][i].asDouble();
+    }
+    bias = new dataType[bias_data_num];
+    for (int i = 0; i<bias_data_num; i++){
+        bias[i] = (dataType)data["bias"]["data"][i].asDouble();
+    }
+
+    for( Json::ValueIterator itr = data["param"].begin() ; itr !=  data["param"].end() ; itr++ ) {
+        param[itr.key().asString()] = (*itr).asInt();
+    }
+
+    output_fm_data_num = data["output_fm_data_num"].asInt();
+}
+
+Layer::~Layer(){
+    delete [] biasShape;
+    delete [] weightShape;
+    delete [] weight;
+    delete [] bias;
+}
+
+Net::Net(Json::Value data){
+    num_layers = data["num_layers"].asInt();
+    max_output_fm_data_num = data["max_output_fm_data_num"].asInt();
+    max_weight_data_num = data["max_weight_data_num"].asInt();
+    max_bias_data_num = data["max_bias_data_num"].asInt();
+    for(int i = 0; i < num_layers; i++){
+        layers[i] = new Layer(data["layers"][i]);
+    }
+}
+
+Net::~Net() {
+    for (std::vector< Layer* >::iterator it = layers.begin() ; it != layers.end(); ++it)
+    {
+        delete (*it);
+    }
+    layers.clear();
 }

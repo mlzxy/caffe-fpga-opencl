@@ -17,6 +17,7 @@ class Net:
         for i in range(len(self.net_proto.layer)):
             self.prototxt_dict[self.net_proto.layer[i].name] = self.net_proto.layer[i]
 
+        prev_layer = None
         for i in range(len(self.net.layers)):
             layer = self.net.layers[i]
             name = self.net._layer_names[i]
@@ -29,8 +30,10 @@ class Net:
             l = construct(self.fitDataLayer(layer.type),
                                       {'blob':layer.blobs,
                                        'model_param':model_param,
-                                       'proto_param':proto_param})
+                                       'proto_param':proto_param,
+                                       'prev':prev_layer})
             if l:
+                prev_layer = l
                 self.layers.append(l)
 
     def fitDataLayer(self, type, lowercase=False):
@@ -41,5 +44,8 @@ class Net:
         return {
             'num_layers':len(self.layers),
             'layers': [layer.json() for layer in self.layers],
-            'config': self.config
+            'config': self.config,
+            'max_output_fm_data_num':max([l.param['output_fm_data_num'] for l in self.layers]),
+            'max_weight_data_num':max([l.weight.size for l in self.layers]),
+            'max_bias_data_num':max([l.bias.size for l in self.layers])
         }

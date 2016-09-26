@@ -18,7 +18,8 @@ include_directories( ${OPENCL_INCLUDE_DIR} )
 
 
 
-set(SOURCE_FILES cpp/main.cpp cpp/helper.cpp cpp/helper.h cpp/json.hpp)
+set(SOURCE_FILES cpp/main.cpp cpp/helper.cpp cpp/helper.h  cpp/jsoncpp.cpp cpp/json/json.h  cpp/json/json-forwards.h
+        cpp/RunOpenCL/convolutionLayer/convolutionLayer.cpp   cpp/RunOpenCL/convolutionLayer/convolutionLayer.h)
 add_executable(opencl_learning ${SOURCE_FILES})
 
 #MESSAGE(STATUS ${OPENCL_LIBRARIES})

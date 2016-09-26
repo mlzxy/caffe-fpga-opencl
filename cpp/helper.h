@@ -19,7 +19,7 @@
 #include <fstream>
 #include <glob.h>
 #include <opencv2/highgui/highgui.hpp>
-#include "json.hpp"
+#include "./json/json.h"
 
 #ifdef __APPLE__
 #include <OpenCL/cl.h>
@@ -44,6 +44,8 @@
 
 /////////////////////////////////////////////// Customized Settings ///////////////////////////////////////////////
 #define PROJECT_NAME convolutionLayer
+typedef float dataType;
+
 
 #define PLATFORM_FILTER APPLE_MAC
 #define DISABLE_DEVICE_FILTER  true
@@ -74,11 +76,12 @@
 #define REPORT_ERR_NR(y)  if(err != CL_SUCCESS) {std::cout <<"ERROR: From " <<y <<" -> " << clErrorCode(err) << "\n"; }else{cout<<"DEBUG: "<<y<<" -> Success"<<endl;};
 
 #define DEBUG_LOG  cout<<"DEBUG: "
+#define INFO_LOG  cout<<"INFO: "
 #define ERROR_LOG  cout<<"ERROR: "
 
 using namespace cv;
 using namespace std;
-using json = nlohmann::json;
+//using json = nlohmann::json;
 
 
 typedef  struct oclHardware {
@@ -107,6 +110,7 @@ typedef struct cmdArg{
     char mFileName[1024];
     char mKernelName[128];
     char dataDir[1024];
+    char network[1024];
 } cmdArg;
 
 
@@ -137,4 +141,37 @@ std::string getFileName(const std::string& s);
 void split(const string &s, char delim, vector<string> &elems);
 bool endsWith(const string& s, const string& suffix);
 string trim(string& str);
+
+enum LayerType {Convolution, Relu, Data, Split, Pooling, Accuracy, SoftmaxWithLoss};
+
+class Layer {
+public:
+    ~Layer() {}
+    Layer(Json::Value);
+    LayerType type;
+    dataType *weight;
+    dataType *bias;
+    int *weightShape; // (outputChannel, inputChannel, kernelSize, kernelSize)
+    int *biasShape; // (outputChannel)
+    int weight_dims;
+    int bias_dims;
+    int weight_data_num;
+    int bias_data_num;
+    int output_fm_data_num;
+    map<std::string, int> param;
+    std::string info;
+};
+
+
+class Net{
+public:
+    std::vector<Layer*> layers;
+    int num_layers;
+    int max_weight_data_num;
+    int max_bias_data_num;
+    int max_output_fm_data_num;
+    Net(Json::Value){}
+    ~Net() {}
+};
+
 #endif //C_VERSION_HELPER_H
