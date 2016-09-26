@@ -43,3 +43,7 @@ build/output/
 
 
 convertor/output/_output
+
+*.pyc
+
+convertor/src/net.pyc

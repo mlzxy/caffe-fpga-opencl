@@ -5,9 +5,10 @@ import caffe_protobuf as caffe_proto
 from google.protobuf.text_format import Merge
 
 class Net:
-    def __init__(self, dataname, txt_path, model_path):
+    def __init__(self, dataname, txt_path, model_path, config):
         self.net = caffe.Net(txt_path, model_path, caffe.TEST)
         self.net_proto = caffe_proto.NetParameter()
+        self.config = {token[0]:token[1] for token in config}
         self.dataname = dataname
         with open(txt_path, 'r') as f:
             Merge(f.read(), self.net_proto)
@@ -39,5 +40,6 @@ class Net:
     def json(self):
         return {
             'num_layers':len(self.layers),
-            'layers': [layer.json() for layer in self.layers]
+            'layers': [layer.json() for layer in self.layers],
+            'config': self.config
         }
