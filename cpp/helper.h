@@ -146,7 +146,7 @@ enum LayerType {Convolution, Relu, Data, Split, Pooling, Accuracy, SoftmaxWithLo
 
 class Layer {
 public:
-    ~Layer() {}
+    ~Layer();
     Layer(Json::Value);
     LayerType type;
     dataType *weight;
@@ -170,8 +170,8 @@ public:
     int max_weight_data_num;
     int max_bias_data_num;
     int max_output_fm_data_num;
-    Net(Json::Value){}
-    ~Net() {}
+    Net(Json::Value);
+    ~Net();
 };
 
 #endif //C_VERSION_HELPER_H

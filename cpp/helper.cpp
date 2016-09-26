@@ -365,7 +365,8 @@ cmdArg parseCmdArg(int argc, char** argv){
             {0, 0, 0, 0}
     };
     int ch;
-    while ((ch = getopt_long(argc, argv, "d:k:f:h:i:", long_options, NULL)) != -1)
+    // must pass -n like short argument, but not --network
+    while ((ch = getopt_long(argc, argv, "d:k:f:h:i:n:", long_options, NULL)) != -1)
     {
         // check to see if a single character or long option came through
         switch (ch)
