@@ -12,9 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0ea49119-6cb7-425f-b25b-15f82d66b3d6" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/C++_Version.iml" afterPath="$PROJECT_DIR$/.idea/C++_Version.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cpp/RunOpenCL/convolutionLayer/convolutionLayer.cpp" afterPath="$PROJECT_DIR$/cpp/RunOpenCL/convolutionLayer/convolutionLayer.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kernels/convolutionLayer/convolutionLayer.cl" afterPath="$PROJECT_DIR$/kernels/convolutionLayer/convolutionLayer.cl" />
     </list>
     <ignored path="C++_Version.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -43,7 +41,7 @@
       <file leaf-file-name="helper.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cpp/helper.h">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2268">
+            <state relative-caret-position="366">
               <caret line="162" column="12" selection-start-line="162" selection-start-column="4" selection-end-line="162" selection-end-column="12" />
               <folding>
                 <element signature="e#134#148#0" expanded="true" />
@@ -65,11 +63,21 @@
       <file leaf-file-name="convolutionLayer.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/cpp/RunOpenCL/convolutionLayer/convolutionLayer.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="296">
-              <caret line="27" column="32" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="32" />
+            <state relative-caret-position="-54">
+              <caret line="46" column="63" selection-start-line="46" selection-start-column="63" selection-end-line="46" selection-end-column="63" />
               <folding>
                 <element signature="e#37#66#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="mnist_data.h" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cpp/RunOpenCL/convolutionLayer/mnist_data.h">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="112">
+              <caret line="2" column="16" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="16" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -97,7 +105,7 @@
       <file leaf-file-name="layer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/convertor/src/layer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1220">
+            <state relative-caret-position="1164">
               <caret line="121" column="31" selection-start-line="121" selection-start-column="31" selection-end-line="121" selection-end-column="31" />
               <folding />
             </state>
@@ -248,6 +256,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="C++_Version" />
+              <option name="myItemType" value="com.jetbrains.cidr.projectView.CidrFilesViewHelper$MyProjectTreeStructure$1" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="C++_Version" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="cpp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="RunOpenCL" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="convolutionLayer" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -664,11 +694,12 @@
       <workItem from="1474873034171" duration="8212000" />
       <workItem from="1475004862296" duration="6089000" />
       <workItem from="1475095932447" duration="2128000" />
+      <workItem from="1475184418197" duration="1789000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="90382000" />
+    <option name="totallyTimeSpent" value="92171000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="32" width="1440" height="808" extended-state="0" />
@@ -676,23 +707,23 @@
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20577872" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33519554" sideWeight="0.4947146" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32681563" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33519554" sideWeight="0.50528544" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3282123" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24947146" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3282123" sideWeight="0.49753347" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38687152" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33519554" sideWeight="0.4947146" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3282123" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="LuaJ" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960895" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.38687152" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout>
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -732,7 +763,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/cpp/RunOpenCL/convolutionLayer/convolutionLayer.cpp</url>
-          <line>30</line>
+          <line>33</line>
           <option name="timeStamp" value="39" />
         </line-breakpoint>
       </breakpoints>
@@ -978,25 +1009,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cpp/RunOpenCL/convolutionLayer/mnist_data.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2072">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/build/resources/archive/RunOpenCL/convolution/convolution.cpp">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="448">
           <caret line="33" column="16" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cpp/RunOpenCL/convolutionLayer/convolutionLayer.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1007,13 +1023,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cpp/helper.h">
+    <entry file="file://$PROJECT_DIR$/kernels/convolutionLayer/convolutionLayer.cl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2268">
-          <caret line="162" column="12" selection-start-line="162" selection-start-column="4" selection-end-line="162" selection-end-column="12" />
-          <folding>
-            <element signature="e#134#148#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="2072">
+          <caret line="148" column="48" selection-start-line="148" selection-start-column="48" selection-end-line="148" selection-end-column="48" />
         </state>
       </provider>
     </entry>
@@ -1021,14 +1034,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4368">
           <caret line="312" column="1" selection-start-line="312" selection-start-column="1" selection-end-line="312" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cpp/main.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="70">
-          <caret line="5" column="31" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
           <folding />
         </state>
       </provider>
@@ -1041,17 +1046,43 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kernels/convolutionLayer/convolutionLayer.cl">
+    <entry file="file://$PROJECT_DIR$/cpp/RunOpenCL/convolutionLayer/convolutionLayer.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2072">
-          <caret line="148" column="48" selection-start-line="148" selection-start-column="48" selection-end-line="148" selection-end-column="48" />
+        <state relative-caret-position="140">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cpp/RunOpenCL/convolutionLayer/mnist_data.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="112">
+          <caret line="2" column="16" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cpp/main.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="70">
+          <caret line="5" column="31" selection-start-line="5" selection-start-column="31" selection-end-line="5" selection-end-column="31" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cpp/helper.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="162" column="12" selection-start-line="162" selection-start-column="4" selection-end-line="162" selection-end-column="12" />
+          <folding>
+            <element signature="e#134#148#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/convertor/src/layer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1220">
+        <state relative-caret-position="1164">
           <caret line="121" column="31" selection-start-line="121" selection-start-column="31" selection-end-line="121" selection-end-column="31" />
           <folding />
         </state>
@@ -1059,8 +1090,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cpp/RunOpenCL/convolutionLayer/convolutionLayer.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="296">
-          <caret line="27" column="32" selection-start-line="27" selection-start-column="32" selection-end-line="27" selection-end-column="32" />
+        <state relative-caret-position="-54">
+          <caret line="46" column="63" selection-start-line="46" selection-start-column="63" selection-end-line="46" selection-end-column="63" />
           <folding>
             <element signature="e#37#66#0" expanded="true" />
           </folding>
