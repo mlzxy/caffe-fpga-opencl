@@ -12,8 +12,11 @@ class Layer:
         self.model_param = data['model_param']
         self.proto_param = data['proto_param']
         layer_name = ''
-        if self.proto_param:
-            layer_name = ':'+self.proto_param.name
+        try:
+            if self.proto_param:
+                layer_name = ':'+self.proto_param.name
+        except:
+            pass
         self.info = 'Layer {0}{1}'.format(type, layer_name)
         self.param = defaultdict(lambda:int(0))
         if self.model_param:
@@ -26,19 +29,21 @@ class Layer:
             self.param['input_channel'] = self.prev.param['output_channel']
             self.param['input_width'] = self.prev.param['output_width']
             self.param['input_height'] = self.prev.param['output_height']
-            if not self.model_param:
+            if not self.model_param:  ## activation layer
                 self.param['output_channel'] = self.prev.param['output_channel']
                 self.param['output_width'] = self.prev.param['output_width']
                 self.param['output_height'] = self.prev.param['output_height']
-        else:
+        else:  ## data layer
             self.param['input_channel'] = self.param['output_channel']
             self.param['input_width'] = self.param['output_width']
             self.param['input_height'] = self.param['output_height']
 
-        self.param['output_fm_data_num'] = self.param['output_channel'] * self.param['output_width'] * self.param['output_height']
-
-
+    def fixPadding(self, key='input'):
+        self.param[key+'_height'] += self.param['pad']
+        self.param[key+'_width'] += self.param['pad']
     def json(self):
+        self.param['output_fm_data_num'] = self.param['output_channel'] * self.param['output_width'] * self.param['output_height']
+        self.param['input_fm_data_num'] = self.param['input_channel'] * self.param['input_width'] * self.param['input_height']
         return {
             'type': self.type,
             'weight':{
@@ -67,9 +72,10 @@ class Layer:
                 'input_height':self.param['input_height'],
                 'output_channel': self.param['output_channel'],
                 'output_width': self.param['output_width'],
-                'output_height': self.param['output_height']
-            },
-            'output_fm_data_num':  self.param['output_fm_data_num']
+                'output_height': self.param['output_height'],
+                'output_fm_data_num': self.param['output_fm_data_num'],
+                'input_fm_data_num': self.param['input_fm_data_num']
+            }
         }
 
 class Activation(Layer):
@@ -89,7 +95,7 @@ class Convolution(Layer):
             self.param['dilation'] = 1
         if len(conv_param.pad) > 0:
             self.param['pad'] = conv_param.pad[0]
-
+        self.fixPadding()
         self.info = "{0} - Kernel [{1},{1}], Pad {2}, Stride {3}, Dilation {4} - Output Information: channel {5}, width {6}, height {7}"\
             .format(self.info, self.param['kernel_size'], self.param['pad'], self.param['stride'], self.param['dilation'],
                     self.param['output_channel'], self.param['output_width'], self.param['output_height'])
@@ -105,6 +111,8 @@ class Pooling(Layer):
             self.param['ave_pool'] = 1
         else:
             self.param['max_pool'] = 1
+        self.param['pad'] = pooling_param.pad
+        self.fixPadding()
         self.param['stride'] = pooling_param.stride
         self.param['kernel_size'] = pooling_param.kernel_size
         self.info = "{0} - Kernel [{1},{1}], Pad {3}, Stride {2} - Output Information: channel {4}, width {5}, height {6}" \
@@ -119,7 +127,21 @@ class Data(Layer):
             .format(self.info, self.model_param.channels, self.model_param.width, self.model_param.height)
         self.param['scale'] = self.proto_param.transform_param.scale
 
+
+class Output(Layer):
+    def __init__(self, type, data):
+        Layer.__init__(self, type, data)
+
+class Padding(Layer):
+    def __init__(self, type, data):
+        Layer.__init__(self, type, data)
+        self.param['pad'] = self.proto_param['pad']
+        self.fixPadding(key='output')
+
+
 lt.connect(lt.Relu, Activation)
 lt.connect(lt.Pooling, Pooling)
 lt.connect(lt.Convolution, Convolution)
 lt.connect(lt.Data, Data)
+lt.connect(lt.Padding, Padding)
+lt.connect(lt.Output, Output)

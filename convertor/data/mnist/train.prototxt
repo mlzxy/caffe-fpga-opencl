@@ -50,6 +50,7 @@ layer {
     num_output: 20
     kernel_size: 5
     stride: 1
+    pad:2
     weight_filler {
       type: "xavier"
     }
@@ -58,7 +59,14 @@ layer {
     }
   }
 }
-# (24, 24)
+# (28, 28)
+
+layer {
+  name: "relu1"
+  type: "ReLU"
+  bottom: "conv1"
+  top: "conv1"
+}
 
 layer {
   name: "pool1"
@@ -71,7 +79,7 @@ layer {
     stride: 2
   }
 }
-# (12, 12)
+# (14, 14)
 
 layer {
   name: "conv2"
@@ -96,7 +104,15 @@ layer {
     }
   }
 }
-# (10, 10)
+# (12, 12)
+
+
+layer {
+  name: "relu2"
+  type: "ReLU"
+  bottom: "conv2"
+  top: "conv2"
+}
 
 layer {
   name: "pool2"
@@ -107,9 +123,12 @@ layer {
     pool: MAX
     kernel_size: 2
     stride: 1
+    pad:1
   }
 }
-# (9, 9)
+# 12->14->13
+# (13, 13)
+
 
 layer {
     name: "conv_ip1"
@@ -124,7 +143,7 @@ layer {
     }
     convolution_param {
       num_output: 100
-      kernel_size: 9
+      kernel_size: 13
       stride: 1
       weight_filler {
         type: "xavier"
@@ -137,7 +156,7 @@ layer {
 # (1, 1)
 
 layer {
-  name: "relu1"
+  name: "relu3"
   type: "ReLU"
   bottom: "conv_ip1"
   top: "conv_ip1"
