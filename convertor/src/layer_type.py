@@ -5,11 +5,12 @@ Split = 'Split'
 Pooling = 'Pooling'
 Accuracy = 'Accuracy'
 SoftmaxWithLoss = 'SoftmaxWithLoss'
-
+Padding = 'Padding'
+Output = 'Output'
 constructor_map = {}
 
 
-layer_type_list = [Convolution, Relu, Data, Split, Pooling, Accuracy, SoftmaxWithLoss]
+layer_type_list = [Convolution, Relu, Data, Split, Pooling, Accuracy, SoftmaxWithLoss, Padding, Output]
 
 Nop = lambda x, y: None
 

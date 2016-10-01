@@ -47,3 +47,9 @@ convertor/output/_output
 *.pyc
 
 convertor/src/net.pyc
+
+kernels/net/.tags
+
+kernels/net/.tags1
+
+kernels/net/clcc.log
