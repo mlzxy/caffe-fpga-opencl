@@ -3,7 +3,7 @@ project(opencl_learning)
 
 
 ## Set
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread -std=c++11")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -lpthread -std=c++11 -L/usr/local/lib/ ")
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 
@@ -19,7 +19,7 @@ include_directories( ${OPENCL_INCLUDE_DIR} )
 
 
 set(SOURCE_FILES cpp/main.cpp cpp/helper.cpp cpp/helper.h  cpp/jsoncpp.cpp cpp/json/json.h  cpp/json/json-forwards.h
-        cpp/RunOpenCL/convolutionLayer/convolutionLayer.cpp   cpp/RunOpenCL/convolutionLayer/convolutionLayer.h)
+        cpp/RunOpenCL/net/net.cpp   cpp/RunOpenCL/net/net.h cpp/RunOpenCL/net/mnist_data.h)
 add_executable(opencl_learning ${SOURCE_FILES})
 
 #MESSAGE(STATUS ${OPENCL_LIBRARIES})

@@ -11,16 +11,14 @@ void split(const string &s, char delim, vector<string> &elems) {
     }
 }
 
-bool endsWith(const string& s, const string& suffix)
-{
-    return s.size() >= suffix.size() && s.rfind(suffix) == (s.size()-suffix.size());
+bool endsWith(const string &s, const string &suffix) {
+    return s.size() >= suffix.size() && s.rfind(suffix) == (s.size() - suffix.size());
 }
 
-string trim(string& str)
-{
+string trim(string &str) {
     size_t first = str.find_first_not_of(' ');
     size_t last = str.find_last_not_of(' ');
-    return str.substr(first, (last-first+1));
+    return str.substr(first, (last - first + 1));
 }
 
 static const pair<cl_int, std::string> map_pairs[] = {
@@ -75,10 +73,10 @@ static const pair<cl_int, std::string> map_pairs[] = {
         make_pair(CL_INVALID_GLOBAL_WORK_SIZE, TO_STRING(CL_INVALID_GLOBAL_WORK_SIZE)),
         make_pair(CL_INVALID_PROPERTY, TO_STRING(CL_INVALID_PROPERTY))};
 
-static const std::map<cl_int, std::string> clErrorCodes(map_pairs, map_pairs + sizeof(map_pairs) / sizeof(map_pairs[0]));
+static const std::map<cl_int, std::string> clErrorCodes(map_pairs,
+                                                        map_pairs + sizeof(map_pairs) / sizeof(map_pairs[0]));
 
-const char* clErrorCode(cl_int code)
-{
+const char *clErrorCode(cl_int code) {
     map<cl_int, string>::const_iterator iter = clErrorCodes.find(code);
     if (iter == clErrorCodes.end())
         return "UNKNOWN ERROR";
@@ -86,13 +84,12 @@ const char* clErrorCode(cl_int code)
         return iter->second.c_str();
 }
 
-int loadFile2Memory(const char *filename, char **result)
-{
+int loadFile2Memory(const char *filename, char **result) {
     int size = 0;
 
     std::ifstream stream(filename, std::ifstream::binary);
     if (!stream) {
-        cout<<"loadFile2Memory Error: "<<filename<<endl;
+        cout << "loadFile2Memory Error: " << filename << endl;
         return -1;
     }
     stream.seekg(0, stream.end);
@@ -107,11 +104,10 @@ int loadFile2Memory(const char *filename, char **result)
 }
 
 
-void release(oclSoftware& software)
-{
+void release(oclSoftware &software) {
     // for loop on software.kernalMap
-    for (itKernelMap iterator = software.kernelMap->begin(); iterator!=software.kernelMap->end();
-            iterator++){
+    for (itKernelMap iterator = software.kernelMap->begin(); iterator != software.kernelMap->end();
+         iterator++) {
         clReleaseKernel(iterator->second);
     }
     delete software.kernelMap;
@@ -119,8 +115,7 @@ void release(oclSoftware& software)
 }
 
 
-void release(oclHardware& hardware)
-{
+void release(oclHardware &hardware) {
     clReleaseCommandQueue(hardware.mQueue);
     clReleaseContext(hardware.mContext);
     if ((hardware.mMajorVersion >= 1) && (hardware.mMinorVersion > 1)) {
@@ -130,11 +125,9 @@ void release(oclHardware& hardware)
 }
 
 
-cl_int compileProgram(const oclHardware &hardware, oclSoftware &software)
-{
+cl_int compileProgram(const oclHardware &hardware, oclSoftware &software) {
     cl_int err = clBuildProgram(software.mProgram, 1, &hardware.mDevice, software.mCompileOptions, 0, 0);
-    if (err != CL_SUCCESS)
-    {
+    if (err != CL_SUCCESS) {
         REPORT_ERR_NR("clBuildProgram");
         size_t size = 0;
         err = clGetProgramBuildInfo(software.mProgram, hardware.mDevice, CL_PROGRAM_BUILD_LOG, 0, 0, &size);
@@ -147,26 +140,25 @@ cl_int compileProgram(const oclHardware &hardware, oclSoftware &software)
         return err;
     }
     //kernel name must match
-    cout <<"Iterating through "<<"kernelMap to create kernels, numOfKernels = "<< software.kernelMap->size() <<endl;
-    for (itKernelMap iterator = software.kernelMap->begin(); iterator!=software.kernelMap->end();
-         iterator++){
-           cout<<"Creating Kernel: "<<iterator->first.c_str()<<endl;
-        (*software.kernelMap)[iterator->first] =  clCreateKernel(software.mProgram, iterator->first.c_str(), &err);
-        if ((*software.kernelMap)[iterator->first] == 0)
-        {
-            ERROR_LOG<<"clCreateKernel on "+iterator->first<<" failed"<<endl;
-        } else{
-            DEBUG_LOG<<"Creating Kernel: "<<iterator->first.c_str()<<" Successfully"<<endl;
+    cout << "Iterating through " << "kernelMap to create kernels, numOfKernels = " << software.kernelMap->size()
+         << endl;
+    for (itKernelMap iterator = software.kernelMap->begin(); iterator != software.kernelMap->end();
+         iterator++) {
+        cout << "Creating Kernel: " << iterator->first.c_str() << endl;
+        (*software.kernelMap)[iterator->first] = clCreateKernel(software.mProgram, iterator->first.c_str(), &err);
+        if ((*software.kernelMap)[iterator->first] == 0) {
+            ERROR_LOG << "clCreateKernel on " + iterator->first << " failed" << endl;
+        } else {
+            DEBUG_LOG << "Creating Kernel: " << iterator->first.c_str() << " Successfully" << endl;
         }
     }
     return CL_SUCCESS;
 }
 
-void getDeviceVersion(oclHardware& hardware)
-{
+void getDeviceVersion(oclHardware &hardware) {
     char versionString[512];
     size_t size = 0;
-    cl_int err = clGetDeviceInfo (hardware.mDevice, CL_DEVICE_VERSION, 511, versionString, &size);
+    cl_int err = clGetDeviceInfo(hardware.mDevice, CL_DEVICE_VERSION, 511, versionString, &size);
     REPORT_ERRM(, "clGetDeviceInfo");
 
     unsigned major = 0;
@@ -201,11 +193,9 @@ void getDeviceVersion(oclHardware& hardware)
 }
 
 
-
-oclHardware getOclHardware(cl_device_type type, const char *target_device)
-{
+oclHardware getOclHardware(cl_device_type type, const char *target_device) {
     oclHardware hardware = {0, 0, 0, 0, 0, 0, 0};
-    cl_platform_id platforms[16] = { 0 };
+    cl_platform_id platforms[16] = {0};
     cl_device_id devices[16];
     cl_device_id device_id;
     char platformName[256];
@@ -219,15 +209,15 @@ oclHardware getOclHardware(cl_device_type type, const char *target_device)
     for (cl_uint i = 0; i < platformCount; i++) {
         err = clGetPlatformInfo(platforms[i], CL_PLATFORM_NAME, 256, platformName, 0);
         REPORT_ERRM(hardware, "clGetPlatformInfo");
-        cout<<"DEBUG: " <<"Available Platform Found: " << platformName << endl;
+        cout << "DEBUG: " << "Available Platform Found: " << platformName << endl;
         cl_uint deviceCount = 0;
         err = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ACCELERATOR, 16, devices, &deviceCount);
         REPORT_ERRM(hardware, string("clGetDeviceIDs at platform: ") + string(platformName));
         cl_uint idev;
-        for (idev=0; idev < deviceCount; idev++) {
+        for (idev = 0; idev < deviceCount; idev++) {
             err = clGetDeviceInfo(devices[idev], CL_DEVICE_NAME, 256, deviceName, 0);
-            REPORT_ERRM(hardware, "clGetDeviceInfo:"+string(deviceName));
-            std::cout<<"DEBUG: "<<platformName<<" Hardware Founded: " << deviceName << std::endl;
+            REPORT_ERRM(hardware, "clGetDeviceInfo:" + string(deviceName));
+            std::cout << "DEBUG: " << platformName << " Hardware Founded: " << deviceName << std::endl;
         }
     }
 
@@ -235,7 +225,7 @@ oclHardware getOclHardware(cl_device_type type, const char *target_device)
         err = clGetPlatformInfo(platforms[i], CL_PLATFORM_NAME, 256, platformName, 0);
         REPORT_ERRM(hardware, "clGetPlatformInfo");
         if (strcmp(platformName, PLATFORM_FILTER) != 0) {
-            std::cout<<"DEBUG: "<<platformName<<"!="<<PLATFORM_FILTER<<endl;
+            std::cout << "DEBUG: " << platformName << "!=" << PLATFORM_FILTER << endl;
             continue;
         }
         platformSelected = true;
@@ -250,15 +240,15 @@ oclHardware getOclHardware(cl_device_type type, const char *target_device)
 
         //iterate all devices to find the target device
         cl_uint idev;
-        for (idev=0; idev < deviceCount; idev++) {
+        for (idev = 0; idev < deviceCount; idev++) {
             err = clGetDeviceInfo(devices[idev], CL_DEVICE_NAME, 256, deviceName, 0);
-            REPORT_ERRM(hardware, "clGetDeviceInfo:"+string(deviceName));
+            REPORT_ERRM(hardware, "clGetDeviceInfo:" + string(deviceName));
             if (strcmp(deviceName, target_device) == 0) {
                 cout << "INFO: Selected Device " << deviceName << endl;
                 device_id = devices[i];
                 break;
             }
-            if (DISABLE_DEVICE_FILTER){
+            if (DISABLE_DEVICE_FILTER) {
                 device_id = devices[i];
                 break;
             }
@@ -268,7 +258,7 @@ oclHardware getOclHardware(cl_device_type type, const char *target_device)
             return hardware;
         }
 
-        cl_context_properties contextData[3] = {CL_CONTEXT_PLATFORM, (cl_context_properties)platforms[i], 0};
+        cl_context_properties contextData[3] = {CL_CONTEXT_PLATFORM, (cl_context_properties) platforms[i], 0};
         cl_context context = clCreateContextFromType(contextData, type, 0, 0, &err);
         REPORT_ERRM(hardware, "clCreateContextFromType");
         cl_command_queue queue = clCreateCommandQueue(context, device_id, 0, &err);
@@ -280,20 +270,19 @@ oclHardware getOclHardware(cl_device_type type, const char *target_device)
         hardware.mQueue = queue;
         hardware.deviceType = type;
         getDeviceVersion(hardware);
-        cout<<"+++++++++++++++++++++++++Runtime Info+++++++++++++++++++++++++++"<<endl;
+        cout << "+++++++++++++++++++++++++Runtime Info+++++++++++++++++++++++++++" << endl;
         std::cout << "INFO: Platform = " << platformName << "\n";
         std::cout << "INFO: Device = " << deviceName << "\n";
         std::cout << "INFO: OpenCL Version = " << hardware.mMajorVersion << '.' << hardware.mMinorVersion << "\n";
         return hardware;
     }
     if (!platformSelected)
-        cout <<"ERROR: No qualified platform founded!!" <<endl;
+        cout << "ERROR: No qualified platform founded!!" << endl;
     return hardware;
 }
 
 
-oclSoftware getOclSoftware(const oclHardware &hardware, const char* kernelNames, const char* kernelFileName)
-{
+oclSoftware getOclSoftware(const oclHardware &hardware, const char *kernelNames, const char *kernelFileName) {
     unsigned char *kernelCode = 0;
 
     oclSoftware soft;
@@ -304,7 +293,7 @@ oclSoftware getOclSoftware(const oclHardware &hardware, const char* kernelNames,
     split(kernelNameListString, ',', kernelNameList);
     soft.kernelMap = new map<std::string, cl_kernel>;
     //****************************//
-    for (size_t i = 0; i < kernelNameList.size(); i++){
+    for (size_t i = 0; i < kernelNameList.size(); i++) {
         (*soft.kernelMap)[kernelNameList[i]] = 0;
     }
     // std::strcpy(soft.mKernelName, kernelName);
@@ -324,25 +313,23 @@ oclSoftware getOclSoftware(const oclHardware &hardware, const char* kernelNames,
         size_t n = size;
         soft.mProgram = clCreateProgramWithBinary(hardware.mContext, 1, &hardware.mDevice, &n,
                                                   (const unsigned char **) &kernelCode, 0, &err);
-    }
-    else {
-        soft.mProgram = clCreateProgramWithSource(hardware.mContext, 1, (const char **)&kernelCode, 0, &err);
+    } else {
+        soft.mProgram = clCreateProgramWithSource(hardware.mContext, 1, (const char **) &kernelCode, 0, &err);
     }
     if (!soft.mProgram || (err != CL_SUCCESS)) {
-        std::cout <<"ERROR: "<< clErrorCode(err) << " on Program Creation \n";
+        std::cout << "ERROR: " << clErrorCode(err) << " on Program Creation \n";
         return soft;
     }
 
-    
+
     err = compileProgram(hardware, soft);
     REPORT_ERRM(soft, "compileProgram");
-    delete [] kernelCode;
+    delete[] kernelCode;
     return soft;
 }
 
 
-void printHelp()
-{
+void printHelp() {
     cout << "usage: %s <options>\n";
     cout << "  -d <cpu|gpu|fpga>\n";
     cout << "  -f <kernel_file> \n";
@@ -352,25 +339,22 @@ void printHelp()
 }
 
 
-
-cmdArg parseCmdArg(int argc, char** argv){
+cmdArg parseCmdArg(int argc, char **argv) {
     cmdArg arg;
     const static struct option long_options[] = {
             {"device",      required_argument, 0, 'd'},
             {"kernel_name", required_argument, 0, 'k'},
             {"kernel_file", required_argument, 0, 'f'},
             {"network",     optional_argument, 0, 'n'},
-            {"data_dir",    optional_argument,  0, 'i'},
+            {"data_dir",    optional_argument, 0, 'i'},
             {"help",        no_argument,       0, 'h'},
-            {0, 0, 0, 0}
+            {0, 0,                             0, 0}
     };
     int ch;
     // must pass -n like short argument, but not --network
-    while ((ch = getopt_long(argc, argv, "d:k:f:h:i:n:", long_options, NULL)) != -1)
-    {
+    while ((ch = getopt_long(argc, argv, "d:k:f:h:i:n:", long_options, NULL)) != -1) {
         // check to see if a single character or long option came through
-        switch (ch)
-        {
+        switch (ch) {
             case 'k':
                 strcpy(arg.mKernelName, optarg);
                 break;
@@ -406,14 +390,14 @@ cmdArg parseCmdArg(int argc, char** argv){
 }
 
 
-double runProgram(int argc, char** argv, RunOpenCL F){
+double runProgram(int argc, char **argv, RunOpenCL F) {
     cmdArg arg = parseCmdArg(argc, argv);
     oclHardware hardware = getOclHardware(arg.deviceType, ALPHA_DATA_KU3_DDR1);
     oclSoftware software = getOclSoftware(hardware, arg.mKernelName, arg.mFileName);
 
-    for (itKernelMap iterator = software.kernelMap->begin(); iterator!=software.kernelMap->end();
-            iterator++){
-        cout<<"Kernel: "<<iterator->first<<" "<<iterator->second<<endl;
+    for (itKernelMap iterator = software.kernelMap->begin(); iterator != software.kernelMap->end();
+         iterator++) {
+        cout << "Kernel: " << iterator->first << " " << iterator->second << endl;
     }
 //    cout<<"INFO: CL_DEVICE_MAX_WORK_GROUP_SIZE = "<<CL_DEVICE_MAX_WORK_GROUP_SIZE<<endl;
 //    cout<<"INFO: CL_DEVICE_MAX_WORK_ITEM_SIZES = " <<CL_DEVICE_MAX_WORK_ITEM_SIZES<<endl;
@@ -422,7 +406,8 @@ double runProgram(int argc, char** argv, RunOpenCL F){
     // - read images from cmdArg.imagesDir
     // - enqeue those images in batch? need experiments
     // - anyway, start with simple one.
-    cout<<"++++++++++++++++++++++++++++++++++++ Entering Custom Host Code ++++++++++++++++++++++++++++++++++++ \n"<<endl;
+    cout << "++++++++++++++++++++++++++++++++++++ Entering Custom Host Code ++++++++++++++++++++++++++++++++++++ \n"
+         << endl;
     double delay = (*F)(arg, hardware, software);
     release(software);
     release(hardware);
@@ -430,11 +415,11 @@ double runProgram(int argc, char** argv, RunOpenCL F){
 }
 
 
-FileList ls(const std::string& pattern){
+FileList ls(const std::string &pattern) {
     glob_t glob_result;
-    glob(pattern.c_str(),GLOB_TILDE,NULL,&glob_result);
+    glob(pattern.c_str(), GLOB_TILDE, NULL, &glob_result);
     vector<string> files;
-    for(unsigned int i=0;i<glob_result.gl_pathc;++i){
+    for (unsigned int i = 0; i < glob_result.gl_pathc; ++i) {
         files.push_back(string(glob_result.gl_pathv[i]));
     }
     globfree(&glob_result);
@@ -442,98 +427,286 @@ FileList ls(const std::string& pattern){
 }
 
 
-
-Mat readImage(string fpath){
+Mat readImage(string fpath) {
     return imread(fpath, CV_LOAD_IMAGE_GRAYSCALE);
 }
 
-size_t imageSize(Mat m){
+size_t imageSize(Mat m) {
     return m.cols * m.rows * m.elemSize();
 }
 
 
-
-std::string getFileName(const std::string& s) {
+std::string getFileName(const std::string &s) {
     char sep = '/';
 #ifdef _WIN32
     sep = '\\';
 #endif
     size_t i = s.rfind(sep, s.length());
     if (i != string::npos) {
-        return(s.substr(i+1, s.length() - i));
+        return (s.substr(i + 1, s.length() - i));
     }
-    return("");
+    return ("");
 }
 
-Layer::Layer(Json::Value data){
-    string ts = data.get("type", "" ).asString();
-    if(ts == "Convolution"){
+
+/**
+ * Network related implementation
+ */
+WeightData createWeightData(Json::Value data) {
+    WeightData learnedParam;
+    learnedParam.weight_dim_num = data["weight"]["num_dim"].asInt();
+    learnedParam.bias_dim_num = data["bias"]["num_dim"].asInt();
+    learnedParam.weightShape = new int[learnedParam.weight_dim_num];
+    learnedParam.biasShape = new int[learnedParam.bias_dim_num];
+    for (int i = 0; i < learnedParam.weight_dim_num; i++) {
+        learnedParam.weightShape[i] = data["weight"]["shape"][i].asInt();
+    }
+    for (int i = 0; i < learnedParam.bias_dim_num; i++) {
+        learnedParam.biasShape[i] = data["bias"]["shape"][i].asInt();
+    }
+    learnedParam.weight_data_num = data["weight"]["num_data"].asLargestInt();
+    learnedParam.bias_data_num = data["bias"]["num_data"].asLargestInt();
+    learnedParam.weight = new dType[learnedParam.weight_data_num];
+    for (int i = 0; i < learnedParam.weight_data_num; i++) {
+        learnedParam.weight[i] = (dType) data["weight"]["data"][i].asDouble();
+    }
+    learnedParam.bias = new dType[learnedParam.bias_data_num];
+    for (int i = 0; i < learnedParam.bias_data_num; i++) {
+        learnedParam.bias[i] = (dType) data["bias"]["data"][i].asDouble();
+    }
+    return learnedParam;
+}
+
+NetParam createNetParam(Json::Value data) {
+    NetParam param;
+    param.scale = (dType) data["scale"].asDouble();
+    param.stride = data["stride"].asInt();
+    param.kernelSize = data["kernel_size"].asInt();
+    param.dilation = data["dilation"].asInt();
+    param.pad = data["kernel_size"].asInt();
+    param.inputChannel = data["input_channel"].asInt();
+    param.inputHeight = data["input_height"].asInt();
+    param.inputWidth = data["input_width"].asInt();
+    param.outputChannel = data["output_channel"].asInt();
+    param.outputHeight = data["output_height"].asInt();
+    param.outputWidth = data["output_width"].asInt();
+    param.inputTotalDataNum = data["input_fm_data_num"].asInt();
+    param.outputTotalDataNum = data["output_fm_data_num"].asInt();
+    return param;
+}
+
+
+#define SET_3D(array, x, y, z) array[0]=(x); array[1]=(y); array[2]=(z);
+#define SET_CL_3D_SIZE(offset, key, d1,d2,d3) \
+    SET_3D(offset, \
+        data[key].get("0", d1).asUInt(), \
+        data[key].get("1", d2).asUInt(), \
+        data[key].get("2", d3).asUInt());
+
+
+Layer::Layer(Json::Value data) {
+    string ts = data.get("type", "").asString();
+    if (ts == "Convolution") {
         type = Convolution;
-    }else if(ts == "ReLU"){
+        kernelKey = "convLayer";
+    } else if (ts == "ReLU") {
         type = Relu;
-    } else if(ts == "Data"){
+        kernelKey = "reluLayer";
+    } else if (ts == "Data") {
         type = Data;
-    } else if(ts == "Pooling"){
+        kernelKey = "dataLayer";
+    } else if (ts == "Pooling") {
         type = Pooling;
-    } else{
-        ERROR_LOG<<"Unknown Layer Type: "<<ts<<endl;
+        kernelKey = "poolingLayer";
+    } else if (ts == "Padding") {
+        type = Padding;
+        kernelKey = "paddingLayer";
+    } else if (ts == "Output") {
+        type = Output;
+        kernelKey = "outputLayer";
+    } else {
+        ERROR_LOG << "Unknown Layer Type: " << ts << endl;
         return;
     }
-    weight_dims = data["weight"]["num_dim"].asInt();
-    bias_dims = data["bias"]["num_dim"].asInt();
-    weightShape = new int[weight_dims];
-    biasShape = new int[bias_dims];
-    for(int i = 0; i<weight_dims; i++){
-        weightShape[i] = data["weight"]["shape"][i].asInt();
-    }
-    for(int i = 0; i<bias_dims; i++){
-        biasShape[i] = data["bias"]["shape"][i].asInt();
-    }
     info = data["info"].asString();
-
-    //weight, bias
-    weight_data_num = data["weight"]["num_data"].asInt();
-    bias_data_num = data["bias"]["num_data"].asInt();
-    weight = new dataType[weight_data_num];
-    for (int i = 0; i<weight_data_num;i++){
-        weight[i] = (dataType)data["weight"]["data"][i].asDouble();
-    }
-    bias = new dataType[bias_data_num];
-    for (int i = 0; i<bias_data_num; i++){
-        bias[i] = (dataType)data["bias"]["data"][i].asDouble();
-    }
-
-    for( Json::ValueIterator itr = data["param"].begin() ; itr !=  data["param"].end() ; itr++ ) {
-        param[itr.key().asString()] = (*itr).asDouble();
-    }
-
-    output_fm_data_num = data["output_fm_data_num"].asInt();
+    learnedParam = createWeightData(data);
+    param = createNetParam(data["param"]);
+    outputBuffer = new dType[param.outputTotalDataNum];
+    inputBuffer = NULL;
+    next = NULL;
+    prev = NULL;
+    weightCL = NULL;
+    biasCL = NULL;
+    outputBufferCL = NULL;
+    inputBufferCL = NULL;
+    paramCL = NULL;
+//     globalSize[3], localSize[3], offset[3];
+    SET_CL_3D_SIZE(globalSize, "global_size", param.outputChannel, param.outputHeight, param.outputWidth);
+    SET_CL_3D_SIZE(localSize, "local_size", 1,1,1);
+    SET_CL_3D_SIZE(offset, "offset", 0,0,0);
 }
 
-Layer::~Layer(){
-    delete [] biasShape;
-    delete [] weightShape;
-    delete [] weight;
-    delete [] bias;
+Layer::~Layer() {
+    delete outputBuffer;
+    delete learnedParam.weight;
+    delete learnedParam.bias;
+    delete learnedParam.weightShape;
+    delete learnedParam.biasShape;
 }
 
-Net::Net(Json::Value data){
+#define FORWARD_ERROR_CHECK REPORT_ERR(false)
+#define CL_RELEASE(x)       \
+if(x != NULL)               \
+    err = clReleaseMemObject(x);  \
+x = NULL;
+
+#define CL_KERNEL_ARG(kernel,size, mem) err = clSetKernelArg(kernel, argCounter, size, mem); \
+argCounter++; \
+FORWARD_ERROR_CHECK;
+
+#define CL_CREATE_BUFFER(...)  clCreateBuffer(__VA_ARGS__);
+
+#define CL_ENQUEUE_WRITE_BUFFER(...) err = clEnqueueWriteBuffer(__VA_ARGS__); \
+FORWARD_ERROR_CHECK;
+
+#define CL_ENQUEUE_READ_BUFFER(...) err = clEnqueueReadBuffer(__VA_ARGS__); \
+FORWARD_ERROR_CHECK;
+
+#define CL_FINISH(...) err = clFinish(__VA_ARGS__); \
+FORWARD_ERROR_CHECK;
+
+#define KERNEL_ENQUEUE(...)  err = clEnqueueNDRangeKernel(__VA_ARGS__); \
+FORWARD_ERROR_CHECK;
+
+bool Layer::freeCLMemory() {
+    cl_int err;
+    CL_RELEASE(outputBufferCL);
+    CL_RELEASE(inputBufferCL);
+    CL_RELEASE(weightCL);
+    CL_RELEASE(biasCL);
+    CL_RELEASE(paramCL);
+    return err == CL_SUCCESS;
+}
+
+
+bool Layer::forward(oclHardware hardware, oclSoftware software, OpenCLVersion mode) {
+    INFO_LOG << "    Forward Pass: " << info << endl;
+    if (prev != NULL) {
+        inputBuffer = prev->outputBuffer;
+    }
+    if (inputBuffer == NULL) {
+        ERROR_LOG << "inputBuffer = NULL!" << endl;
+        return false;
+    }
+    cl_int err = CL_SUCCESS;
+
+    size_t inputSize = 0, outputSize = 0;
+    if (mode == OCL12) {
+        outputSize = (size_t) param.outputTotalDataNum;
+        inputSize = (size_t) param.inputTotalDataNum;
+    } else {
+        if (type == Output) {
+            outputSize = (size_t) param.outputTotalDataNum;
+        } else if (type == Data) {
+            inputSize = (size_t) param.inputTotalDataNum;
+        }
+    }
+    inputBufferCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_WRITE_ONLY, inputSize, NULL, &err);
+    outputBufferCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_READ_ONLY, outputSize, NULL, &err);
+    paramCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_WRITE_ONLY, sizeof(NetParam), NULL, &err);
+    FORWARD_ERROR_CHECK;
+    //Input Feature Map
+    CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, inputBufferCL, CL_TRUE, 0, inputSize, inputBuffer, 0, NULL, NULL);
+    CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, paramCL, CL_TRUE, 0, sizeof(NetParam), (void *)&param, 0, NULL, NULL);
+
+
+
+    //Set Kernel Arg
+    cl_kernel kernel = (*software.kernelMap)[kernelKey];
+    size_t argCounter = 0;
+    CL_KERNEL_ARG(kernel,  sizeof(cl_mem), &inputBufferCL);
+    CL_KERNEL_ARG(kernel,  sizeof(cl_mem), &outputBufferCL);
+    if(type == Convolution){
+        weightCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_WRITE_ONLY, learnedParam.weight_data_num, NULL, &err);
+        biasCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_WRITE_ONLY, learnedParam.bias_data_num, NULL, &err);
+        FORWARD_ERROR_CHECK;
+        CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, weightCL, CL_TRUE, 0, sizeof(cl_mem), learnedParam.weight, 0, NULL, NULL);
+        CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, biasCL, CL_TRUE, 0, sizeof(cl_mem), learnedParam.bias, 0, NULL, NULL);
+        CL_KERNEL_ARG(kernel, sizeof(cl_mem), &weightCL);
+        CL_KERNEL_ARG(kernel,  sizeof(cl_mem), &biasCL);
+    }
+    CL_KERNEL_ARG(kernel, sizeof(cl_mem), &paramCL);
+    CL_KERNEL_ARG(kernel,  sizeof(bool), &phase);
+
+
+    FORWARD_ERROR_CHECK
+    //Enqueue Kernel
+    KERNEL_ENQUEUE(hardware.mQueue, kernel, 3, offset, localSize, globalSize, 0, NULL, NULL);
+
+    //Output Feature Map
+    if (outputSize > 0) {
+        CL_FINISH(hardware.mQueue);
+        CL_ENQUEUE_READ_BUFFER(hardware.mQueue, outputBufferCL, CL_TRUE, 0, outputSize, outputBuffer, 0, NULL, NULL);
+        freeCLMemory();
+    }
+    //Ping Pong
+    if (next) {
+        next->phase = !phase;
+    }
+    return err == CL_SUCCESS;
+}
+
+Net::Net(Json::Value data, cmdArg arg, OpenCLVersion version) {
+    name = string(arg.network);
+    mode = version;
     num_layers = data["num_layers"].asInt();
-    max_output_fm_data_num = data["max_output_fm_data_num"].asInt();
-    max_weight_data_num = data["max_weight_data_num"].asInt();
-    max_bias_data_num = data["max_bias_data_num"].asInt();
-    layers = new std::vector<Layer*>(num_layers);
-    for(int i = 0; i < num_layers; i++){
-        cout<<"Construct Layer -> "<<data["layers"][i]["info"].asString()<<endl;
-        (*layers)[i] = new Layer(data["layers"][i]);
+    layers = new Layer *[num_layers];
+    Layer *current = NULL;
+    for (int i = 0; i < num_layers; i++) {
+        layers[i] = new Layer(data["layers"][i]);
+        current = layers[i];
+        if (i > 0) {
+            layers[i - 1]->next = current;
+            current->prev = layers[i - 1];
+        }
     }
 }
 
 Net::~Net() {
-    for (std::vector< Layer* >::iterator it = layers->begin() ; it != layers->end(); ++it)
-    {
-        delete (*it);
-    }
-    layers->clear();
+    for (int i = 0; i < num_layers; i++)
+        delete layers[i];
     delete layers;
 }
+
+
+bool Net::freeCLMemory() {
+    bool result = true;
+    for (int i = 0; i < num_layers; i++) {
+        result = layers[i]->freeCLMemory();
+        if(!result){
+            ERROR_LOG<<"FREE CL MEMORY ERROR in "<<layers[i]->info<<endl;
+        }
+    }
+    return result;
+}
+
+bool Net::forward(oclHardware hardware, oclSoftware software, dType *data) {
+    INFO_LOG << "Forward Pass: " << name << endl;
+    layers[0]->inputBuffer = data;
+    layers[0]->phase = false;
+    bool result = true;
+    for (int i = 0; i < num_layers; i++) {
+        result = layers[i]->forward(hardware, software, mode);
+        if (!result) {
+            ERROR_LOG << layers[i]->type << ": " << layers[i]->info << endl;
+            return false;
+        }
+    }
+    result = freeCLMemory();
+    return result;
+}
+
+Layer *Net::outputLayer() {
+    return layers[num_layers - 1];
+}
+

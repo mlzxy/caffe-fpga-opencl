@@ -43,12 +43,13 @@
 #define CHOOSEN_DEVICE  ALPHA_DATA_KU3_DDR1
 
 /////////////////////////////////////////////// Customized Settings ///////////////////////////////////////////////
-#define PROJECT_NAME convolutionLayer
-typedef float dataType;
+#define PROJECT_NAME net
+typedef float dType;
 
-
+#define OPENCL_VERSION OCL12
 #define PLATFORM_FILTER APPLE_MAC
 #define DISABLE_DEVICE_FILTER  true
+
 
 // #define PLATFORM_FILTER NVIDIA_CUDA
 // #define DISABLE_DEVICE_FILTER  true
@@ -142,38 +143,93 @@ void split(const string &s, char delim, vector<string> &elems);
 bool endsWith(const string& s, const string& suffix);
 string trim(string& str);
 
-typedef std::map<std::string, double> NetParam;
+/**
+ * Network related declaration
+ */
+typedef struct {
+    dType scale;
+    int stride;
+    int kernelSize;
+    int pad;
+    int dilation;
+    int inputChannel;
+    int inputHeight;
+    int inputWidth;
+    int outputChannel;
+    int outputHeight;
+    int outputWidth;
+    int inputTotalDataNum;
+    int outputTotalDataNum;
+} NetParam;
 
-enum LayerType {Convolution, Relu, Data, Split, Pooling, Accuracy, SoftmaxWithLoss};
+
+typedef struct{
+    dType *weight;
+    dType *bias;
+    int *weightShape; // (outputChannel, inputChannel, kernelSize, kernelSize)
+    int *biasShape; // (outputChannel)
+    long weight_data_num;
+    long bias_data_num;
+    int weight_dim_num;
+    int bias_dim_num;
+} WeightData;
+
+enum LayerType {Convolution, Relu, Data, Split, Pooling, Accuracy, SoftmaxWithLoss, Output, Padding};
+enum OpenCLVersion {OCL20, OCL12};
 
 class Layer {
 public:
     ~Layer();
     Layer(Json::Value);
+    bool forward(oclHardware hardware, oclSoftware software, OpenCLVersion mode);
+    bool freeCLMemory();
+    cl_mem weightCL;
+    cl_mem biasCL;
+    cl_mem outputBufferCL;
+    cl_mem inputBufferCL;
+    cl_mem paramCL;
+    size_t globalSize[3], localSize[3], offset[3];
     LayerType type;
-    dataType *weight;
-    dataType *bias;
-    int *weightShape; // (outputChannel, inputChannel, kernelSize, kernelSize)
-    int *biasShape; // (outputChannel)
-    int weight_dims;
-    int bias_dims;
-    int weight_data_num;
-    int bias_data_num;
-    int output_fm_data_num;
+    string kernelKey;
+    WeightData learnedParam;
     NetParam param;
+    Layer* next;
+    bool phase;
+    Layer* prev;
+    dType *inputBuffer;
+    dType *outputBuffer;
     std::string info;
 };
 
 
 class Net{
 public:
-    std::vector<Layer*> *layers;
+    Layer **layers;
     int num_layers;
-    int max_weight_data_num;
-    int max_bias_data_num;
-    int max_output_fm_data_num;
-    Net(Json::Value);
+    string name;
+    OpenCLVersion mode;
+    bool freeCLMemory();
+    Net(Json::Value, cmdArg arg,OpenCLVersion version);
     ~Net();
+    bool forward(oclHardware hardware, oclSoftware software, dType *data);
+    Layer* outputLayer();
+};
+
+
+template<typename T, typename U> U maxLabel(T* arr, U size){
+    if(size == 0)
+        return -1;
+    if(size == 1)
+        return 0;
+    T max = arr[0];
+    U maxIdx = 0;
+    for(U i = 1; i<size;i++){
+        if(max < arr[i]){
+            max = arr[i];
+            maxIdx = i;
+        }
+    }
+    return maxIdx;
 };
 
 #endif //C_VERSION_HELPER_H
