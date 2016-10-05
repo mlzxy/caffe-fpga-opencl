@@ -24,12 +24,13 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
     Net *net = new Net(netRoot, arg, OPENCL_VERSION);
     INFO_LOG<<"Net build finished."<<endl;
     float correctCounter = 0;
-
+    dType softmax_output[10];
 //    dType *image = new dType[784];
     for(int i = 0;i<MNIST_TEST_NUM;i++){
         net->forward(hardware, software, mnist_images[i]);
         Layer* output = net->outputLayer();
-        int predicted = maxLabel<dType, int>(output->outputBuffer, output->param.outputTotalDataNum);
+        softmax(output->outputBuffer, softmax_output, output->param.outputTotalDataNum);
+        int predicted = maxLabel<dType, int>(softmax_output, output->param.outputTotalDataNum);
         string result;
         if(predicted == mnist_labels[i]){
             correctCounter++;

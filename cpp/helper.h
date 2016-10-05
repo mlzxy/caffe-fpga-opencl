@@ -235,6 +235,6 @@ template<typename T, typename U> U maxLabel(T* arr, U size){
 };
 void print2D(dType *fm, int height, int width);
 
-
+void softmax(dType *input, dType *output, int size);
 
 #endif //C_VERSION_HELPER_H

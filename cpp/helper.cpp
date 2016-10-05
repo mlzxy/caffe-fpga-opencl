@@ -733,3 +733,13 @@ void print2D(dType *fm, int height, int width){
     }
     cout<<"\n\n";
 }
+
+void softmax(dType *input, dType *output, int size){
+    dType sum = 0;
+    for (int i = 0; i<size;i++){
+        sum += exp(input[i]);
+    }
+    for (int i = 0; i<size;i++){
+        output[i] = exp(input[i])/sum;
+    }
+}

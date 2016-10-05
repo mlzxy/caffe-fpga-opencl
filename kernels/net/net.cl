@@ -290,7 +290,7 @@ dType fmCache[2][BUFFER_SIZE];
 #define EASY_WORK_ITEM_3D_OUTPUT_BEGIN(channelCounter, heightCounter,          \
                                        widthCounter)                           \
   WORK_ITEM_3D_BEGIN(channelCounter, param->outputChannel, GLOBAL_ID_0,        \
-                     heightCounter, param->outputHeight, GLOBAL_SIZE_1,        \
+                     heightCounter, param->outputHeight, GLOBAL_ID_1,        \
                      widthCounter, param->outputWidth, GLOBAL_ID_2)
 
 /**
@@ -365,8 +365,11 @@ __kernel void paddingLayer(__global dType *inputFeatureMap,
 __kernel void poolingLayer(__global dType *inputFeatureMap,
                            __global dType *outputFeatureMap,
                            __global NetParam *param, bool phase) {
-  __private dType maxValue = MIN_NUM, _temp;
+  __private dType maxValue, _temp;
   EASY_WORK_ITEM_3D_OUTPUT_BEGIN(channelCounter, heightCounter, widthCounter);
+  maxValue = ELM(readFmBuffer, channelCounter, param->inputHeight,
+                 heightCounter * param->stride, param->inputWidth,
+                 widthCounter * param->stride);
   for (int i = 0; i < param->kernelSize; i++)
     for (int j = 0; j < param->kernelSize; j++) {
       _temp = ELM(readFmBuffer, channelCounter, param->inputHeight,
@@ -412,8 +415,9 @@ __kernel void convLayer(__global dType *inputFeatureMap,
 
   __private int dilatedKernelSize =
       (param->kernelSize - 1) * param->dilation + 1;
-  __private dType result = 0;
+  __private dType result;
   EASY_WORK_ITEM_3D_OUTPUT_BEGIN(channelCounter, heightCounter, widthCounter);
+  result = 0;
   // printf("computing <%d, %d, %d>\n", channelCounter, heightCounter, widthCounter);
   for (int c = 0; c < param->inputChannel; c++)
     for (int i = 0; i < param->kernelSize; i++)
