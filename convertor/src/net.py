@@ -56,9 +56,15 @@ class Net:
         return {
             'num_layers':len(self.layers),
             'layers': [layer.json() for layer in self.layers],
-            'config': self.config,
             'max_output_fm_data_num':max([l.param['output_fm_data_num'] for l in self.layers]),
             'max_input_fm_data_num':max([l.param['input_fm_data_num'] for l in self.layers]),
             'max_weight_data_num':max([l.weight.size for l in self.layers]),
             'max_bias_data_num':max([l.bias.size for l in self.layers])
+        }
+
+
+    def config_json(self):
+        return {
+            'num_layers':len(self.layers),
+            'layers': [layer.config_json() for layer in self.layers],
         }

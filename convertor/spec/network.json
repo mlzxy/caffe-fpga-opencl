@@ -1,0 +1,45 @@
+{
+  "num_layers": "Number",
+  "config":{
+    "key":"value"
+  },
+  "max_output_fm_data_num":"Number",
+  "max_input_fm_data_num":"Number",
+  "max_weight_data_num":"Number",
+  "max_bias_data_num":"Number",
+  "layers":[
+    {
+      "type": "String",
+      "weight":{
+        "shape": ["Number"],
+        "num_dim":"Number",
+        "data": ["Number"],
+        "num_data":"Number" 
+      },
+      "bias":{
+        "shape": ["Number"],
+        "num_dim":"Number",
+        "data": ["Number"],
+        "num_data": "Number"
+      },
+      "info":"String",
+      "param":{
+        "scale": "Number",
+    "max_pool":"Number 0/1 ",
+    "ave_pool": "Number 0/1",
+    "stride": "Number",
+    "kernel_size":"Number",
+    "pad": "Number",
+    "dilation": "Number",
+    "input_channel":"Number",
+    "input_width":"Number",
+    "input_height":"Number",
+    "output_channel": "Number",
+    "output_width": "Number",
+    "output_height": "Number",
+    "output_fm_data_num": "Number",
+    "input_fm_data_num": "Number"
+    }
+    }
+  ]
+}

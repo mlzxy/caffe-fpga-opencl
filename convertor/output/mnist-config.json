@@ -1,0 +1,511 @@
+{
+    "layers": [
+        {
+            "bias": {
+                "shape": [
+                    0
+                ]
+            }, 
+            "config": {
+                "global_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "local_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "param": {
+                "input_channel": 1,
+                "input_height": 28,
+                "input_width": 28,
+                "output_channel": 1,
+                "output_height": 28,
+                "output_width": 28
+            },
+            "type": "Data",
+            "weight": {
+                "shape": [
+                    0
+                ]
+            }
+        },
+        {
+            "bias": {
+                "shape": [
+                    0
+                ]
+            },
+            "config": {
+                "global_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "local_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "param": {
+                "input_channel": 1,
+                "input_height": 28,
+                "input_width": 28,
+                "output_channel": 1,
+                "output_height": 32,
+                "output_width": 32
+            },
+            "type": "Padding",
+            "weight": {
+                "shape": [
+                    0
+                ]
+            }
+        },
+        {
+            "bias": {
+                "shape": [
+                    20
+                ]
+            },
+            "config": {
+                "global_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "local_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "param": {
+                "input_channel": 1,
+                "input_height": 32,
+                "input_width": 32,
+                "output_channel": 20,
+                "output_height": 28,
+                "output_width": 28
+            },
+            "type": "Convolution",
+            "weight": {
+                "shape": [
+                    20,
+                    1,
+                    5,
+                    5
+                ]
+            }
+        },
+        {
+            "bias": {
+                "shape": [
+                    0
+                ]
+            },
+            "config": {
+                "global_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "local_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "param": {
+                "input_channel": 20,
+                "input_height": 28,
+                "input_width": 28,
+                "output_channel": 20,
+                "output_height": 28,
+                "output_width": 28
+            },
+            "type": "ReLU",
+            "weight": {
+                "shape": [
+                    0
+                ]
+            }
+        },
+        {
+            "bias": {
+                "shape": [
+                    0
+                ]
+            },
+            "config": {
+                "global_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "local_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "param": {
+                "input_channel": 20,
+                "input_height": 28,
+                "input_width": 28,
+                "output_channel": 20,
+                "output_height": 14,
+                "output_width": 14
+            },
+            "type": "Pooling",
+            "weight": {
+                "shape": [
+                    0
+                ]
+            }
+        },
+        {
+            "bias": {
+                "shape": [
+                    50
+                ]
+            },
+            "config": {
+                "global_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "local_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "param": {
+                "input_channel": 20,
+                "input_height": 14,
+                "input_width": 14,
+                "output_channel": 50,
+                "output_height": 12,
+                "output_width": 12
+            },
+            "type": "Convolution",
+            "weight": {
+                "shape": [
+                    50,
+                    20,
+                    3,
+                    3
+                ]
+            }
+        },
+        {
+            "bias": {
+                "shape": [
+                    0
+                ]
+            },
+            "config": {
+                "global_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "local_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "param": {
+                "input_channel": 50,
+                "input_height": 12,
+                "input_width": 12,
+                "output_channel": 50,
+                "output_height": 12,
+                "output_width": 12
+            },
+            "type": "ReLU",
+            "weight": {
+                "shape": [
+                    0
+                ]
+            }
+        },
+        {
+            "bias": {
+                "shape": [
+                    0
+                ]
+            },
+            "config": {
+                "global_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "local_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "param": {
+                "input_channel": 50,
+                "input_height": 12,
+                "input_width": 12,
+                "output_channel": 50,
+                "output_height": 14,
+                "output_width": 14
+            },
+            "type": "Padding",
+            "weight": {
+                "shape": [
+                    0
+                ]
+            }
+        },
+        {
+            "bias": {
+                "shape": [
+                    0
+                ]
+            },
+            "config": {
+                "global_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "local_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "param": {
+                "input_channel": 50,
+                "input_height": 14,
+                "input_width": 14,
+                "output_channel": 50,
+                "output_height": 13,
+                "output_width": 13
+            },
+            "type": "Pooling",
+            "weight": {
+                "shape": [
+                    0
+                ]
+            }
+        },
+        {
+            "bias": {
+                "shape": [
+                    100
+                ]
+            },
+            "config": {
+                "global_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "local_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "param": {
+                "input_channel": 50,
+                "input_height": 13,
+                "input_width": 13,
+                "output_channel": 100,
+                "output_height": 1,
+                "output_width": 1
+            },
+            "type": "Convolution",
+            "weight": {
+                "shape": [
+                    100,
+                    50,
+                    13,
+                    13
+                ]
+            }
+        },
+        {
+            "bias": {
+                "shape": [
+                    0
+                ]
+            },
+            "config": {
+                "global_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "local_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "param": {
+                "input_channel": 100,
+                "input_height": 1,
+                "input_width": 1,
+                "output_channel": 100,
+                "output_height": 1,
+                "output_width": 1
+            },
+            "type": "ReLU",
+            "weight": {
+                "shape": [
+                    0
+                ]
+            }
+        },
+        {
+            "bias": {
+                "shape": [
+                    10
+                ]
+            },
+            "config": {
+                "global_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "local_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "param": {
+                "input_channel": 100,
+                "input_height": 1,
+                "input_width": 1,
+                "output_channel": 10,
+                "output_height": 1,
+                "output_width": 1
+            },
+            "type": "Convolution",
+            "weight": {
+                "shape": [
+                    10,
+                    100,
+                    1,
+                    1
+                ]
+            }
+        },
+        {
+            "bias": {
+                "shape": [
+                    0
+                ]
+            },
+            "config": {
+                "global_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "local_size": [
+                    1,
+                    1,
+                    1
+                ],
+                "offset": [
+                    0,
+                    0,
+                    0
+                ]
+            },
+            "param": {
+                "input_channel": 10,
+                "input_height": 1,
+                "input_width": 1,
+                "output_channel": 10,
+                "output_height": 1,
+                "output_width": 1
+            },
+            "type": "Output",
+            "weight": {
+                "shape": [
+                    0
+                ]
+            }
+        }
+    ],
+    "num_layers": 13
+}

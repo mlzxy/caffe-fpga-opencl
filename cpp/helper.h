@@ -46,6 +46,8 @@
 #define PROJECT_NAME net
 typedef float dType;
 
+#define OPENCL_COMPILE_OPTION "-I/Users/xinyuzhang/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/kernels/net"
+
 #define OPENCL_VERSION OCL12
 #define PLATFORM_FILTER APPLE_MAC
 #define DISABLE_DEVICE_FILTER  true
@@ -231,5 +233,8 @@ template<typename T, typename U> U maxLabel(T* arr, U size){
     }
     return maxIdx;
 };
+void print2D(dType *fm, int height, int width);
+
+
 
 #endif //C_VERSION_HELPER_H

@@ -9,6 +9,9 @@ def convert(model_path='',  output_dir='',  name='', prototxt_path='', config=No
     with open(join(realpath(output_dir),name + '.json'), 'w+') as outfile:
         json.dump(net.json(), outfile)
         print("Dump model data into json file {0}.json".format(name))
+        with open(join(realpath(output_dir),name + '-config.json'), 'w+') as configfile:
+            print("Dump config data into json file {0}.json".format(name+'-config'))
+            json.dump(net.config_json(), configfile, indent=4, sort_keys=True)
 
 
 if __name__ == "__main__":

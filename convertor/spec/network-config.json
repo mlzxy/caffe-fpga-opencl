@@ -1,0 +1,20 @@
+{
+  "default":{
+    "globalSize":[1,1,1],
+    "localSize":[1,1,1],
+    "offset":[0,0,0]
+  },
+  "layers":[
+    {  // Data
+      "globalSize":[1,1,1],
+      "localSize":[1,1,1]
+    },
+    { // Padding
+
+    },
+    { //
+
+    }
+
+  ]
+}

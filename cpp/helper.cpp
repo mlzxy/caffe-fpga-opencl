@@ -211,7 +211,7 @@ oclHardware getOclHardware(cl_device_type type, const char *target_device) {
         REPORT_ERRM(hardware, "clGetPlatformInfo");
         cout << "DEBUG: " << "Available Platform Found: " << platformName << endl;
         cl_uint deviceCount = 0;
-        err = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ACCELERATOR, 16, devices, &deviceCount);
+        err = clGetDeviceIDs(platforms[i], type, 16, devices, &deviceCount);
         REPORT_ERRM(hardware, string("clGetDeviceIDs at platform: ") + string(platformName));
         cl_uint idev;
         for (idev = 0; idev < deviceCount; idev++) {
@@ -232,7 +232,7 @@ oclHardware getOclHardware(cl_device_type type, const char *target_device) {
         std::cout << "INFO: Selected platform " << platformName << std::endl;
 
         cl_uint deviceCount = 0;
-        err = clGetDeviceIDs(platforms[i], CL_DEVICE_TYPE_ACCELERATOR, 16, devices, &deviceCount);
+        err = clGetDeviceIDs(platforms[i], type, 16, devices, &deviceCount);
         REPORT_ERRM(hardware, string("clGetDeviceIDs:") + string(platformName));
         if (deviceCount == 0) {
             continue;
@@ -298,6 +298,8 @@ oclSoftware getOclSoftware(const oclHardware &hardware, const char *kernelNames,
     }
     // std::strcpy(soft.mKernelName, kernelName);
     cl_int err;
+
+    std::sprintf(soft.mCompileOptions, OPENCL_COMPILE_OPTION);
     if (hardware.deviceType == CL_DEVICE_TYPE_CPU) {
         std::sprintf(soft.mCompileOptions, "-g");
     }
@@ -483,7 +485,7 @@ NetParam createNetParam(Json::Value data) {
     param.stride = data["stride"].asInt();
     param.kernelSize = data["kernel_size"].asInt();
     param.dilation = data["dilation"].asInt();
-    param.pad = data["kernel_size"].asInt();
+    param.pad = data["pad"].asInt();
     param.inputChannel = data["input_channel"].asInt();
     param.inputHeight = data["input_height"].asInt();
     param.inputWidth = data["input_width"].asInt();
@@ -497,11 +499,11 @@ NetParam createNetParam(Json::Value data) {
 
 
 #define SET_3D(array, x, y, z) array[0]=(x); array[1]=(y); array[2]=(z);
-#define SET_CL_3D_SIZE(offset, key, d1,d2,d3) \
+#define SET_CL_3D_SIZE(data, offset, key) \
     SET_3D(offset, \
-        data[key].get("0", d1).asUInt(), \
-        data[key].get("1", d2).asUInt(), \
-        data[key].get("2", d3).asUInt());
+        data[key][0].asUInt(), \
+        data[key][1].asUInt(), \
+        data[key][2].asUInt());
 
 
 Layer::Layer(Json::Value data) {
@@ -541,9 +543,11 @@ Layer::Layer(Json::Value data) {
     inputBufferCL = NULL;
     paramCL = NULL;
 //     globalSize[3], localSize[3], offset[3];
-    SET_CL_3D_SIZE(globalSize, "global_size", param.outputChannel, param.outputHeight, param.outputWidth);
-    SET_CL_3D_SIZE(localSize, "local_size", 1,1,1);
-    SET_CL_3D_SIZE(offset, "offset", 0,0,0);
+//    Json::Value globalSizeJson = data["config"]["global_size"];
+//    globalSize[0] =  globalSizeJson[0].asUInt();
+    SET_CL_3D_SIZE(data["config"], globalSize, "global_size");
+    SET_CL_3D_SIZE(data["config"], localSize, "local_size");
+    SET_CL_3D_SIZE(data["config"], offset, "offset");
 }
 
 Layer::~Layer() {
@@ -611,13 +615,21 @@ bool Layer::forward(oclHardware hardware, oclSoftware software, OpenCLVersion mo
             inputSize = (size_t) param.inputTotalDataNum;
         }
     }
-    inputBufferCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_WRITE_ONLY, inputSize, NULL, &err);
-    outputBufferCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_READ_ONLY, outputSize, NULL, &err);
-    paramCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_WRITE_ONLY, sizeof(NetParam), NULL, &err);
+    inputBufferCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_READ_ONLY, inputSize * sizeof(dType), NULL, &err);
+    FORWARD_ERROR_CHECK;
+    outputBufferCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_WRITE_ONLY, outputSize * sizeof(dType), NULL, &err);
+    FORWARD_ERROR_CHECK;
+    paramCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_READ_ONLY, sizeof(NetParam), NULL, &err); // works good
     FORWARD_ERROR_CHECK;
     //Input Feature Map
-    CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, inputBufferCL, CL_TRUE, 0, inputSize, inputBuffer, 0, NULL, NULL);
-    CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, paramCL, CL_TRUE, 0, sizeof(NetParam), (void *)&param, 0, NULL, NULL);
+//    dType *_inputBuffer = new dType[784];
+//    _inputBuffer[0] = 10.0;
+//    for(int i = 0; i< 784;i++){
+//        _inputBuffer[i] = (float)inputBuffer[i];
+//    }
+//    print2D(_inputBuffer, 28,28);
+    CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, inputBufferCL, CL_TRUE, 0, inputSize*sizeof(dType), (void *)inputBuffer, 0, NULL, NULL);
+    CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, paramCL, CL_TRUE, 0, sizeof(NetParam), (void *)&param, 0, NULL, NULL); //works good
 
 
 
@@ -627,11 +639,11 @@ bool Layer::forward(oclHardware hardware, oclSoftware software, OpenCLVersion mo
     CL_KERNEL_ARG(kernel,  sizeof(cl_mem), &inputBufferCL);
     CL_KERNEL_ARG(kernel,  sizeof(cl_mem), &outputBufferCL);
     if(type == Convolution){
-        weightCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_WRITE_ONLY, learnedParam.weight_data_num, NULL, &err);
-        biasCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_WRITE_ONLY, learnedParam.bias_data_num, NULL, &err);
+        weightCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_READ_ONLY, learnedParam.weight_data_num*sizeof(dType), NULL, &err);
+        biasCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_READ_ONLY, learnedParam.bias_data_num*sizeof(dType), NULL, &err);
         FORWARD_ERROR_CHECK;
-        CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, weightCL, CL_TRUE, 0, sizeof(cl_mem), learnedParam.weight, 0, NULL, NULL);
-        CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, biasCL, CL_TRUE, 0, sizeof(cl_mem), learnedParam.bias, 0, NULL, NULL);
+        CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, weightCL, CL_TRUE, 0, learnedParam.weight_data_num*sizeof(dType), learnedParam.weight, 0, NULL, NULL);
+        CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, biasCL, CL_TRUE, 0, learnedParam.bias_data_num*sizeof(dType), learnedParam.bias, 0, NULL, NULL);
         CL_KERNEL_ARG(kernel, sizeof(cl_mem), &weightCL);
         CL_KERNEL_ARG(kernel,  sizeof(cl_mem), &biasCL);
     }
@@ -646,7 +658,8 @@ bool Layer::forward(oclHardware hardware, oclSoftware software, OpenCLVersion mo
     //Output Feature Map
     if (outputSize > 0) {
         CL_FINISH(hardware.mQueue);
-        CL_ENQUEUE_READ_BUFFER(hardware.mQueue, outputBufferCL, CL_TRUE, 0, outputSize, outputBuffer, 0, NULL, NULL);
+        CL_ENQUEUE_READ_BUFFER(hardware.mQueue, outputBufferCL, CL_TRUE, 0, outputSize*sizeof(dType), outputBuffer, 0, NULL, NULL);
+        CL_FINISH(hardware.mQueue);
         freeCLMemory();
     }
     //Ping Pong
@@ -710,3 +723,13 @@ Layer *Net::outputLayer() {
     return layers[num_layers - 1];
 }
 
+void print2D(dType *fm, int height, int width){
+    cout<<"\n\n";
+    for(int i = 0; i<height;i++){
+        for(int j = 0;j<width;j++){
+            cout<<fm[i*width+j]<<",";
+        }
+        cout<<endl;
+    }
+    cout<<"\n\n";
+}

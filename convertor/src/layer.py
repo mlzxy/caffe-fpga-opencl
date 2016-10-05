@@ -39,8 +39,8 @@ class Layer:
             self.param['input_height'] = self.param['output_height']
 
     def fixPadding(self, key='input'):
-        self.param[key+'_height'] += self.param['pad']
-        self.param[key+'_width'] += self.param['pad']
+        self.param[key+'_height'] += (2*self.param['pad'])
+        self.param[key+'_width'] += (2*self.param['pad'])
     def json(self):
         self.param['output_fm_data_num'] = self.param['output_channel'] * self.param['output_width'] * self.param['output_height']
         self.param['input_fm_data_num'] = self.param['input_channel'] * self.param['input_width'] * self.param['input_height']
@@ -75,6 +75,35 @@ class Layer:
                 'output_height': self.param['output_height'],
                 'output_fm_data_num': self.param['output_fm_data_num'],
                 'input_fm_data_num': self.param['input_fm_data_num']
+            },
+            'config':{
+                'global_size':[1,1,1],
+                'local_size':[1,1,1],
+                'offset':[0,0,0]
+            }
+        }
+
+    def config_json(self):
+        return {
+            'type':self.type,
+            'weight':{
+                'shape': tupleToList(self.weight.shape),
+            },
+            'bias':{
+                'shape': tupleToList(self.bias.shape),
+            },
+            'param':{
+                'input_channel':self.param['input_channel'],
+                'input_width':self.param['input_width'],
+                'input_height':self.param['input_height'],
+                'output_channel': self.param['output_channel'],
+                'output_width': self.param['output_width'],
+                'output_height': self.param['output_height']
+            },
+            'config':{
+                'global_size':[1,1,1],
+                'local_size':[1,1,1],
+                'offset':[0,0,0]
             }
         }
 
@@ -111,9 +140,9 @@ class Pooling(Layer):
             self.param['ave_pool'] = 1
         else:
             self.param['max_pool'] = 1
-        self.param['pad'] = pooling_param.pad
+        self.param['pad'] = int(pooling_param.pad)
         self.fixPadding()
-        self.param['stride'] = pooling_param.stride
+        self.param['stride'] = int(pooling_param.stride)
         self.param['kernel_size'] = pooling_param.kernel_size
         self.info = "{0} - Kernel [{1},{1}], Pad {3}, Stride {2} - Output Information: channel {4}, width {5}, height {6}" \
             .format(self.info, self.param['kernel_size'], self.param['stride'], self.param['pad'],
@@ -137,6 +166,7 @@ class Padding(Layer):
         Layer.__init__(self, type, data)
         self.param['pad'] = self.proto_param['pad']
         self.fixPadding(key='output')
+        pass
 
 
 lt.connect(lt.Relu, Activation)

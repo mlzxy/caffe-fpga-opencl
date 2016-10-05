@@ -25,11 +25,9 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
     INFO_LOG<<"Net build finished."<<endl;
     float correctCounter = 0;
 
-    dType *image = new dType[784];
+//    dType *image = new dType[784];
     for(int i = 0;i<MNIST_TEST_NUM;i++){
-        for(int j = 0; j<784;j++)
-            image[i] = (dType)mnist_images[i][j];
-        net->forward(hardware, software, image);
+        net->forward(hardware, software, mnist_images[i]);
         Layer* output = net->outputLayer();
         int predicted = maxLabel<dType, int>(output->outputBuffer, output->param.outputTotalDataNum);
         string result;
@@ -41,5 +39,7 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
         }
         INFO_LOG<<result<<" prediction on image "<<i<<": "<<predicted<<" = "<<mnist_labels[i]<<endl;
     }
+
+    INFO_LOG<<"Accuracy = " << correctCounter/MNIST_TEST_NUM*100<<"%."<<endl;
     delete net;
 }
