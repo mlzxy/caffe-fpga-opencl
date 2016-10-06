@@ -532,6 +532,8 @@ Layer::Layer(Json::Value data) {
     learnedParam = createWeightData(data);
     param = createNetParam(data["param"]);
     outputBuffer = new dType[param.outputTotalDataNum];
+    //set memory to zero
+    memset(outputBuffer, 0, param.outputTotalDataNum*sizeof(dType));
     inputBuffer = NULL;
     next = NULL;
     prev = NULL;
@@ -591,8 +593,10 @@ bool Layer::freeCLMemory() {
 }
 
 
-bool Layer::forward(oclHardware hardware, oclSoftware software, OpenCLVersion mode) {
-    INFO_LOG << "    Forward Pass: " << info << endl;
+bool Layer::forward(oclHardware hardware, oclSoftware software, OpenCLVersion mode, NetLogging log) {
+    if(log == LAYER) {
+        INFO_LOG << "    Forward Pass: " << info << endl;
+    }
     if (prev != NULL) {
         inputBuffer = prev->outputBuffer;
     }
@@ -619,6 +623,8 @@ bool Layer::forward(oclHardware hardware, oclSoftware software, OpenCLVersion mo
     FORWARD_ERROR_CHECK;
     paramCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_READ_ONLY, sizeof(NetParam), NULL, &err); // works good
     FORWARD_ERROR_CHECK;
+
+
     //Input Feature Map
 //    dType *_inputBuffer = new dType[784];
 //    _inputBuffer[0] = 10.0;
@@ -646,7 +652,7 @@ bool Layer::forward(oclHardware hardware, oclSoftware software, OpenCLVersion mo
         CL_KERNEL_ARG(kernel,  sizeof(cl_mem), &biasCL);
     }
     CL_KERNEL_ARG(kernel, sizeof(cl_mem), &paramCL);
-    CL_KERNEL_ARG(kernel,  sizeof(bool), &phase);
+    CL_KERNEL_ARG(kernel,  sizeof(int), &phase);
 
 
     FORWARD_ERROR_CHECK
@@ -701,17 +707,30 @@ bool Net::freeCLMemory() {
     return result;
 }
 
-bool Net::forward(oclHardware hardware, oclSoftware software, dType *data) {
-    INFO_LOG << "Forward Pass: " << name << endl;
+bool Net::forward(oclHardware hardware, oclSoftware software, dType *data, NetLogging log) {
+    if(log != NO) {
+        INFO_LOG << "Forward Pass: " << name << endl;
+    }
     layers[0]->inputBuffer = data;
-    layers[0]->phase = false;
+    layers[0]->phase = 0;
     bool result = true;
     for (int i = 0; i < num_layers; i++) {
-        result = layers[i]->forward(hardware, software, mode);
+//        if(i == 1){
+//            cout<<"OUTPUT BUFFER BEFORE"<<endl;
+//            print2D(layers[i]->outputBuffer, layers[i]->param.outputHeight, layers[i]->param.outputWidth);
+//        }
+        result = layers[i]->forward(hardware, software, mode, log);
         if (!result) {
             ERROR_LOG << layers[i]->type << ": " << layers[i]->info << endl;
             return false;
         }
+
+        // for debugging //
+//        if(i == 1){
+//            cout<<"OUTPUT BUFFER AFTER"<<endl;
+//            print2D(layers[i]->outputBuffer, layers[i]->param.outputHeight, layers[i]->param.outputWidth);
+//        }
+        // for debugging //
     }
     result = freeCLMemory();
     return result;

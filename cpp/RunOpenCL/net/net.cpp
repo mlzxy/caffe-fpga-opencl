@@ -11,10 +11,11 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
     char *netJson = 0;
     INFO_LOG<<"Start to read "<<arg.network<<endl;
     int jsonSize = loadFile2Memory(arg.network, &netJson);
-    INFO_LOG<<"Read network json "<<arg.network<<" finished"<<endl;
-    if(jsonSize < 0){
-        ERROR_LOG<<"Fail to load "<<arg.network<<endl;
+    if(jsonSize == -1){
+        ERROR_LOG<<"Fail to load File "<<arg.network<<endl;
+        exit(0);
     }
+    INFO_LOG<<"Read network json "<<arg.network<<" finished"<<endl;
     Json::Reader reader;
     Json::Value netRoot;
     bool parsingSuccessful = reader.parse( std::string(netJson), netRoot );
@@ -27,8 +28,8 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
     float correctCounter = 0;
     dType softmax_output[10];
     bool forward_result;
-    for(int i = 0;i<MNIST_TEST_NUM;i++){
-        forward_result = net->forward(hardware, software, mnist_images[i]);
+    for(int i = 0;i<MNIST_TEST_NUM; i++){
+        forward_result = net->forward(hardware, software, mnist_images[i], NET);
         if(!forward_result){
             delete net;
             ERROR_LOG<<"FREE MEMORY AND EXITING...";
@@ -44,7 +45,7 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
         }else{
             result="Wrong";
         }
-        INFO_LOG<<result<<" prediction on image "<<i<<": "<<predicted<<" = "<<mnist_labels[i]<<endl;
+        INFO_LOG<<"NO "<<i+1<<","<<result<<" prediction on image "<<i<<": "<<predicted<<" = "<<mnist_labels[i]<<endl;
     }
 
     INFO_LOG<<"Accuracy = " << correctCounter/MNIST_TEST_NUM*100<<"%."<<endl;

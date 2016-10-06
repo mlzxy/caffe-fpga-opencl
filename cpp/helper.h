@@ -49,16 +49,19 @@ typedef float dType;
 #define OPENCL_COMPILE_OPTION "-I/Users/xinyuzhang/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/kernels/net"
 
 #define OPENCL_VERSION OCL12
+
+#ifdef __APPLE__
 #define PLATFORM_FILTER APPLE_MAC
 #define DISABLE_DEVICE_FILTER  true
+#else
+#define PLATFORM_FILTER XILINX_FPGA
+#define DISABLE_DEVICE_FILTER  false
+#endif
+
 
 
 // #define PLATFORM_FILTER NVIDIA_CUDA
 // #define DISABLE_DEVICE_FILTER  true
-
-//#define PLATFORM_FILTER XILINX_FPGA
-//#define DISABLE_DEVICE_FILTER  false
-
 //////////////////////////////////////////////////////////////////////////////// //////////////////////////////////
 
 // Macro for adding quotes
@@ -178,12 +181,12 @@ typedef struct{
 
 enum LayerType {Convolution, Relu, Data, Split, Pooling, Accuracy, SoftmaxWithLoss, Output, Padding};
 enum OpenCLVersion {OCL20, OCL12};
-
+enum NetLogging {NO, LAYER, NET};
 class Layer {
 public:
     ~Layer();
     Layer(Json::Value);
-    bool forward(oclHardware hardware, oclSoftware software, OpenCLVersion mode);
+    bool forward(oclHardware hardware, oclSoftware software, OpenCLVersion mode, NetLogging log);
     bool freeCLMemory();
     cl_mem weightCL;
     cl_mem biasCL;
@@ -196,7 +199,7 @@ public:
     WeightData learnedParam;
     NetParam param;
     Layer* next;
-    bool phase;
+    int phase;
     Layer* prev;
     dType *inputBuffer;
     dType *outputBuffer;
@@ -213,7 +216,7 @@ public:
     bool freeCLMemory();
     Net(Json::Value, cmdArg arg,OpenCLVersion version);
     ~Net();
-    bool forward(oclHardware hardware, oclSoftware software, dType *data);
+    bool forward(oclHardware hardware, oclSoftware software, dType *data, NetLogging log);
     Layer* outputLayer();
 };
 

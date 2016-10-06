@@ -11,9 +11,8 @@
  *  Customization
  */
 typedef float dType;
-#define MIN_NUM FLT_MIN
-#define MAX_NUM FLT_MAX
-
+//#define BUFFER_SIZE 10000
+typedef int BOOL;
 //////////////////////////////////////////////////////////////////////
 /**
  * Don't change anything below if you don't understand.
@@ -186,6 +185,20 @@ typedef float dType;
   WORK_ITEM_END(loadDataCounter, groupSize)
 
 /**
+ * [MEM_SET set memory to constant]
+ * @param  dest      [memory destination]
+ * @param constant   [value]
+ * @param  total     [total number of data will be transfered, usually
+ * inputTotalDataNum]
+ * @param  id        [description the gloabl id of current work item]
+ * @param  groupSize [description the global size of this opencl kernel]
+ */
+#define MEMSET(dest, cstt, total, id, groupSize)                               \
+  WORK_ITEM_BEGIN(loadDataCounter, total, id)                                  \
+  (dest)[loadDataCounter] = (cstt);                                            \
+  WORK_ITEM_END(loadDataCounter, groupSize)
+
+/**
  * [LOAD_DATA_SCALE load data from src to dest, with a scale parameter]
  * @param  src       [memory source]
  * @param  dest      [memory destination]
@@ -212,13 +225,13 @@ typedef float dType;
  * [LOAD_DATA_PAD description]
  * @param  src              [memory source]
  * @param  dest             [memory destination]
- * @param  numChannel       [how many channel of the feature map]
+ * @param  numChannel       [how many channel of the input feature map]
  * @param  channelGroupSize [the global size on the channel dimension]
  * @param  channelId        [the global id on the channel dimension]
- * @param  numHeight        [the height of each feature map]
+ * @param  numHeight        [the height of each input feature map]
  * @param  heightGroupSize  [global size on height]
  * @param  heightId         [global id on height]
- * @param  numWidth         [the width of each feature map]
+ * @param  numWidth         [the width of each input feature map]
  * @param  widthGroupSize   [global size on width]
  * @param  widthId          [global id on width]
  * @param  pad              [padding parameter]
@@ -236,6 +249,39 @@ typedef float dType;
   WORK_ITEM_3D_END(channelCounter, channelGroupSize, heightCounter,            \
                    heightGroupSize, widthCounter, widthGroupSize)
 
+/**
+ * [LOAD_DATA_PAD description]
+ * @param  src              [memory source]
+ * @param  dest             [memory destination]
+ * @param  numChannel       [how many channel of the output feature map]
+ * @param  channelGroupSize [the global size on the channel dimension]
+ * @param  channelId        [the global id on the channel dimension]
+ * @param  numHeight        [the height of each output feature map]
+ * @param  heightGroupSize  [global size on height]
+ * @param  heightId         [global id on height]
+ * @param  numWidth         [the width of each output feature map]
+ * @param  widthGroupSize   [global size on width]
+ * @param  widthId          [global id on width]
+ * @param  pad              [padding parameter]
+ * @return                  [code generated]
+ */
+#define LOAD_DATA_PAD_ENSURE_ZERO(src, dest, numChannel, channelGroupSize,     \
+                                  channelId, inputHeight, outputHeight,        \
+                                  heightGroupSize, heightId, inputWidth,       \
+                                  outputWidth, widthGroupSize, widthId, pad)   \
+  __private bool zero = false;                                                 \
+  WORK_ITEM_3D_BEGIN(channelCounter, numChannel, channelId, heightCounter,     \
+                     outputHeight, heightId, widthCounter, outputWidth,        \
+                     widthId)                                                  \
+  zero = heightCounter < pad || widthCounter < pad ||                          \
+         (outputWidth - widthCounter - 1) < pad ||                             \
+         (outputHeight - heightCounter - 1) < pad;                             \
+  ELM(dest, channelCounter, outputHeight, heightCounter, outputWidth,          \
+      widthCounter) =                                                          \
+      zero ? 0 : ELM(src, channelCounter, inputHeight, heightCounter - (pad),  \
+                     inputWidth, widthCounter - (pad));                        \
+  WORK_ITEM_3D_END(channelCounter, channelGroupSize, heightCounter,            \
+                   heightGroupSize, widthCounter, widthGroupSize)
 /**
  * [RELU(x) relu activation]
  * @param  x [input value]
@@ -265,8 +311,8 @@ typedef struct {
 
 #ifdef BUFFER_SIZE
 dType fmCache[2][BUFFER_SIZE];
-#define readFmBuffer fmCache[phase == false]; // phase should start with false
-#define writeFmBuffer fmCache[phase == true];
+#define readFmBuffer fmCache[phase == 0]; // phase should start with false
+#define writeFmBuffer fmCache[phase == 1];
 #else
 #define readFmBuffer inputFeatureMap
 #define writeFmBuffer outputFeatureMap
@@ -290,7 +336,7 @@ dType fmCache[2][BUFFER_SIZE];
 #define EASY_WORK_ITEM_3D_OUTPUT_BEGIN(channelCounter, heightCounter,          \
                                        widthCounter)                           \
   WORK_ITEM_3D_BEGIN(channelCounter, param->outputChannel, GLOBAL_ID_0,        \
-                     heightCounter, param->outputHeight, GLOBAL_ID_1,        \
+                     heightCounter, param->outputHeight, GLOBAL_ID_1,          \
                      widthCounter, param->outputWidth, GLOBAL_ID_2)
 
 /**
@@ -332,7 +378,7 @@ dType fmCache[2][BUFFER_SIZE];
  */
 __kernel void dataLayer(__global dType *inputFeatureMap,
                         __global dType *outputFeatureMap,
-                        __global NetParam *param, bool phase) {
+                        __global NetParam *param, BOOL phase) {
   LOAD_DATA_SCALE(inputFeatureMap, writeFmBuffer, param->inputTotalDataNum,
                   GLOBAL_ID, GLOBAL_SIZE, param->scale);
 }
@@ -348,10 +394,20 @@ __kernel void dataLayer(__global dType *inputFeatureMap,
  */
 __kernel void paddingLayer(__global dType *inputFeatureMap,
                            __global dType *outputFeatureMap,
-                           __global NetParam *param, bool phase) {
-  LOAD_DATA_PAD(readFmBuffer, writeFmBuffer, param->inputChannel, GLOBAL_SIZE_0,
-                GLOBAL_ID_0, param->inputHeight, GLOBAL_SIZE_1, GLOBAL_ID_1,
-                param->inputWidth, GLOBAL_SIZE_2, GLOBAL_ID_2, param->pad);
+                           __global NetParam *param, BOOL phase) {
+
+  // MEMSET(writeFmBuffer, 0, param->outputTotalDataNum, GLOBAL_ID,
+  // GLOBAL_SIZE);
+  // barrier(CLK_GLOBAL_MEM_FENCE);
+  // LOAD_DATA_PAD(readFmBuffer, writeFmBuffer, param->inputChannel,
+  // GLOBAL_SIZE_0,
+  //               GLOBAL_ID_0, param->inputHeight, GLOBAL_SIZE_1, GLOBAL_ID_1,
+  //               param->inputWidth, GLOBAL_SIZE_2, GLOBAL_ID_2, param->pad);
+  LOAD_DATA_PAD_ENSURE_ZERO(readFmBuffer, writeFmBuffer, param->outputChannel,
+                            GLOBAL_SIZE_0, GLOBAL_ID_0, param->inputHeight,
+                            param->outputHeight, GLOBAL_SIZE_1, GLOBAL_ID_1,
+                            param->inputWidth, param->outputWidth,
+                            GLOBAL_SIZE_2, GLOBAL_ID_2, param->pad)
 }
 
 /**
@@ -364,7 +420,7 @@ __kernel void paddingLayer(__global dType *inputFeatureMap,
  */
 __kernel void poolingLayer(__global dType *inputFeatureMap,
                            __global dType *outputFeatureMap,
-                           __global NetParam *param, bool phase) {
+                           __global NetParam *param, BOOL phase) {
   __private dType maxValue, _temp;
   EASY_WORK_ITEM_3D_OUTPUT_BEGIN(channelCounter, heightCounter, widthCounter);
   maxValue = ELM(readFmBuffer, channelCounter, param->inputHeight,
@@ -392,7 +448,7 @@ __kernel void poolingLayer(__global dType *inputFeatureMap,
 // I think I could safely skip this.
 __kernel void reluLayer(__global dType *inputFeatureMap,
                         __global dType *outputFeatureMap,
-                        __global NetParam *param, bool phase) {
+                        __global NetParam *param, BOOL phase) {
   WORK_ITEM_BEGIN(reluCounter, param->inputTotalDataNum, GLOBAL_ID)
   writeFmBuffer[reluCounter] = RELU(readFmBuffer[reluCounter]);
   WORK_ITEM_END(reluCounter, GLOBAL_SIZE)
@@ -411,14 +467,15 @@ __kernel void reluLayer(__global dType *inputFeatureMap,
 __kernel void convLayer(__global dType *inputFeatureMap,
                         __global dType *outputFeatureMap,
                         __global dType *weight, __global dType *bias,
-                        __global const NetParam *param, bool phase) {
+                        __global const NetParam *param, BOOL phase) {
 
   __private int dilatedKernelSize =
       (param->kernelSize - 1) * param->dilation + 1;
   __private dType result;
   EASY_WORK_ITEM_3D_OUTPUT_BEGIN(channelCounter, heightCounter, widthCounter);
   result = 0;
-  // printf("computing <%d, %d, %d>\n", channelCounter, heightCounter, widthCounter);
+  // printf("computing <%d, %d, %d>\n", channelCounter, heightCounter,
+  // widthCounter);
   for (int c = 0; c < param->inputChannel; c++)
     for (int i = 0; i < param->kernelSize; i++)
       for (int j = 0; j < param->kernelSize; j++) {
@@ -429,8 +486,9 @@ __kernel void convLayer(__global dType *inputFeatureMap,
                        widthCounter * param->stride + j * param->dilation) *
                    WELM(weight, channelCounter, param->inputChannel, c,
                         param->kernelSize, i, j));
-                //
-                //         comment out the WELM will eliminate the problem, so it seems we sport the problem.
+        //
+        //         comment out the WELM will eliminate the problem, so it seems
+        //         we sport the problem.
       }
 
   result += bias[channelCounter];
@@ -447,10 +505,10 @@ __kernel void convLayer(__global dType *inputFeatureMap,
  * @param param            [network parameter]
  * @param phase            [phase id, for ping pong buffer switching]
  */
-//safely skip
+// safely skip
 __kernel void outputLayer(__global dType *inputFeatureMap,
                           __global dType *outputFeatureMap,
-                          __global NetParam *param, bool phase) {
+                          __global NetParam *param, BOOL phase) {
   LOAD_DATA(readFmBuffer, outputFeatureMap, param->inputTotalDataNum, GLOBAL_ID,
             GLOBAL_SIZE);
 }
