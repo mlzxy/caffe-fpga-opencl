@@ -8,9 +8,9 @@
             }, 
             "config": {
                 "global_size": [
-                    1,
-                    1,
-                    1
+                    10,
+                    10,
+                    10
                 ],
                 "local_size": [
                     1,
@@ -46,9 +46,9 @@
             },
             "config": {
                 "global_size": [
-                    1,
-                    1,
-                    1
+                    10,
+                    10,
+                    10
                 ],
                 "local_size": [
                     1,
@@ -84,9 +84,9 @@
             },
             "config": {
                 "global_size": [
-                    1,
-                    1,
-                    1
+                    10,
+                    10,
+                    10
                 ],
                 "local_size": [
                     1,
@@ -125,9 +125,9 @@
             },
             "config": {
                 "global_size": [
-                    1,
-                    1,
-                    1
+                    10,
+                    10,
+                    10
                 ],
                 "local_size": [
                     1,
@@ -163,9 +163,9 @@
             },
             "config": {
                 "global_size": [
-                    1,
-                    1,
-                    1
+                    10,
+                    10,
+                    10
                 ],
                 "local_size": [
                     1,
@@ -201,9 +201,9 @@
             },
             "config": {
                 "global_size": [
-                    1,
-                    1,
-                    1
+                    10,
+                    10,
+                    10
                 ],
                 "local_size": [
                     1,
@@ -242,9 +242,9 @@
             },
             "config": {
                 "global_size": [
-                    1,
-                    1,
-                    1
+                    10,
+                    10,
+                    10
                 ],
                 "local_size": [
                     1,
@@ -280,9 +280,9 @@
             },
             "config": {
                 "global_size": [
-                    1,
-                    1,
-                    1
+                    10,
+                    10,
+                    10
                 ],
                 "local_size": [
                     1,
@@ -318,9 +318,9 @@
             },
             "config": {
                 "global_size": [
-                    1,
-                    1,
-                    1
+                    10,
+                    10,
+                    10
                 ],
                 "local_size": [
                     1,
@@ -356,9 +356,9 @@
             },
             "config": {
                 "global_size": [
-                    1,
-                    1,
-                    1
+                    10,
+                    10,
+                    10
                 ],
                 "local_size": [
                     1,
@@ -397,7 +397,7 @@
             },
             "config": {
                 "global_size": [
-                    1,
+                    100,
                     1,
                     1
                 ],
@@ -435,7 +435,7 @@
             },
             "config": {
                 "global_size": [
-                    1,
+                    10,
                     1,
                     1
                 ],
@@ -476,7 +476,7 @@
             },
             "config": {
                 "global_size": [
-                    1,
+                    10,
                     1,
                     1
                 ],

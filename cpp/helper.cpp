@@ -202,7 +202,7 @@ oclHardware getOclHardware(cl_device_type type, const char *target_device) {
     char deviceName[256];
     cl_uint platformCount = 0;
     cl_int err;
-
+    printTitle("Hardware Detecting and Choosing");
     err = clGetPlatformIDs(16, platforms, &platformCount);
     REPORT_ERRM(hardware, "clGetPlatformIDs");
     bool platformSelected = false;
@@ -270,7 +270,7 @@ oclHardware getOclHardware(cl_device_type type, const char *target_device) {
         hardware.mQueue = queue;
         hardware.deviceType = type;
         getDeviceVersion(hardware);
-        cout << "+++++++++++++++++++++++++Runtime Info+++++++++++++++++++++++++++" << endl;
+        printTitle("Platform Hardware Info");
         std::cout << "INFO: Platform = " << platformName << "\n";
         std::cout << "INFO: Device = " << deviceName << "\n";
         std::cout << "INFO: OpenCL Version = " << hardware.mMajorVersion << '.' << hardware.mMinorVersion << "\n";
@@ -304,6 +304,7 @@ oclSoftware getOclSoftware(const oclHardware &hardware, const char *kernelNames,
         std::sprintf(soft.mCompileOptions, "-g");
     }
 
+    printTitle("Kernel Compilation");
     std::cout << "INFO: Loading " << kernelFileName << "\n";
     int size = loadFile2Memory(kernelFileName, (char **) &kernelCode);
     if (size < 0) {
@@ -392,6 +393,7 @@ cmdArg parseCmdArg(int argc, char **argv) {
 }
 
 
+
 double runProgram(int argc, char **argv, RunOpenCL F) {
     cmdArg arg = parseCmdArg(argc, argv);
     oclHardware hardware = getOclHardware(arg.deviceType, ALPHA_DATA_KU3_DDR1);
@@ -401,15 +403,11 @@ double runProgram(int argc, char **argv, RunOpenCL F) {
          iterator++) {
         cout << "Kernel: " << iterator->first << " " << iterator->second << endl;
     }
-//    cout<<"INFO: CL_DEVICE_MAX_WORK_GROUP_SIZE = "<<CL_DEVICE_MAX_WORK_GROUP_SIZE<<endl;
-//    cout<<"INFO: CL_DEVICE_MAX_WORK_ITEM_SIZES = " <<CL_DEVICE_MAX_WORK_ITEM_SIZES<<endl;
 
-    // run the program here!
-    // - read images from cmdArg.imagesDir
-    // - enqeue those images in batch? need experiments
-    // - anyway, start with simple one.
-    cout << "++++++++++++++++++++++++++++++++++++ Entering Custom Host Code ++++++++++++++++++++++++++++++++++++ \n"
-         << endl;
+
+    printTitle("OpenCL RunTime Environment");
+    printCLConstant();
+    printTitle("Entering Custom Host Code");
     double delay = (*F)(arg, hardware, software);
     release(software);
     release(hardware);
@@ -583,7 +581,7 @@ FORWARD_ERROR_CHECK;
 FORWARD_ERROR_CHECK;
 
 bool Layer::freeCLMemory() {
-    cl_int err;
+    cl_int err = CL_SUCCESS;
     CL_RELEASE(outputBufferCL);
     CL_RELEASE(inputBufferCL);
     CL_RELEASE(weightCL);
@@ -653,7 +651,7 @@ bool Layer::forward(oclHardware hardware, oclSoftware software, OpenCLVersion mo
 
     FORWARD_ERROR_CHECK
     //Enqueue Kernel
-    KERNEL_ENQUEUE(hardware.mQueue, kernel, 3, offset, localSize, globalSize, 0, NULL, NULL);
+    KERNEL_ENQUEUE(hardware.mQueue, kernel, 3, offset, globalSize, localSize, 0, NULL, NULL);
 
     //Output Feature Map
     if (outputSize > 0) {

@@ -7,6 +7,7 @@
 #include "../../helper.h"
 
 double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
+    clock_t start = clock();
     char *netJson = 0;
     INFO_LOG<<"Start to read "<<arg.network<<endl;
     int jsonSize = loadFile2Memory(arg.network, &netJson);
@@ -25,9 +26,14 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
     INFO_LOG<<"Net build finished."<<endl;
     float correctCounter = 0;
     dType softmax_output[10];
-//    dType *image = new dType[784];
+    bool forward_result;
     for(int i = 0;i<MNIST_TEST_NUM;i++){
-        net->forward(hardware, software, mnist_images[i]);
+        forward_result = net->forward(hardware, software, mnist_images[i]);
+        if(!forward_result){
+            delete net;
+            ERROR_LOG<<"FREE MEMORY AND EXITING...";
+            exit(0);
+        }
         Layer* output = net->outputLayer();
         softmax(output->outputBuffer, softmax_output, output->param.outputTotalDataNum);
         int predicted = maxLabel<dType, int>(softmax_output, output->param.outputTotalDataNum);
@@ -43,4 +49,5 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
 
     INFO_LOG<<"Accuracy = " << correctCounter/MNIST_TEST_NUM*100<<"%."<<endl;
     delete net;
+    return (clock() - start)/(double)CLOCKS_PER_SEC;
 }

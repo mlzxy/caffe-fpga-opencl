@@ -237,4 +237,15 @@ void print2D(dType *fm, int height, int width);
 
 void softmax(dType *input, dType *output, int size);
 
+inline void printTitle(string x){
+cout << "++++++++++++++++++++++++++++++++++++ "<<x<<" ++++++++++++++++++++++++++++++++++++ \n"
+    << endl;
+}
+
+inline void printCLConstant(){
+    INFO_LOG<<"CL_DEVICE_MAX_WORK_GROUP_SIZE = "<<CL_DEVICE_MAX_WORK_GROUP_SIZE<<endl;
+    INFO_LOG<<"CL_DEVICE_MAX_WORK_ITEM_SIZES   " <<CL_DEVICE_MAX_WORK_ITEM_SIZES<<endl;
+}
+
+
 #endif //C_VERSION_HELPER_H
