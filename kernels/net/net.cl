@@ -1,7 +1,6 @@
 /**
  *  Customization
  */
-// #define BUFFER_SIZE 100
 
 //////////////////////////////////////////////////////////////////////
 /**
@@ -10,8 +9,11 @@
 /**
  *  Customization
  */
+#ifdef __xilinx__
+#define BUFFER_SIZE 15680
+#endif
+// #define DEBUG
 typedef float dType;
-//#define BUFFER_SIZE 10000
 typedef int BOOL;
 //////////////////////////////////////////////////////////////////////
 /**
@@ -311,8 +313,8 @@ typedef struct {
 
 #ifdef BUFFER_SIZE
 dType fmCache[2][BUFFER_SIZE];
-#define readFmBuffer fmCache[phase == 0]; // phase should start with false
-#define writeFmBuffer fmCache[phase == 1];
+#define readFmBuffer fmCache[phase[0] == 0]  // read==0
+#define writeFmBuffer fmCache[phase[0] == 1] // write==1
 #else
 #define readFmBuffer inputFeatureMap
 #define writeFmBuffer outputFeatureMap
@@ -366,6 +368,22 @@ dType fmCache[2][BUFFER_SIZE];
   ELM(writeFmBuffer, channelCounter, param->outputHeight, heightCounter,       \
       param->outputWidth, widthCounter)
 
+#define print2D(fm, height, width)                                             \
+  printf("\n\n");                                                              \
+  for (int i = 0; i < height; i++) {                                           \
+    for (int j = 0; j < width; j++) {                                          \
+      printf("%.2f,", fm[i * width + j]);                                      \
+    }                                                                          \
+    printf("\n");                                                              \
+  }                                                                            \
+  printf("\n\n");
+
+#ifdef DEBUG
+#define DEBUG_PRINT(type) printf("Global ID %d - %s Layer, phase = %d\n", GLOBAL_ID, type, phase[0])
+#else
+#define DEBUG_PRINT(type) printf("");
+#endif
+
 /**
  * [dataLayer
  *  data layer to transfer data from input feature map to (output|cache), with
@@ -378,9 +396,13 @@ dType fmCache[2][BUFFER_SIZE];
  */
 __kernel void dataLayer(__global dType *inputFeatureMap,
                         __global dType *outputFeatureMap,
-                        __global NetParam *param, BOOL phase) {
+                        __global NetParam *param, __global BOOL *phase) {
+  DEBUG_PRINT("dataLayer");
+  // printf("Global Size = %d, Global id %d in data\n", GLOBAL_SIZE, GLOBAL_ID);
+  // writeFmBuffer -> ==1, phase = 0, so we write into fmCache[0]
   LOAD_DATA_SCALE(inputFeatureMap, writeFmBuffer, param->inputTotalDataNum,
                   GLOBAL_ID, GLOBAL_SIZE, param->scale);
+  // print2D(writeFmBuffer, 28, 28);
 }
 
 /**
@@ -394,20 +416,26 @@ __kernel void dataLayer(__global dType *inputFeatureMap,
  */
 __kernel void paddingLayer(__global dType *inputFeatureMap,
                            __global dType *outputFeatureMap,
-                           __global NetParam *param, BOOL phase) {
-
-  // MEMSET(writeFmBuffer, 0, param->outputTotalDataNum, GLOBAL_ID,
-  // GLOBAL_SIZE);
-  // barrier(CLK_GLOBAL_MEM_FENCE);
-  // LOAD_DATA_PAD(readFmBuffer, writeFmBuffer, param->inputChannel,
-  // GLOBAL_SIZE_0,
-  //               GLOBAL_ID_0, param->inputHeight, GLOBAL_SIZE_1, GLOBAL_ID_1,
-  //               param->inputWidth, GLOBAL_SIZE_2, GLOBAL_ID_2, param->pad);
+                           __global NetParam *param, __global BOOL *phase) {
+  DEBUG_PRINT("paddingLayer");
+  // printf("phase = %d, writeBuffer choose %d, read Buffer Choose %d\n", phase[0], phase==1, phase==0);
+  // if (param->inputWidth == 28) {
+  //   printf("before readFmBuffer");
+  //   print2D(readFmBuffer, 28, 28);
+  //   printf("before writeFmBuffer should be zero");
+  //   print2D(writeFmBuffer, 32, 32);
+  // }
   LOAD_DATA_PAD_ENSURE_ZERO(readFmBuffer, writeFmBuffer, param->outputChannel,
                             GLOBAL_SIZE_0, GLOBAL_ID_0, param->inputHeight,
                             param->outputHeight, GLOBAL_SIZE_1, GLOBAL_ID_1,
                             param->inputWidth, param->outputWidth,
                             GLOBAL_SIZE_2, GLOBAL_ID_2, param->pad)
+  // if (param->inputWidth == 28) {
+  //   printf("after readFmBuffer, should be untouched");
+  //   print2D(readFmBuffer, 28, 28);
+  //   printf("after writeFmBuffer, should have value");
+  //   print2D(writeFmBuffer, 32, 32);
+  // }
 }
 
 /**
@@ -420,7 +448,8 @@ __kernel void paddingLayer(__global dType *inputFeatureMap,
  */
 __kernel void poolingLayer(__global dType *inputFeatureMap,
                            __global dType *outputFeatureMap,
-                           __global NetParam *param, BOOL phase) {
+                           __global NetParam *param, __global BOOL *phase) {
+  DEBUG_PRINT("poolingLayer");
   __private dType maxValue, _temp;
   EASY_WORK_ITEM_3D_OUTPUT_BEGIN(channelCounter, heightCounter, widthCounter);
   maxValue = ELM(readFmBuffer, channelCounter, param->inputHeight,
@@ -448,7 +477,8 @@ __kernel void poolingLayer(__global dType *inputFeatureMap,
 // I think I could safely skip this.
 __kernel void reluLayer(__global dType *inputFeatureMap,
                         __global dType *outputFeatureMap,
-                        __global NetParam *param, BOOL phase) {
+                        __global NetParam *param, __global BOOL *phase) {
+  DEBUG_PRINT("reluLayer");
   WORK_ITEM_BEGIN(reluCounter, param->inputTotalDataNum, GLOBAL_ID)
   writeFmBuffer[reluCounter] = RELU(readFmBuffer[reluCounter]);
   WORK_ITEM_END(reluCounter, GLOBAL_SIZE)
@@ -467,8 +497,8 @@ __kernel void reluLayer(__global dType *inputFeatureMap,
 __kernel void convLayer(__global dType *inputFeatureMap,
                         __global dType *outputFeatureMap,
                         __global dType *weight, __global dType *bias,
-                        __global const NetParam *param, BOOL phase) {
-
+                        __global const NetParam *param, __global BOOL *phase) {
+  DEBUG_PRINT("convLayer");
   __private int dilatedKernelSize =
       (param->kernelSize - 1) * param->dilation + 1;
   __private dType result;
@@ -486,9 +516,6 @@ __kernel void convLayer(__global dType *inputFeatureMap,
                        widthCounter * param->stride + j * param->dilation) *
                    WELM(weight, channelCounter, param->inputChannel, c,
                         param->kernelSize, i, j));
-        //
-        //         comment out the WELM will eliminate the problem, so it seems
-        //         we sport the problem.
       }
 
   result += bias[channelCounter];
@@ -508,9 +535,13 @@ __kernel void convLayer(__global dType *inputFeatureMap,
 // safely skip
 __kernel void outputLayer(__global dType *inputFeatureMap,
                           __global dType *outputFeatureMap,
-                          __global NetParam *param, BOOL phase) {
+                          __global NetParam *param, __global BOOL *phase) {
+  DEBUG_PRINT("convLayer");
   LOAD_DATA(readFmBuffer, outputFeatureMap, param->inputTotalDataNum, GLOBAL_ID,
             GLOBAL_SIZE);
+  // #ifdef __xilinx__
+  //  MEMSET(readFmBuffer, 0, BUFFER_SIZE, GLOBAL_ID, GLOBAL_SIZE);
+  // #endif
 }
 
 /**

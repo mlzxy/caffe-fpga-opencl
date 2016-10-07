@@ -3,6 +3,7 @@ import numpy as np
 from util import *
 from collections import defaultdict
 
+
 class Layer:
     def __init__(self, type, data):
         self.type = type
@@ -14,11 +15,11 @@ class Layer:
         layer_name = ''
         try:
             if self.proto_param:
-                layer_name = ':'+self.proto_param.name
+                layer_name = ':' + self.proto_param.name
         except:
             pass
         self.info = 'Layer {0}{1}'.format(type, layer_name)
-        self.param = defaultdict(lambda:int(0))
+        self.param = defaultdict(lambda: int(0))
         if self.model_param:
             self.param['output_channel'] = self.model_param.channels
             self.param['output_width'] = self.model_param.width
@@ -39,73 +40,75 @@ class Layer:
             self.param['input_height'] = self.param['output_height']
 
     def fixPadding(self, key='input'):
-        self.param[key+'_height'] += (2*self.param['pad'])
-        self.param[key+'_width'] += (2*self.param['pad'])
+        self.param[key + '_height'] += (2 * self.param['pad'])
+        self.param[key + '_width'] += (2 * self.param['pad'])
+
     def json(self):
-        self.param['output_fm_data_num'] = self.param['output_channel'] * self.param['output_width'] * self.param['output_height']
-        self.param['input_fm_data_num'] = self.param['input_channel'] * self.param['input_width'] * self.param['input_height']
+        self.param['output_fm_data_num'] = self.param['output_channel'] * self.param['output_width'] * self.param[
+            'output_height']
+        self.param['input_fm_data_num'] = self.param['input_channel'] * self.param['input_width'] * self.param[
+            'input_height']
         return {
             'type': self.type,
-            'weight':{
+            'weight': {
                 'shape': tupleToList(self.weight.shape),
-                'num_dim':len(self.weight.shape),
+                'num_dim': len(self.weight.shape),
                 'data': self.weight.flatten().tolist(),
-                'num_data':self.weight.size
+                'num_data': self.weight.size
             },
-            'bias':{
+            'bias': {
                 'shape': tupleToList(self.bias.shape),
                 'num_dim': len(self.bias.shape),
                 'data': self.bias.flatten().tolist(),
                 'num_data': self.bias.size
             },
-            'info':self.info,
-            'param':{
+            'info': self.info,
+            'param': {
                 'scale': self.param['scale'],
-                'max_pool':self.param['max_pool'],
+                'max_pool': self.param['max_pool'],
                 'ave_pool': self.param['ave_pool'],
                 'stride': self.param['stride'],
-                'kernel_size':self.param['kernel_size'],
+                'kernel_size': self.param['kernel_size'],
                 'pad': self.param['pad'],
                 'dilation': self.param['dilation'],
-                'input_channel':self.param['input_channel'],
-                'input_width':self.param['input_width'],
-                'input_height':self.param['input_height'],
+                'input_channel': self.param['input_channel'],
+                'input_width': self.param['input_width'],
+                'input_height': self.param['input_height'],
                 'output_channel': self.param['output_channel'],
                 'output_width': self.param['output_width'],
                 'output_height': self.param['output_height'],
                 'output_fm_data_num': self.param['output_fm_data_num'],
                 'input_fm_data_num': self.param['input_fm_data_num']
             },
-            'config':{
-                'global_size':[1,1,1],
-                'local_size':[1,1,1],
-                'offset':[0,0,0]
+            'config': {
+                'global_size': [1, 1, 1],
+                'local_size': [1, 1, 1],
+                'offset': [0, 0, 0]
             }
         }
 
     def config_json(self):
-        return {
-            'type':self.type,
-            'weight':{
-                'shape': tupleToList(self.weight.shape),
-            },
-            'bias':{
-                'shape': tupleToList(self.bias.shape),
-            },
-            'param':{
-                'input_channel':self.param['input_channel'],
-                'input_width':self.param['input_width'],
-                'input_height':self.param['input_height'],
-                'output_channel': self.param['output_channel'],
-                'output_width': self.param['output_width'],
-                'output_height': self.param['output_height']
-            },
-            'config':{
-                'global_size':[1,1,1],
-                'local_size':[1,1,1],
-                'offset':[0,0,0]
+        result = {
+            'type': self.type,
+            'config': {
+                'global_size': [1, 1, 1],
+                'local_size': [1, 1, 1],
+                'offset': [0, 0, 0]
             }
         }
+        if type == lt.Convolution:
+            result['weight'] = tupleToList(self.weight.shape)
+            result['bias'] = tupleToList(self.bias.shape)
+
+        if type != lt.Relu:
+            result['input_channel'] =  self.param['input_channel']
+            result['input_width'] = self.param['input_width']
+            result['input_height'] = self.param['input_height']
+            result['output_channel'] = self.param['output_channel']
+            result['output_width'] = self.param['output_width']
+            result['output_height'] = self.param['output_height']
+        return result
+
 
 class Activation(Layer):
     def __init__(self, type, data):
@@ -125,11 +128,13 @@ class Convolution(Layer):
         if len(conv_param.pad) > 0:
             self.param['pad'] = conv_param.pad[0]
         self.fixPadding()
-        self.info = "{0} - Kernel [{1},{1}], Pad {2}, Stride {3}, Dilation {4} - Output Information: channel {5}, width {6}, height {7}"\
-            .format(self.info, self.param['kernel_size'], self.param['pad'], self.param['stride'], self.param['dilation'],
+        self.info = "{0} - Kernel [{1},{1}], Pad {2}, Stride {3}, Dilation {4} - Output Information: channel {5}, width {6}, height {7}" \
+            .format(self.info, self.param['kernel_size'], self.param['pad'], self.param['stride'],
+                    self.param['dilation'],
                     self.param['output_channel'], self.param['output_width'], self.param['output_height'])
         self.weight = self.blob[0].data
         self.bias = self.blob[1].data
+
 
 class Pooling(Layer):
     def __init__(self, type, data):
@@ -152,7 +157,7 @@ class Pooling(Layer):
 class Data(Layer):
     def __init__(self, type, data):
         Layer.__init__(self, type, data)
-        self.info = "{0} - Output Information: channel {1}, width {2}, height {3}"\
+        self.info = "{0} - Output Information: channel {1}, width {2}, height {3}" \
             .format(self.info, self.model_param.channels, self.model_param.width, self.model_param.height)
         self.param['scale'] = self.proto_param.transform_param.scale
 
@@ -160,6 +165,7 @@ class Data(Layer):
 class Output(Layer):
     def __init__(self, type, data):
         Layer.__init__(self, type, data)
+
 
 class Padding(Layer):
     def __init__(self, type, data):

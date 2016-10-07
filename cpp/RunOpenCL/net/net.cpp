@@ -8,6 +8,8 @@
 
 double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
     clock_t start = clock();
+    int mnist_test_num = 50;
+    int start_idx = 0;
     char *netJson = 0;
     INFO_LOG<<"Start to read "<<arg.network<<endl;
     int jsonSize = loadFile2Memory(arg.network, &netJson);
@@ -28,8 +30,8 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
     float correctCounter = 0;
     dType softmax_output[10];
     bool forward_result;
-    for(int i = 0;i<MNIST_TEST_NUM; i++){
-        forward_result = net->forward(hardware, software, mnist_images[i], NET);
+    for(int i = start_idx;i<start_idx+mnist_test_num; i++){
+        forward_result = net->forward(hardware, software, mnist_images[i], LAYER);
         if(!forward_result){
             delete net;
             ERROR_LOG<<"FREE MEMORY AND EXITING...";
@@ -48,7 +50,7 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
         INFO_LOG<<"NO "<<i+1<<","<<result<<" prediction on image "<<i<<": "<<predicted<<" = "<<mnist_labels[i]<<endl;
     }
 
-    INFO_LOG<<"Accuracy = " << correctCounter/MNIST_TEST_NUM*100<<"%."<<endl;
+    INFO_LOG<<"Accuracy = " << correctCounter/mnist_test_num*100<<"%."<<endl;
     delete net;
     return (clock() - start)/(double)CLOCKS_PER_SEC;
 }

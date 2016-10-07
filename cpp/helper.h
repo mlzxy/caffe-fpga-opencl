@@ -40,28 +40,23 @@
 #define DEVICE_GPU    CL_DEVICE_TYPE_GPU
 #define DEVICE_CPU    CL_DEVICE_TYPE_CPU
 #define DEVICE_FPGA   CL_DEVICE_TYPE_ACCELERATOR
-#define CHOOSEN_DEVICE  ALPHA_DATA_KU3_DDR1
+// #define CHOOSEN_DEVICE  ALPHA_DATA_KU3_DDR1
 
 /////////////////////////////////////////////// Customized Settings ///////////////////////////////////////////////
 #define PROJECT_NAME net
 typedef float dType;
-
-#define OPENCL_COMPILE_OPTION "-I/Users/xinyuzhang/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/kernels/net"
-
-#define OPENCL_VERSION OCL12
+#define OPENCL_COMPILE_OPTION ""
 
 #ifdef __APPLE__
 #define PLATFORM_FILTER APPLE_MAC
-#define DISABLE_DEVICE_FILTER  true
+#define OPENCL_VERSION OCL12
 #else
+#define OPENCL_VERSION OCL20
 #define PLATFORM_FILTER XILINX_FPGA
-#define DISABLE_DEVICE_FILTER  false
 #endif
 
+#define DEVICE_ID 0
 
-
-// #define PLATFORM_FILTER NVIDIA_CUDA
-// #define DISABLE_DEVICE_FILTER  true
 //////////////////////////////////////////////////////////////////////////////// //////////////////////////////////
 
 // Macro for adding quotes
@@ -193,6 +188,7 @@ public:
     cl_mem outputBufferCL;
     cl_mem inputBufferCL;
     cl_mem paramCL;
+    cl_mem phaseCL;
     size_t globalSize[3], localSize[3], offset[3];
     LayerType type;
     string kernelKey;
@@ -241,7 +237,7 @@ void print2D(dType *fm, int height, int width);
 void softmax(dType *input, dType *output, int size);
 
 inline void printTitle(string x){
-cout << "++++++++++++++++++++++++++++++++++++ "<<x<<" ++++++++++++++++++++++++++++++++++++ \n"
+cout << "\n\n++++++++++++++++++++++++++++++++++++ "<<x<<" ++++++++++++++++++++++++++++++++++++"
     << endl;
 }
 

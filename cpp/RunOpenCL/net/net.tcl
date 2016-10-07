@@ -1,6 +1,9 @@
 # SDAccel command script
 set projectName "net"
+
+## cpu
 set flow "cpu"
+
 set networkJSON "convertor/output/mnist.json"
 ## ======== ##
 
@@ -73,18 +76,18 @@ run_emulation -flow $flow -args "${commandLineArgument}"
 # compile_emulation -flow hardware -opencl_binary [get_opencl_binary ${containerName}]
 
 # Generate the system estimate report
-# report_estimate
+report_estimate
 
 # Run the design in CPU emulation mode
 # run_emulation -flow hardware -args "-f ${containerName}.xclbin -k ${kernelNameString} -d fpga"
 
 
 # Build the application for hardware
-# build_system
+build_system
 
 
 # Package the results for the card
-# package_system
+package_system
 
 
-# run_system -args "${commandLineArgument}"
+run_system -args "${commandLineArgument}"
