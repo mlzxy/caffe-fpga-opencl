@@ -1,12 +1,11 @@
 # SDAccel command script
 set projectName "net"
-
 ## cpu
 set flow "cpu"
-
 set networkJSON "convertor/output/mnist.json"
-## ======== ##
 
+
+## ======== ##
 set root "../../"
 set absoluteRoot "/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/"
 set networkFullPath "${absoluteRoot}${networkJSON}"

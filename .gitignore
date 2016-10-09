@@ -41,6 +41,7 @@ build/output/
 
 *.xml
 
+.idea/*
 
 convertor/output/_output
 

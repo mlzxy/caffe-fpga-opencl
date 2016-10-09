@@ -46,6 +46,7 @@
 #define PROJECT_NAME net
 typedef float dType;
 #define OPENCL_COMPILE_OPTION ""
+#define NETWORK_LOG_LEVEL  NO
 
 #ifdef __APPLE__
 #define PLATFORM_FILTER APPLE_MAC

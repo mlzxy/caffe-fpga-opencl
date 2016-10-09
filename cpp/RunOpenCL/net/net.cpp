@@ -31,7 +31,7 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
     dType softmax_output[10];
     bool forward_result;
     for(int i = start_idx;i<start_idx+mnist_test_num; i++){
-        forward_result = net->forward(hardware, software, mnist_images[i], LAYER);
+        forward_result = net->forward(hardware, software, mnist_images[i], NETWORK_LOG_LEVEL);
         if(!forward_result){
             delete net;
             ERROR_LOG<<"FREE MEMORY AND EXITING...";
