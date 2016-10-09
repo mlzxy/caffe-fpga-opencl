@@ -2,6 +2,7 @@
 // Created by 张鑫语 on 8/20/16.
 //
 #include "helper.h"
+#include "custom.h"
 
 void split(const string &s, char delim, vector<string> &elems) {
   stringstream ss(s);
@@ -140,16 +141,16 @@ cl_int compileProgram(const oclHardware &hardware, oclSoftware &software) {
   cl_int err = clBuildProgram(software.mProgram, 1, &hardware.mDevice,
                               software.mCompileOptions, 0, 0);
   if (err != CL_SUCCESS) {
-    REPORT_ERR_NR("clBuildProgram");
+    ERR_CHECK("clBuildProgram");
     size_t size = 0;
     err = clGetProgramBuildInfo(software.mProgram, hardware.mDevice,
                                 CL_PROGRAM_BUILD_LOG, 0, 0, &size);
-    REPORT_ERRM(err, "clGetProgramBuildInfo");
+    ERR_CHECK("clGetProgramBuildInfo");
 
     std::vector<char> log(size + 1);
     err = clGetProgramBuildInfo(software.mProgram, hardware.mDevice,
                                 CL_PROGRAM_BUILD_LOG, size, &log[0], 0);
-    REPORT_ERRM(err, "clGetProgramBuildInfo Second");
+    ERR_CHECK("clGetProgramBuildInfo Second");
     std::cout << &log[0] << "\n";
     return err;
   }
@@ -177,7 +178,7 @@ void getDeviceVersion(oclHardware &hardware) {
   size_t size = 0;
   cl_int err = clGetDeviceInfo(hardware.mDevice, CL_DEVICE_VERSION, 511,
                                versionString, &size);
-  REPORT_ERRM(, "clGetDeviceInfo");
+  ERR_CHECK("clGetDeviceInfo");
 
   unsigned major = 0;
   unsigned minor = 0;
@@ -221,22 +222,21 @@ oclHardware getOclHardware(cl_device_type type) {
   cl_int err;
   printTitle("Hardware Detecting");
   err = clGetPlatformIDs(16, platforms, &platformCount);
-  REPORT_ERRM(hardware, "clGetPlatformIDs");
+  ERR_CHECK("clGetPlatformIDs");
   bool platformSelected = false;
   for (cl_uint i = 0; i < platformCount; i++) {
     err =
         clGetPlatformInfo(platforms[i], CL_PLATFORM_NAME, 256, platformName, 0);
-    REPORT_ERRM(hardware, "clGetPlatformInfo");
+    ERR_CHECK( "clGetPlatformInfo");
     cout << "DEBUG: "
          << "Available Platform Found: " << platformName << endl;
     cl_uint deviceCount = 0;
     err = clGetDeviceIDs(platforms[i], type, 16, devices, &deviceCount);
-    REPORT_ERRM(hardware,
-                string("clGetDeviceIDs at platform: ") + string(platformName));
+    ERR_CHECK(string("clGetDeviceIDs at platform: ") + string(platformName));
     cl_uint idev;
     for (idev = 0; idev < deviceCount; idev++) {
       err = clGetDeviceInfo(devices[idev], CL_DEVICE_NAME, 256, deviceName, 0);
-      REPORT_ERRM(hardware, "clGetDeviceInfo:" + string(deviceName));
+      ERR_CHECK("clGetDeviceInfo:" + string(deviceName));
       std::cout << "DEBUG: " << platformName
                 << " Hardware Founded: " << deviceName << std::endl;
     }
@@ -246,7 +246,7 @@ oclHardware getOclHardware(cl_device_type type) {
   for (cl_uint i = 0; i < platformCount; i++) {
     err =
         clGetPlatformInfo(platforms[i], CL_PLATFORM_NAME, 256, platformName, 0);
-    REPORT_ERRM(hardware, "clGetPlatformInfo");
+    ERR_CHECK("clGetPlatformInfo");
     if (strcmp(platformName, PLATFORM_FILTER) != 0) {
       std::cout << "DEBUG: " << platformName << "!=" << PLATFORM_FILTER << endl;
       continue;
@@ -256,7 +256,7 @@ oclHardware getOclHardware(cl_device_type type) {
 
     cl_uint deviceCount = 0;
     err = clGetDeviceIDs(platforms[i], type, 16, devices, &deviceCount);
-    REPORT_ERRM(hardware, string("clGetDeviceIDs:") + string(platformName));
+    ERR_CHECK(string("clGetDeviceIDs:") + string(platformName));
     if (deviceCount == 0) {
       continue;
     }
@@ -267,7 +267,7 @@ oclHardware getOclHardware(cl_device_type type) {
     printTitle("Hardware Selecting - Device");
     for (idev = 0; idev < deviceCount; idev++) {
       err = clGetDeviceInfo(devices[idev], CL_DEVICE_NAME, 256, deviceName, 0);
-      REPORT_ERRM(hardware, "clGetDeviceInfo:" + string(deviceName));
+      ERR_CHECK("clGetDeviceInfo:" + string(deviceName));
       INFO_LOG << "Available Device: " << deviceName << endl;
       device_id = devices[i];
       found = true;
@@ -285,9 +285,9 @@ oclHardware getOclHardware(cl_device_type type) {
     cl_context_properties contextData[3] = {
         CL_CONTEXT_PLATFORM, (cl_context_properties)platforms[i], 0};
     cl_context context = clCreateContextFromType(contextData, type, 0, 0, &err);
-    REPORT_ERRM(hardware, "clCreateContextFromType");
+    ERR_CHECK("clCreateContextFromType");
     cl_command_queue queue = clCreateCommandQueue(context, device_id, 0, &err);
-    REPORT_ERRM(hardware, "clCreateCommandQueue");
+    ERR_CHECK("clCreateCommandQueue");
 
     hardware.mPlatform = platforms[i];
     hardware.mContext = context;
@@ -353,7 +353,7 @@ oclSoftware getOclSoftware(const oclHardware &hardware, const char *kernelNames,
   }
 
   err = compileProgram(hardware, soft);
-  REPORT_ERRM(soft, "compileProgram");
+  ERR_CHECK("compileProgram");
   delete[] kernelCode;
   return soft;
 }
@@ -462,343 +462,4 @@ std::string getFileName(const std::string &s) {
     return (s.substr(i + 1, s.length() - i));
   }
   return ("");
-}
-
-/**
- * Network related implementation
- */
-WeightData createWeightData(Json::Value data) {
-  WeightData learnedParam;
-  learnedParam.weight_dim_num = data["weight"]["num_dim"].asInt();
-  learnedParam.bias_dim_num = data["bias"]["num_dim"].asInt();
-  learnedParam.weightShape = new int[learnedParam.weight_dim_num];
-  learnedParam.biasShape = new int[learnedParam.bias_dim_num];
-  for (int i = 0; i < learnedParam.weight_dim_num; i++) {
-    learnedParam.weightShape[i] = data["weight"]["shape"][i].asInt();
-  }
-  for (int i = 0; i < learnedParam.bias_dim_num; i++) {
-    learnedParam.biasShape[i] = data["bias"]["shape"][i].asInt();
-  }
-  learnedParam.weight_data_num = data["weight"]["num_data"].asLargestInt();
-  learnedParam.bias_data_num = data["bias"]["num_data"].asLargestInt();
-  learnedParam.weight = new dType[learnedParam.weight_data_num];
-  for (int i = 0; i < learnedParam.weight_data_num; i++) {
-    learnedParam.weight[i] = (dType)data["weight"]["data"][i].asDouble();
-  }
-  learnedParam.bias = new dType[learnedParam.bias_data_num];
-  for (int i = 0; i < learnedParam.bias_data_num; i++) {
-    learnedParam.bias[i] = (dType)data["bias"]["data"][i].asDouble();
-  }
-  return learnedParam;
-}
-
-NetParam createNetParam(Json::Value data) {
-  NetParam param;
-  param.scale = (dType)data["scale"].asDouble();
-  param.stride = data["stride"].asInt();
-  param.kernelSize = data["kernel_size"].asInt();
-  param.dilation = data["dilation"].asInt();
-  param.pad = data["pad"].asInt();
-  param.inputChannel = data["input_channel"].asInt();
-  param.inputHeight = data["input_height"].asInt();
-  param.inputWidth = data["input_width"].asInt();
-  param.outputChannel = data["output_channel"].asInt();
-  param.outputHeight = data["output_height"].asInt();
-  param.outputWidth = data["output_width"].asInt();
-  param.inputTotalDataNum = data["input_fm_data_num"].asInt();
-  param.outputTotalDataNum = data["output_fm_data_num"].asInt();
-  return param;
-}
-
-#define SET_3D(array, x, y, z)                                                 \
-  array[0] = (x);                                                              \
-  array[1] = (y);                                                              \
-  array[2] = (z);
-#define SET_CL_3D_SIZE(data, offset, key)                                      \
-  SET_3D(offset, data[key][0].asUInt(), data[key][1].asUInt(),                 \
-         data[key][2].asUInt());
-
-Layer::Layer(Json::Value data) {
-  string ts = data.get("type", "").asString();
-  if (ts == "Convolution") {
-    type = Convolution;
-    kernelKey = "convLayer";
-  } else if (ts == "ReLU") {
-    type = Relu;
-    kernelKey = "reluLayer";
-  } else if (ts == "Data") {
-    type = Data;
-    kernelKey = "dataLayer";
-  } else if (ts == "Pooling") {
-    type = Pooling;
-    kernelKey = "poolingLayer";
-  } else if (ts == "Padding") {
-    type = Padding;
-    kernelKey = "paddingLayer";
-  } else if (ts == "Output") {
-    type = Output;
-    kernelKey = "outputLayer";
-  } else {
-    ERROR_LOG << "Unknown Layer Type: " << ts << endl;
-    return;
-  }
-  info = data["info"].asString();
-  learnedParam = createWeightData(data);
-  param = createNetParam(data["param"]);
-  outputBuffer = new dType[param.outputTotalDataNum];
-  // set memory to zero
-  memset(outputBuffer, 0, param.outputTotalDataNum * sizeof(dType));
-  inputBuffer = NULL;
-  next = NULL;
-  prev = NULL;
-  weightCL = NULL;
-  biasCL = NULL;
-  outputBufferCL = NULL;
-  inputBufferCL = NULL;
-  paramCL = NULL;
-  //     globalSize[3], localSize[3], offset[3];
-  //    Json::Value globalSizeJson = data["config"]["global_size"];
-  //    globalSize[0] =  globalSizeJson[0].asUInt();
-  SET_CL_3D_SIZE(data["config"], globalSize, "global_size");
-  SET_CL_3D_SIZE(data["config"], localSize, "local_size");
-  SET_CL_3D_SIZE(data["config"], offset, "offset");
-}
-
-Layer::~Layer() {
-  delete outputBuffer;
-  delete learnedParam.weight;
-  delete learnedParam.bias;
-  delete learnedParam.weightShape;
-  delete learnedParam.biasShape;
-}
-
-#define FORWARD_ERROR_CHECK REPORT_ERR(false)
-#define CL_RELEASE(x)                                                          \
-  if (x != NULL)                                                               \
-    err = clReleaseMemObject(x);                                               \
-  x = NULL;
-
-#define CL_KERNEL_ARG(kernel, size, mem)                                       \
-  err = clSetKernelArg(kernel, argCounter, size, mem);                         \
-  argCounter++;                                                                \
-  FORWARD_ERROR_CHECK;
-
-#define CL_CREATE_BUFFER(...) clCreateBuffer(__VA_ARGS__);
-
-#define CL_ENQUEUE_WRITE_BUFFER(...)                                           \
-  err = clEnqueueWriteBuffer(__VA_ARGS__);                                     \
-  FORWARD_ERROR_CHECK;
-
-#define CL_ENQUEUE_READ_BUFFER(...)                                            \
-  err = clEnqueueReadBuffer(__VA_ARGS__);                                      \
-  FORWARD_ERROR_CHECK;
-
-#define CL_FINISH(...)                                                         \
-  err = clFinish(__VA_ARGS__);                                                 \
-  FORWARD_ERROR_CHECK;
-
-#define KERNEL_ENQUEUE(...)                                                    \
-  err = clEnqueueNDRangeKernel(__VA_ARGS__);                                   \
-  FORWARD_ERROR_CHECK;
-
-bool Layer::freeCLMemory() {
-  cl_int err = CL_SUCCESS;
-  CL_RELEASE(outputBufferCL);
-  CL_RELEASE(inputBufferCL);
-  CL_RELEASE(weightCL);
-  CL_RELEASE(biasCL);
-  CL_RELEASE(paramCL);
-  CL_RELEASE(phaseCL);
-  return err == CL_SUCCESS;
-}
-
-bool Layer::forward(oclHardware hardware, oclSoftware software,
-                    OpenCLVersion mode, NetLogging log) {
-  if (log == LAYER) {
-    INFO_LOG << "    Forward Pass: " << info << endl;
-  }
-  if (prev != NULL) {
-    inputBuffer = prev->outputBuffer;
-  }
-  if (inputBuffer == NULL) {
-    ERROR_LOG << "inputBuffer = NULL!" << endl;
-    return false;
-  }
-  cl_int err = CL_SUCCESS;
-
-  size_t inputSize = 1, outputSize = 1;
-  if (mode == OCL12) {
-    outputSize = (size_t)param.outputTotalDataNum;
-    inputSize = (size_t)param.inputTotalDataNum;
-  } else {
-    if (type == Output) {
-      outputSize = (size_t)param.outputTotalDataNum;
-    } else if (type == Data) {
-      inputSize = (size_t)param.inputTotalDataNum;
-    }
-  }
-  inputBufferCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_READ_ONLY,
-                                   inputSize * sizeof(dType), NULL, &err);
-  FORWARD_ERROR_CHECK;
-  outputBufferCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_WRITE_ONLY,
-                                    outputSize * sizeof(dType), NULL, &err);
-  FORWARD_ERROR_CHECK;
-  paramCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_READ_ONLY,
-                             sizeof(NetParam), NULL, &err); // works good
-  FORWARD_ERROR_CHECK;
-  phaseCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_READ_ONLY, sizeof(int),
-                             NULL, &err); // works good
-  FORWARD_ERROR_CHECK;
-
-  // Input Feature Map
-  //    dType *_inputBuffer = new dType[784];
-  //    _inputBuffer[0] = 10.0;
-  //    for(int i = 0; i< 784;i++){
-  //        _inputBuffer[i] = (float)inputBuffer[i];
-  //    }
-  //    print2D(_inputBuffer, 28,28);
-  CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, inputBufferCL, CL_TRUE, 0,
-                          inputSize * sizeof(dType), (void *)inputBuffer, 0,
-                          NULL, NULL);
-  CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, paramCL, CL_TRUE, 0,
-                          sizeof(NetParam), (void *)&param, 0, NULL,
-                          NULL); // works good
-  CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, phaseCL, CL_TRUE, 0, sizeof(int),
-                          (void *)&phase, 0, NULL, NULL);
-
-  // Set Kernel Arg
-  cl_kernel kernel = (*software.kernelMap)[kernelKey];
-  size_t argCounter = 0;
-  CL_KERNEL_ARG(kernel, sizeof(cl_mem), &inputBufferCL);
-  CL_KERNEL_ARG(kernel, sizeof(cl_mem), &outputBufferCL);
-  if (type == Convolution) {
-    weightCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_READ_ONLY,
-                                learnedParam.weight_data_num * sizeof(dType),
-                                NULL, &err);
-    biasCL = CL_CREATE_BUFFER(hardware.mContext, CL_MEM_READ_ONLY,
-                              learnedParam.bias_data_num * sizeof(dType), NULL,
-                              &err);
-    FORWARD_ERROR_CHECK;
-    CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, weightCL, CL_TRUE, 0,
-                            learnedParam.weight_data_num * sizeof(dType),
-                            learnedParam.weight, 0, NULL, NULL);
-    CL_ENQUEUE_WRITE_BUFFER(hardware.mQueue, biasCL, CL_TRUE, 0,
-                            learnedParam.bias_data_num * sizeof(dType),
-                            learnedParam.bias, 0, NULL, NULL);
-    CL_KERNEL_ARG(kernel, sizeof(cl_mem), &weightCL);
-    CL_KERNEL_ARG(kernel, sizeof(cl_mem), &biasCL);
-  }
-  CL_KERNEL_ARG(kernel, sizeof(cl_mem), &paramCL);
-  //    cout<<"phase = "<<phase<<endl;
-  int *x = new int(10);
-  CL_KERNEL_ARG(kernel, sizeof(cl_mem), &phaseCL);
-
-  FORWARD_ERROR_CHECK
-  // Enqueue Kernel
-  KERNEL_ENQUEUE(hardware.mQueue, kernel, 3, offset, globalSize, localSize, 0,
-                 NULL, NULL);
-
-  // Output Feature Map
-  if (outputSize > 1) {
-    CL_FINISH(hardware.mQueue);
-    CL_ENQUEUE_READ_BUFFER(hardware.mQueue, outputBufferCL, CL_TRUE, 0,
-                           outputSize * sizeof(dType), outputBuffer, 0, NULL,
-                           NULL);
-    CL_FINISH(hardware.mQueue);
-    freeCLMemory();
-  }
-
-  // Ping Pong
-  if (next) {
-    next->phase = !phase;
-  }
-  return err == CL_SUCCESS;
-}
-
-Net::Net(Json::Value data, cmdArg arg, OpenCLVersion version) {
-  name = string(arg.network);
-  mode = version;
-  num_layers = data["num_layers"].asInt();
-  layers = new Layer *[num_layers];
-  Layer *current = NULL;
-  for (int i = 0; i < num_layers; i++) {
-    layers[i] = new Layer(data["layers"][i]);
-    current = layers[i];
-    if (i > 0) {
-      layers[i - 1]->next = current;
-      current->prev = layers[i - 1];
-    }
-  }
-}
-
-Net::~Net() {
-  for (int i = 0; i < num_layers; i++)
-    delete layers[i];
-  delete layers;
-}
-
-bool Net::freeCLMemory() {
-  bool result = true;
-  for (int i = 0; i < num_layers; i++) {
-    result = layers[i]->freeCLMemory();
-    if (!result) {
-      ERROR_LOG << "FREE CL MEMORY ERROR in " << layers[i]->info << endl;
-    }
-  }
-  return result;
-}
-
-bool Net::forward(oclHardware hardware, oclSoftware software, dType *data,
-                  NetLogging log) {
-  if (log != NO) {
-    INFO_LOG << "Forward Pass: " << name << endl;
-  }
-  layers[0]->inputBuffer = data;
-  layers[0]->phase = 0;
-  bool result = true;
-  for (int i = 0; i < num_layers; i++) {
-    //        if(i == 1){
-    //            cout<<"OUTPUT BUFFER BEFORE"<<endl;
-    //            print2D(layers[i]->outputBuffer,
-    //            layers[i]->param.outputHeight, layers[i]->param.outputWidth);
-    //        }
-    result = layers[i]->forward(hardware, software, mode, log);
-    if (!result) {
-      ERROR_LOG << layers[i]->type << ": " << layers[i]->info << endl;
-      return false;
-    }
-
-    // for debugging //
-    //        if(i == 1){
-    //            cout<<"OUTPUT BUFFER AFTER"<<endl;
-    //            print2D(layers[i]->outputBuffer,
-    //            layers[i]->param.outputHeight, layers[i]->param.outputWidth);
-    //        }
-    // for debugging //
-  }
-  result = freeCLMemory();
-  return result;
-}
-
-Layer *Net::outputLayer() { return layers[num_layers - 1]; }
-
-void print2D(dType *fm, int height, int width) {
-  cout << "\n\n";
-  for (int i = 0; i < height; i++) {
-    for (int j = 0; j < width; j++) {
-      cout << fm[i * width + j] << ",";
-    }
-    cout << endl;
-  }
-  cout << "\n\n";
-}
-
-void softmax(dType *input, dType *output, int size) {
-  dType sum = 0;
-  for (int i = 0; i < size; i++) {
-    sum += exp(input[i]);
-  }
-  for (int i = 0; i < size; i++) {
-    output[i] = exp(input[i]) / sum;
-  }
 }

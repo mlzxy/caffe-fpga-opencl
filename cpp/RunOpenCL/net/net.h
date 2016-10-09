@@ -7,7 +7,7 @@
 
 
 
-#include "../../helper.h"
+#include "../../fpganet.h"
 
 double run(cmdArg arg, oclHardware hardware, oclSoftware software);
 

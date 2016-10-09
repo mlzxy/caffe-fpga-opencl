@@ -2,7 +2,7 @@
 // Created by 张鑫语 on 8/20/16.
 //
 
-#include "helper.h"
+#include "fpganet.h"
 #include INCLUDE_PROJECT_HEADER
 
 

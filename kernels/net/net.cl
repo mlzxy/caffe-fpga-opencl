@@ -539,22 +539,4 @@ __kernel void outputLayer(__global dType *inputFeatureMap,
   DEBUG_PRINT("convLayer");
   LOAD_DATA(readFmBuffer, outputFeatureMap, param->inputTotalDataNum, GLOBAL_ID,
             GLOBAL_SIZE);
-  // #ifdef __xilinx__
-  //  MEMSET(readFmBuffer, 0, BUFFER_SIZE, GLOBAL_ID, GLOBAL_SIZE);
-  // #endif
 }
-
-/**
- * This code should be finished like in one hour.
- * I could even skip the python code, and go direct with c++ code.
- * cpp code shoud implement this
- *  - every layer has a output buffer, and next pointer and a enqueue method.
- *  - net has a forward method
- *      - which enqueue all
- *      - and clFinish in FPGA case
- *      - or alternately in other case
- *      - or three mode
- *
- * Since we have padding layer, the input/output shape should be carefully
- * designed.
- */

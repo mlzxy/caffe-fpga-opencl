@@ -1,0 +1,28 @@
+#ifndef OPENCL_LEARNING_CUSTOM_H
+#define OPENCL_LEARNING_CUSTOM_H
+
+
+#define XILINX_FPGA "Xilinx"
+#define APPLE_MAC  "Apple"
+#define NVIDIA_CUDA  "NVIDIA CUDA"
+#define DEVICE_GPU    CL_DEVICE_TYPE_GPU
+#define DEVICE_CPU    CL_DEVICE_TYPE_CPU
+#define DEVICE_FPGA   CL_DEVICE_TYPE_ACCELERATOR
+
+
+#define PROJECT_NAME net
+typedef float dType;
+#define OPENCL_COMPILE_OPTION ""
+#define NETWORK_LOG_LEVEL  NO
+#ifdef __APPLE__
+#define PLATFORM_FILTER APPLE_MAC
+#define OPENCL_VERSION OCL12
+#else
+#define OPENCL_VERSION OCL20
+#define PLATFORM_FILTER XILINX_FPGA
+#endif
+// You could add Nvidia Here
+#define DEVICE_ID 0
+
+
+#endif
