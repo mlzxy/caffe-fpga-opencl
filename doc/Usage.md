@@ -57,9 +57,15 @@ The steps to convert and run a trained caffe model on your opencl enabled fpga:
 
 
 3. Building
-    - **CPU:** use `CMakeLists.txt` to build for CPU (I use [CLion](https://www.jetbrains.com/clion/) to automate that and debugging.)
-    - **GPU:** If you want to use GPU, take an example of this [Makefile](build/resources/archive/RunOpenCL/pipelineDemo/Makefile.gpu) and create your own. (rememeber to set correct `LD_LIBRARY_PATH`)
-    - **FPGA:** Modify your tcl building script in [cpp/RunOpenCL/net/net.tcl](../cpp/RunOpenCL/net/net.tcl) and `source ./build/bash/runBuildTcl.sh && runBuildTCL net` to run this in `sdaccel`
+    - **CPU:**
+        - use `CMakeLists.txt` to build for CPU (I use [CLion](https://www.jetbrains.com/clion/) to automate that and debugging.)
+    - **GPU:**
+        - If you want to use GPU, take an example of this [Makefile](build/resources/archive/RunOpenCL/pipelineDemo/Makefile.gpu) and create your own. (rememeber to set correct `LD_LIBRARY_PATH`)
+    - **FPGA:**
+        1. Modify your tcl building script in [cpp/RunOpenCL/net/net.tcl](../cpp/RunOpenCL/net/net.tcl)
+        2. `source ./build/bash/runBuildTcl.sh && runBuildTCL net` to run this in `sdaccel`
+        3. or equivalent `cd ./build/ && mkdir -p output && sdaccel ../../cpp/RunOpenCL/net/net.tcl`
+
 
 
 
@@ -69,4 +75,5 @@ Go to [cpp/custom.h](../cpp/custom.h) and head of [kernels/net/net.cl](../kernel
 
 - dataType to use (`float` by default)
 - opencl compilation option
+- memory optimization
 - etc...

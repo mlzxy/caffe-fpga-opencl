@@ -9,7 +9,7 @@ set networkJSON "convertor/output/mnist.json"
 set root "../../"
 set absoluteRoot "/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/"
 set networkFullPath "${absoluteRoot}${networkJSON}"
-set device "xilinx:adm-pcie-ku3:1ddr:2.1"
+set device "xilinx:adm-pcie-ku3:2ddr-xpr:3.1"
 set solutionName "${projectName}_board_compilation_solution"
 set cppList [list "cpp/main.cpp" "cpp/helper.cpp" "cpp/jsoncpp.cpp" "cpp/network.cpp"  "cpp/RunOpenCL/${projectName}/${projectName}.cpp"]
 set hList [list "cpp/helper.h" "cpp/json/json.h" "cpp/fpganet.h" "cpp/custom.h" "cpp/network.h"  "cpp/json/json-forwards.h" "cpp/RunOpenCL/${projectName}/${projectName}.h"   "cpp/RunOpenCL/${projectName}/mnist_data.h"]
@@ -89,4 +89,4 @@ build_system
 package_system
 
 
-run_system -args "${commandLineArgument}"
+# run_system -args "${commandLineArgument}"

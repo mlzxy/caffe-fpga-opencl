@@ -29,7 +29,19 @@ This project supports two mode
      ![](images/mode20.png)
 
 
-However, because Opencl is very restristed in a hardware design perspective, **you can't really use pingpong buffer to optimize the weight/bias external memory loading.**  Weight/Bias are parameters for each layer kernel.
+The settings is in [cpp/custom.h](../cpp/custom.h), right now the `OpenCL 2.0` mode has bugs, please use `OCL12`.
+
+```C++
+#ifdef __APPLE__
+#define PLATFORM_FILTER APPLE_MAC
+#define OPENCL_VERSION OCL12
+#else
+#define PLATFORM_FILTER XILINX_FPGA
+#define OPENCL_VERSION OCL12
+#endif
+```
+
+However, because Opencl is very restristed in a hardware design perspective, **you can't really use pingpong buffer to optimize the weight/bias external memory loading.**  Only then intermediate feature map are buffered, weight/bias are loaded as function parameters for each layer kernel.
 
 
 ### Attributes
@@ -49,4 +61,4 @@ I recommend you to read some papers to find the best pipeline/unroll parameters 
 
 - [Optimizing FPGA-based Accelerator Design for Deep Convolutional Neural Networks](http://dl.acm.org/citation.cfm?id=2689060)
 
-But I do think layers are unbalanced, so if you could figure out a way to **compute half of layer/one and half layers**, then it could further optimize performance.
+But again, because of the restriction from opencl, you can't really split/pipeline the memory traffic inside a single layer. They must be loaded at bundle. 

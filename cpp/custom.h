@@ -18,7 +18,7 @@ typedef float dType;
 #define PLATFORM_FILTER APPLE_MAC
 #define OPENCL_VERSION OCL12
 #else
-#define OPENCL_VERSION OCL20
+#define OPENCL_VERSION OCL12
 #define PLATFORM_FILTER XILINX_FPGA
 #endif
 // You could add Nvidia Here

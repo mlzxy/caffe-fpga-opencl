@@ -10,9 +10,9 @@
  *  Customization
  */
 #ifdef __xilinx__
-#define BUFFER_SIZE 15680
+// #define BUFFER_SIZE 15680
 #endif
-// #define DEBUG
+#define DEBUG
 typedef float dType;
 typedef int BOOL;
 //////////////////////////////////////////////////////////////////////
