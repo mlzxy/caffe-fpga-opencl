@@ -213,10 +213,10 @@ Net::Net(Json::Value data, cmdArg arg, OpenCLVersion version) {
   name = string(arg.network);
   mode = version;
   if (version == OCL12) {
-      INFO_LOG<<"Building Network with Opencl 1.2"
+      INFO_LOG<<"Building Network with Opencl 1.2";
   }
   else {
-      INFO_LOG<<"Building Network with Opencl 2.0, with memory optimization with pingpong buffer."
+      INFO_LOG<<"Building Network with Opencl 2.0, with memory optimization with pingpong buffer.";
   }
   num_layers = data["num_layers"].asInt();
   layers = new Layer *[num_layers];
