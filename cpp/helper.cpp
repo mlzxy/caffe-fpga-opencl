@@ -366,7 +366,7 @@ void printHelp() {
 
     cout << "  -d <cpu|gpu|fpga> device type, default cpu in apple, otherwise fpga\n\n";
 
-    cout << "  -r <true|false> release is true or false, default false\n\n";
+//    cout << "  -r <true|false> release is true or false, default false\n\n";
 
     cout << "  -l <no|layer|net|debug> network logging level, debug will print feature map\n\n";
 
@@ -386,7 +386,7 @@ cmdArg parseCmdArg(int argc, char **argv) {
     strcpy(arg.platformName, DEFAULT_PLATFORM);
     arg.deviceID = 0;
     arg.networkLoggingLevel = NO;
-    arg.debug = true;
+//    arg.debug = true;
     arg.openclVersion = OCL12;
     arg.deviceType = DEFAULT_DEVICE;
 
@@ -399,7 +399,7 @@ cmdArg parseCmdArg(int argc, char **argv) {
             {"platform",        required_argument, 0, 'p'},
             {"help",            no_argument,       0, 'h'},
             {"choose_device",   required_argument, 0, 'c'},
-            {"release",         required_argument, 0, 'r'},
+//            {"release",         required_argument, 0, 'r'},
             {"network_logging", required_argument, 0, 'l'},
             {"opencl_version",  required_argument, 0, 'v'},
             {0, 0,                                 0, 0}
@@ -452,10 +452,10 @@ cmdArg parseCmdArg(int argc, char **argv) {
                     arg.deviceID = 0;
                 }
                 break;
-            case 'r':
-                istringstream(optarg) >> std::boolalpha >> arg.debug;
-                arg.debug = !arg.debug; //because the flag is release
-                break;
+//            case 'r':
+//                istringstream(optarg) >> std::boolalpha >> arg.debug;
+//                arg.debug = !arg.debug; //because the flag is release
+//                break;
             case 'l':
                 if (strcmp(optarg, "no") == 0)
                     arg.networkLoggingLevel = NO;
@@ -501,7 +501,7 @@ void printArgument(cmdArg arg){
     INFO_LOG<<"Kernel File        = "<<arg.mFileName<<endl;
     INFO_LOG<<"Kernels to compile = "<<arg.mKernelName<<endl;
     INFO_LOG<<"Network JSON File  = "<<arg.network<<endl;
-    INFO_LOG<<"Debug              = "<<arg.debug<<endl;
+//    INFO_LOG<<"Debug              = "<<arg.debug<<endl;
     INFO_LOG<<"Device Type        = "<<arg.deviceType<<endl;
     INFO_LOG<<"Device Id          = "<<arg.deviceID<<endl;
     INFO_LOG<<"Platform Name      = "<<arg.platformName<<endl;

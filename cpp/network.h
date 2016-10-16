@@ -1,6 +1,7 @@
 #include "helper.h"
 #include "custom.h"
 #include "net_enum.h"
+#include <iomanip>
 
 #ifndef OPENCL_LEARNING_NETWORK_H
 #define OPENCL_LEARNING_NETWORK_H

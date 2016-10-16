@@ -39,6 +39,8 @@ using namespace std;
 #define DEBUG_LOG  cout<<"DEBUG: "
 #define INFO_LOG  cout<<"INFO: "
 #define ERROR_LOG  cout<<"ERROR: "
+#define SOLID_LINE cout<<"==========================================\n"
+#define DOTTED_LINE cout<<"------------------------------------------\n"
 
 /**
  * # Constants #
@@ -90,7 +92,7 @@ typedef struct cmdArg{
     char platformName[1024];
     int  deviceID;
     char network[1024];
-    bool debug;
+//    bool debug;
     NetLogging networkLoggingLevel;
     OpenCLVersion  openclVersion;
     char info[1024]; //custom information

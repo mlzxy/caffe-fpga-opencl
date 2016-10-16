@@ -1,5 +1,5 @@
 #include "network.h"
-
+#include "fpganet.h"
 
 
 WeightData createWeightData(Json::Value data) {
@@ -116,7 +116,7 @@ bool Layer::freeCLMemory() {
 
 bool Layer::forward(oclHardware hardware, oclSoftware software,
                     OpenCLVersion mode, NetLogging log) {
-  if (log == LAYER) {
+  if (log == LAYER || log == DEBUG) {
     INFO_LOG << "    Forward Pass: " << info << endl;
   }
   if (prev != NULL) {
@@ -129,7 +129,7 @@ bool Layer::forward(oclHardware hardware, oclSoftware software,
   cl_int err = CL_SUCCESS;
 
   size_t inputSize = 1, outputSize = 1;
-  if (mode == OCL12) {
+  if (mode == OCL12 || log == DEBUG) {
     outputSize = (size_t)param.outputTotalDataNum;
     inputSize = (size_t)param.inputTotalDataNum;
   } else {
@@ -183,8 +183,6 @@ bool Layer::forward(oclHardware hardware, oclSoftware software,
     CL_KERNEL_ARG(kernel, sizeof(cl_mem), &biasCL);
   }
   CL_KERNEL_ARG(kernel, sizeof(cl_mem), &paramCL);
-  //    cout<<"phase = "<<phase<<endl;
-  int *x = new int(10);
   CL_KERNEL_ARG(kernel, sizeof(cl_mem), &phaseCL);
 
   FORWARD_ERROR_CHECK
@@ -199,6 +197,14 @@ bool Layer::forward(oclHardware hardware, oclSoftware software,
                            outputSize * sizeof(dType), outputBuffer, 0, NULL,
                            NULL);
     CL_FINISH(hardware.mQueue);
+    if(log == DEBUG){
+        cout<<"Input: "<<endl;
+        print2D(inputBuffer, param.inputHeight, param.inputWidth);
+        DOTTED_LINE;
+        cout<<"Output: "<<endl;
+        print2D(outputBuffer, param.outputHeight, param.outputWidth);
+        SOLID_LINE;
+    }
     freeCLMemory();
   }
 
@@ -283,7 +289,7 @@ void print2D(dType *fm, int height, int width) {
   cout << "\n\n";
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
-      cout << fm[i * width + j] << ",";
+      cout <<std::fixed << std::setprecision(2)<< fm[i * width + j] << ",";
     }
     cout << endl;
   }
