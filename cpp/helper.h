@@ -1,7 +1,3 @@
-//
-// Created by 张鑫语 on 8/20/16.
-//
-
 #ifndef C_VERSION_HELPER_H
 #define C_VERSION_HELPER_H
 
@@ -20,7 +16,7 @@
 #include <glob.h>
 #include <opencv2/highgui/highgui.hpp>
 #include "./json/json.h"
-
+#include "net_enum.h"
 #ifdef __APPLE__
 #include <OpenCL/cl.h>
 //#include <OpenCL/cl.hpp>
@@ -28,6 +24,10 @@
 #include <CL/cl.h>
 //#include <CL/cl.hpp> // Xilinx Opencl doesn't support Opencl C++ Bindings.
 #endif
+
+
+using namespace cv;
+using namespace std;
 
 
 
@@ -40,10 +40,23 @@
 #define INFO_LOG  cout<<"INFO: "
 #define ERROR_LOG  cout<<"ERROR: "
 
+/**
+ * # Constants #
+ */
+#define DEVICE_GPU    CL_DEVICE_TYPE_GPU
+#define DEVICE_CPU    CL_DEVICE_TYPE_CPU
+#define DEVICE_FPGA   CL_DEVICE_TYPE_ACCELERATOR
+#define XILINX_FPGA "Xilinx"
+#define APPLE_MAC  "Apple"
+#define NVIDIA_CUDA  "NVIDIA CUDA"
+#ifdef __APPLE__
+#define DEFAULT_PLATFORM APPLE_MAC
+#define DEFAULT_DEVICE DEVICE_CPU
+#else
+#define DEFAULT_PLATFORM XILINX_FPGA
+#define DEFAULT_DEVICE CL_DEVICE_TYPE_ACCELERATOR
+#endif
 
-
-using namespace cv;
-using namespace std;
 
 
 /**
@@ -74,8 +87,13 @@ typedef struct cmdArg{
     cl_device_type deviceType;
     char mFileName[1024];
     char mKernelName[128];
-    char dataDir[1024];
+    char platformName[1024];
+    int  deviceID;
     char network[1024];
+    bool debug;
+    NetLogging networkLoggingLevel;
+    OpenCLVersion  openclVersion;
+    char info[1024]; //custom information
 } cmdArg;
 
 
@@ -83,16 +101,17 @@ typedef struct cmdArg{
  * OpenCL Related Utilties #
  */
 oclSoftware getOclSoftware(const oclHardware &hardware, const char* kernelNames, const char* kernelFileName);
-oclHardware getOclHardware(cl_device_type type);
+oclHardware getOclHardware(cmdArg arg);
 cl_int compileProgram(const oclHardware &hardware, oclSoftware &software);
 void getDeviceVersion(oclHardware& hardware);
 void printHelp();
+void printArgument(cmdArg arg);
 cmdArg parseCmdArg(int argc, char** argv);
 void release(oclSoftware& software);
 void release(oclHardware& hardware);
 int loadFile2Memory(const char *filename, char **result);
 const char *clErrorCode(cl_int code);
-typedef double (*RunOpenCL)(cmdArg arg, oclHardware hardware, oclSoftware software);
+typedef bool (*RunOpenCL)(cmdArg arg, oclHardware hardware, oclSoftware software);
 double runProgram(int argc, char** argv, RunOpenCL F);
 
 
@@ -101,6 +120,7 @@ double runProgram(int argc, char** argv, RunOpenCL F);
  */
 Mat readImage(string fpath);
 size_t imageSize(Mat m);
+
 typedef vector<std::string>  FileList;
 FileList ls(const std::string& pattern);
 std::string getFileName(const std::string& s);
@@ -109,13 +129,10 @@ void split(const string &s, char delim, vector<string> &elems);
 bool endsWith(const string& s, const string& suffix);
 string trim(string& str);
 
-
-
 inline void printTitle(string x){
 cout << "\n\n++++++++++++++++++++++++++++++++++++ "<<x<<" ++++++++++++++++++++++++++++++++++++"
     << endl;
 }
-
 inline void printCLConstant(){
     INFO_LOG<<"CL_DEVICE_MAX_WORK_GROUP_SIZE = "<<CL_DEVICE_MAX_WORK_GROUP_SIZE<<endl;
     INFO_LOG<<"CL_DEVICE_MAX_WORK_ITEM_SIZES   " <<CL_DEVICE_MAX_WORK_ITEM_SIZES<<endl;
@@ -123,7 +140,9 @@ inline void printCLConstant(){
 
 
 /**
- * Network Related Structure Declaration
+ * # The "main" function #
  */
-//#include "network.h"
-#endif //C_VERSION_HELPER_H
+bool run(cmdArg arg, oclHardware hardware, oclSoftware software);
+#endif
+
+

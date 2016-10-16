@@ -1,5 +1,6 @@
 #include "helper.h"
 #include "custom.h"
+#include "net_enum.h"
 
 #ifndef OPENCL_LEARNING_NETWORK_H
 #define OPENCL_LEARNING_NETWORK_H
@@ -73,9 +74,7 @@ typedef struct{
     int bias_dim_num;
 } WeightData;
 
-enum LayerType {Convolution, Relu, Data, Split, Pooling, Accuracy, SoftmaxWithLoss, Output, Padding};
-enum OpenCLVersion {OCL20, OCL12};
-enum NetLogging {NO, LAYER, NET};
+
 class Layer {
 public:
     ~Layer();
@@ -109,7 +108,7 @@ public:
     string name;
     OpenCLVersion mode;
     bool freeCLMemory();
-    Net(Json::Value, cmdArg arg,OpenCLVersion version);
+    Net(Json::Value, cmdArg arg);
     ~Net();
     bool forward(oclHardware hardware, oclSoftware software, dType *data, NetLogging log);
     Layer* outputLayer();

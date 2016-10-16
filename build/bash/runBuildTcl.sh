@@ -5,10 +5,7 @@
 # now figure out why! oh yeah
 RUN_BUILD_TCL_ROOT=/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version
 ROOT=$HOME/Dropbox/Centos_WorkSpace/OpenCL/C++_Version
-
-function gen_ku3_driver(){
-	xbinst -x $FPGA_KU3_DDR1 -d $1
-}
+FPGA=xilinx:adm-pcie-ku3:2ddr-xpr:3.1
 
 function test_pcie_fpga(){
 	sudo lspci -s :04:00.0 -vv
@@ -16,15 +13,15 @@ function test_pcie_fpga(){
 
 
 function  xocc_sw(){
-	xocc -g --xdevice ${FPGA_KU3_DDR1}  -t sw_emu  -o $1.sw_emu.xclbin   $1
+	xocc -g --xdevice ${FPGA}  -t sw_emu  -o $1.sw_emu.xclbin   $1
 }
 
 function  xocc_hwem(){
-	xocc  --xdevice ${FPGA_KU3_DDR1} -o $1.hw_emu.xclbin -t hw_emu $1
+	xocc  --xdevice ${FPGA} -o $1.hw_emu.xclbin -t hw_emu $1
 }
 
 function  xocc_hw(){
-	xocc  --xdevice ${FPGA_KU3_DDR1} -o $1.hw.xclbin -t hw $1
+	xocc  --xdevice ${FPGA} -o $1.hw.xclbin -t hw $1
 }
 
 function xocc_clean(){

@@ -2,13 +2,21 @@
 // Created by 张鑫语 on 9/24/16.
 //
 
-#include "net.h"
-#include "mnist_data.h"
-#include "../../helper.h"
+#include "custom.h"
+#include "fpganet.h"
+#include "./other/mnist_data.h"
 
-double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
-    clock_t start = clock();
-    int mnist_test_num = 50;
+
+
+bool run(cmdArg arg, oclHardware hardware, oclSoftware software) {
+    int mnist_test_num;
+    try {
+         mnist_test_num = std::stoi(arg.info);
+    } catch (std::exception const &e) {
+        INFO_LOG<<"Number of images not specified, use 1"<<endl;
+        mnist_test_num = 1;
+    }
+
     int start_idx = 0;
     char *netJson = 0;
     INFO_LOG<<"Start to read "<<arg.network<<endl;
@@ -25,13 +33,13 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
         ERROR_LOG<<"Fail to parse "<<arg.network<<endl;
     }
     INFO_LOG<<"Start to build net."<<endl;
-    Net *net = new Net(netRoot, arg, OPENCL_VERSION);
+    Net *net = new Net(netRoot, arg);
     INFO_LOG<<"Net build finished."<<endl;
     float correctCounter = 0;
     dType softmax_output[10];
     bool forward_result;
     for(int i = start_idx;i<start_idx+mnist_test_num; i++){
-        forward_result = net->forward(hardware, software, mnist_images[i], NETWORK_LOG_LEVEL);
+        forward_result = net->forward(hardware, software, mnist_images[i], arg.networkLoggingLevel);
         if(!forward_result){
             delete net;
             ERROR_LOG<<"FREE MEMORY AND EXITING...";
@@ -49,8 +57,9 @@ double run(cmdArg arg, oclHardware hardware, oclSoftware software) {
         }
         INFO_LOG<<"NO "<<i+1<<","<<result<<" prediction on image "<<i<<": "<<predicted<<" = "<<mnist_labels[i]<<endl;
     }
-
     INFO_LOG<<"Accuracy = " << correctCounter/mnist_test_num*100<<"%."<<endl;
     delete net;
-    return (clock() - start)/(double)CLOCKS_PER_SEC;
+
+
+    return true;
 }

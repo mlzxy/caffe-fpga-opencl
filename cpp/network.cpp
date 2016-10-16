@@ -209,14 +209,14 @@ bool Layer::forward(oclHardware hardware, oclSoftware software,
   return err == CL_SUCCESS;
 }
 
-Net::Net(Json::Value data, cmdArg arg, OpenCLVersion version) {
+Net::Net(Json::Value data, cmdArg arg) {
   name = string(arg.network);
-  mode = version;
-  if (version == OCL12) {
-      INFO_LOG<<"Building Network with Opencl 1.2";
+  mode = arg.openclVersion;
+  if (mode == OCL12) {
+      INFO_LOG<<"Building Network with Opencl 1.2"<<endl;
   }
   else {
-      INFO_LOG<<"Building Network with Opencl 2.0, with memory optimization with pingpong buffer.";
+      INFO_LOG<<"Building Network with Opencl 2.0, with memory optimization with pingpong buffer."<<endl;
   }
   num_layers = data["num_layers"].asInt();
   layers = new Layer *[num_layers];

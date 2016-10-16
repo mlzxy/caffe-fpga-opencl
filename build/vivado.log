@@ -1,0 +1,188 @@
+
+WARNING: Unable to find common Xilinx tools. Automatic updates and 
+         license management will be disabled.
+
+
+****** sdaccel v2016.2 (64-bit)
+  **** SW Build 1660141 on Tue Sep 13 12:58:45 MDT 2016
+    ** Copyright 1986-2016 Xilinx, Inc. All Rights Reserved.
+
+
+source /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipirun.tcl -notrace
+Sourcing kernel info from: ./map.tcl
+Setting ip_repo_paths: 
+  {/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/kernels/reluLayer/reluLayer/ip}
+  {/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/kernels/convLayer/convLayer/ip}
+  {/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/kernels/dataLayer/dataLayer/ip}
+  {/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/kernels/poolingLayer/poolingLayer/ip}
+  {/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/kernels/outputLayer/outputLayer/ip}
+  {/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/kernels/paddingLayer/paddingLayer/ip}
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/kernels/reluLayer/reluLayer/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/kernels/convLayer/convLayer/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/kernels/dataLayer/dataLayer/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/kernels/poolingLayer/poolingLayer/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/kernels/outputLayer/outputLayer/ip'.
+INFO: [IP_Flow 19-1700] Loaded user IP repository '/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/kernels/paddingLayer/paddingLayer/ip'.
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/home/xy0/Applications/SDAccel/SDAccel/2016.2/Vivado/data/ip'.
+Wrote  : </home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.srcs/sources_1/bd/opencldesign/opencldesign.bd> 
+INFO: Updated OCL block configuration: USER_WIDTH 0 S_DATA_WIDTH 32 S_ADDR_WIDTH 17 BOUNDARY_VERSION 2 C_BASEADDR 0x00010000 C_HIGHADDR 0x0001FFFF COMPONENT_NAME xcl_design_u_ocl_region_0 EDK_IPTYPE PERIPHERAL ENABLE_ADVANCED_OPTIONS 1 ENABLE_PROFILING 1 ENABLE_SMARTCONNECT 0 HAS_BURST 0 HAS_INTERRUPT 0 HAS_KERNEL_CLOCK 1 HAS_S_MEM 0 KERNEL_TYPE ADD_ONE KERNEL_VLNV none M00_AXIS_RX_TDATA_NUM_BYTES 8 M00_AXIS_RX_TUSER_WIDTH 8 M01_AXIS_RX_TDATA_NUM_BYTES 8 M01_AXIS_RX_TUSER_WIDTH 8 M_ADDR_WIDTH 38 M_DATA_WIDTH 512 M_HAS_REGSLICE 4 M_ID_WIDTH 4 NUM_KERNELS 2 NUM_MI 2 NUM_M_AXIS_RX 0 NUM_S_AXIS_TX 0 REGSLICE_CONFIG_DICT none S00_AXIS_TX_TDATA_NUM_BYTES 8 S00_AXIS_TX_TUSER_WIDTH 8 S01_AXIS_TX_TDATA_NUM_BYTES 8 S01_AXIS_TX_TUSER_WIDTH 8 SYNC_RESET 1 S_HAS_REGSLICE 4 S_MEM_ADDR_WIDTH 16 S_MEM_DATA_WIDTH 32 S_MEM_ID_WIDTH 1 TIEOFF_KERNEL_RESET 0 USE_BSCAN 0 USE_PR 0 USE_SYNTH 0
+Sourcing file: /home/xy0/Applications/SDAccel/SDAccel/2016.2/bin/../scripts/ocl/ocl_block_utils.tcl
+Creating BD external ports...
+Creating BD contents...
+Updating BD port configurations...
+Updating kernel resources...
+Updating addressing...
+INFO: mapping /instance_convLayer/s_axi_control/Reg into /S_AXI offset=0x00001000 range=0x1000 : ocl_slave_seg_instance_convLayer
+INFO: mapping /instance_dataLayer/s_axi_control/Reg into /S_AXI offset=0x00002000 range=0x1000 : ocl_slave_seg_instance_dataLayer
+INFO: mapping /instance_outputLayer/s_axi_control/Reg into /S_AXI offset=0x00004000 range=0x1000 : ocl_slave_seg_instance_outputLayer
+INFO: mapping /instance_paddingLayer/s_axi_control/Reg into /S_AXI offset=0x00005000 range=0x1000 : ocl_slave_seg_instance_paddingLayer
+INFO: mapping /instance_poolingLayer/s_axi_control/Reg into /S_AXI offset=0x00003000 range=0x1000 : ocl_slave_seg_instance_poolingLayer
+INFO: mapping /instance_reluLayer/s_axi_control/Reg into /S_AXI offset=0x00000000 range=0x1000 : ocl_slave_seg_instance_reluLayer
+</M00_AXI/Reg> is being mapped into </instance_convLayer/Data_m_axi_gmem> at <0x44A00000 [ 64K ]>
+</M00_AXI/Reg> is being mapped into </instance_dataLayer/Data_m_axi_gmem> at <0x44A00000 [ 64K ]>
+</M00_AXI/Reg> is being mapped into </instance_outputLayer/Data_m_axi_gmem> at <0x44A00000 [ 64K ]>
+</M00_AXI/Reg> is being mapped into </instance_paddingLayer/Data_m_axi_gmem> at <0x44A00000 [ 64K ]>
+</M00_AXI/Reg> is being mapped into </instance_poolingLayer/Data_m_axi_gmem> at <0x44A00000 [ 64K ]>
+</M00_AXI/Reg> is being mapped into </instance_reluLayer/Data_m_axi_gmem> at <0x44A00000 [ 64K ]>
+Wrote  : </home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.srcs/sources_1/bd/opencldesign/opencldesign.bd> 
+CRITICAL WARNING: [BD 41-237] Bus Interface property SUPPORTS_NARROW_BURST does not match between /slave_bridge/s_axi(0) and /S_AXI(1)
+CRITICAL WARNING: [BD 41-237] Bus Interface property MAX_BURST_LENGTH does not match between /slave_bridge/s_axi(1) and /S_AXI(256)
+validate_bd_design: Time (s): cpu = 00:00:05 ; elapsed = 00:00:05 . Memory (MB): peak = 1398.512 ; gain = 32.996 ; free physical = 2221 ; free virtual = 21745
+Wrote  : </home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.srcs/sources_1/bd/opencldesign/opencldesign.bd> 
+INFO: [BD 41-1662] The design 'opencldesign.bd' is already validated. Therefore parameter propagation will not be re-run.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/s00_couplers/s00_regslice/s_axi_arlock'(1) to net 's00_couplers_to_s00_regslice_ARLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/s00_couplers/s00_regslice/s_axi_awlock'(1) to net 's00_couplers_to_s00_regslice_AWLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/s01_couplers/s01_regslice/s_axi_arlock'(1) to net 's01_couplers_to_s01_regslice_ARLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/s01_couplers/s01_regslice/s_axi_awlock'(1) to net 's01_couplers_to_s01_regslice_AWLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/s02_couplers/s02_regslice/s_axi_arlock'(1) to net 's02_couplers_to_s02_regslice_ARLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/s02_couplers/s02_regslice/s_axi_awlock'(1) to net 's02_couplers_to_s02_regslice_AWLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/s03_couplers/s03_regslice/s_axi_arlock'(1) to net 's03_couplers_to_s03_regslice_ARLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/s03_couplers/s03_regslice/s_axi_awlock'(1) to net 's03_couplers_to_s03_regslice_AWLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/s04_couplers/s04_regslice/s_axi_arlock'(1) to net 's04_couplers_to_s04_regslice_ARLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/s04_couplers/s04_regslice/s_axi_awlock'(1) to net 's04_couplers_to_s04_regslice_AWLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/s05_couplers/s05_regslice/s_axi_arlock'(1) to net 's05_couplers_to_s05_regslice_ARLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/s05_couplers/s05_regslice/s_axi_awlock'(1) to net 's05_couplers_to_s05_regslice_AWLOCK'(2) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/m00_couplers/auto_cc/m_axi_bid'(3) to net 'auto_cc_to_m00_couplers_BID'(4) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/m_axi_interconnect_M00_AXI/m00_couplers/auto_cc/m_axi_rid'(3) to net 'auto_cc_to_m00_couplers_RID'(4) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/master_bridge_0/s_axi_awid'(4) to net 'm_axi_interconnect_M00_AXI_M00_AXI_AWID'(3) - Only lower order bits will be connected.
+WARNING: [BD 41-235] Width mismatch when connecting pin: '/master_bridge_0/s_axi_arid'(4) to net 'm_axi_interconnect_M00_AXI_M00_AXI_ARID'(3) - Only lower order bits will be connected.
+Verilog Output written to : /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.srcs/sources_1/bd/opencldesign/hdl/opencldesign.v
+Verilog Output written to : /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.srcs/sources_1/bd/opencldesign/hdl/opencldesign_wrapper.v
+Wrote  : </home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.srcs/sources_1/bd/opencldesign/opencldesign.bd> 
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/xbar .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block s_axi_interconnect_0/xbar .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block interconnect_sys_reset .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block kernel_sys_reset .
+WARNING: [IP_Flow 19-519] IP 'opencldesign_instance_reluLayer_0' detected a language mismatch between 'VHDL Simulation Wrapper' and 'Verilog Simulation' output products. Please check with the IP provider to see if this is expected.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block instance_reluLayer .
+WARNING: [IP_Flow 19-519] IP 'opencldesign_instance_convLayer_0' detected a language mismatch between 'VHDL Simulation Wrapper' and 'Verilog Simulation' output products. Please check with the IP provider to see if this is expected.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block instance_convLayer .
+WARNING: [IP_Flow 19-519] IP 'opencldesign_instance_dataLayer_0' detected a language mismatch between 'VHDL Simulation Wrapper' and 'Verilog Simulation' output products. Please check with the IP provider to see if this is expected.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block instance_dataLayer .
+WARNING: [IP_Flow 19-519] IP 'opencldesign_instance_poolingLayer_0' detected a language mismatch between 'VHDL Simulation Wrapper' and 'Verilog Simulation' output products. Please check with the IP provider to see if this is expected.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block instance_poolingLayer .
+WARNING: [IP_Flow 19-519] IP 'opencldesign_instance_outputLayer_0' detected a language mismatch between 'VHDL Simulation Wrapper' and 'Verilog Simulation' output products. Please check with the IP provider to see if this is expected.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block instance_outputLayer .
+WARNING: [IP_Flow 19-519] IP 'opencldesign_instance_paddingLayer_0' detected a language mismatch between 'VHDL Simulation Wrapper' and 'Verilog Simulation' output products. Please check with the IP provider to see if this is expected.
+INFO: [BD 41-1029] Generation completed for the IP Integrator block instance_paddingLayer .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block slave_bridge .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block master_bridge_0 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block master_bridge_1 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block xlconstant_zero_1 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block xlconstant_zero_38 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block xlconstant_zero_8 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block xlconstant_zero_3 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block xlconstant_zero_2 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block xlconstant_zero_4 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block xlconstant_zero_512 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block xlconstant_zero_64 .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s00_couplers/s00_regslice .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s01_couplers/s01_regslice .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s02_couplers/s02_regslice .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s03_couplers/s03_regslice .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s04_couplers/s04_regslice .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s05_couplers/s05_regslice .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block s_axi_interconnect_0/m00_couplers/m00_regslice .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block s_axi_interconnect_0/m01_couplers/m01_regslice .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block s_axi_interconnect_0/m02_couplers/m02_regslice .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block s_axi_interconnect_0/m03_couplers/m03_regslice .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block s_axi_interconnect_0/m04_couplers/m04_regslice .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block s_axi_interconnect_0/m05_couplers/m05_regslice .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/m00_couplers/auto_cc .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s00_couplers/auto_us .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s00_couplers/auto_rs_w .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s01_couplers/auto_us .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s01_couplers/auto_rs_w .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s02_couplers/auto_us .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s02_couplers/auto_rs_w .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s03_couplers/auto_us .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s03_couplers/auto_rs_w .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s04_couplers/auto_us .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s04_couplers/auto_rs_w .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s05_couplers/auto_us .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block m_axi_interconnect_M00_AXI/s05_couplers/auto_rs_w .
+INFO: [BD 41-1029] Generation completed for the IP Integrator block s_axi_interconnect_0/s00_couplers/auto_cc .
+Exporting to file /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.srcs/sources_1/bd/opencldesign/hw_handoff/opencldesign.hwh
+Generated Block Design Tcl file /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.srcs/sources_1/bd/opencldesign/hw_handoff/opencldesign_bd.tcl
+Generated Hardware Definition File /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.srcs/sources_1/bd/opencldesign/hdl/opencldesign.hwdef
+
+WARNING: Unable to find common Xilinx tools. Automatic updates and 
+         license management will be disabled.
+
+[Sat Oct 15 12:45:33 2016] Launched opencldesign_xbar_0_synth_1, opencldesign_s01_regslice_0_synth_1, opencldesign_s00_regslice_0_synth_1, opencldesign_m03_regslice_0_synth_1, opencldesign_m04_regslice_0_synth_1, opencldesign_m00_regslice_0_synth_1, opencldesign_m05_regslice_0_synth_1, opencldesign_s05_regslice_0_synth_1, opencldesign_m01_regslice_0_synth_1, opencldesign_m02_regslice_0_synth_1, opencldesign_xbar_1_synth_1, opencldesign_xlconstant_zero_38_0_synth_1, opencldesign_xlconstant_zero_1_0_synth_1, opencldesign_master_bridge_1_0_synth_1, opencldesign_master_bridge_0_0_synth_1, opencldesign_xlconstant_zero_8_0_synth_1, opencldesign_slave_bridge_0_synth_1, opencldesign_instance_paddingLayer_0_synth_1, opencldesign_instance_outputLayer_0_synth_1, opencldesign_instance_poolingLayer_0_synth_1, opencldesign_instance_dataLayer_0_synth_1, opencldesign_instance_convLayer_0_synth_1, opencldesign_instance_reluLayer_0_synth_1, opencldesign_interconnect_sys_reset_0_synth_1, opencldesign_kernel_sys_reset_0_synth_1, opencldesign_auto_cc_0_synth_1, opencldesign_s02_regslice_0_synth_1, opencldesign_s04_regslice_0_synth_1, opencldesign_s03_regslice_0_synth_1, opencldesign_xlconstant_zero_64_0_synth_1, opencldesign_xlconstant_zero_512_0_synth_1, opencldesign_xlconstant_zero_4_0_synth_1, opencldesign_xlconstant_zero_2_0_synth_1, opencldesign_xlconstant_zero_3_0_synth_1, opencldesign_auto_us_2_synth_1, opencldesign_auto_rs_w_1_synth_1, opencldesign_auto_us_1_synth_1, opencldesign_auto_rs_w_0_synth_1, opencldesign_auto_us_0_synth_1, opencldesign_auto_rs_w_4_synth_1, opencldesign_auto_us_4_synth_1, opencldesign_auto_rs_w_3_synth_1, opencldesign_auto_us_3_synth_1, opencldesign_auto_rs_w_2_synth_1, opencldesign_auto_cc_1_synth_1, opencldesign_auto_rs_w_5_synth_1, opencldesign_auto_us_5_synth_1...
+Run output will be captured here:
+opencldesign_xbar_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_xbar_0_synth_1/runme.log
+opencldesign_s01_regslice_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_s01_regslice_0_synth_1/runme.log
+opencldesign_s00_regslice_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_s00_regslice_0_synth_1/runme.log
+opencldesign_m03_regslice_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_m03_regslice_0_synth_1/runme.log
+opencldesign_m04_regslice_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_m04_regslice_0_synth_1/runme.log
+opencldesign_m00_regslice_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_m00_regslice_0_synth_1/runme.log
+opencldesign_m05_regslice_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_m05_regslice_0_synth_1/runme.log
+opencldesign_s05_regslice_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_s05_regslice_0_synth_1/runme.log
+opencldesign_m01_regslice_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_m01_regslice_0_synth_1/runme.log
+opencldesign_m02_regslice_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_m02_regslice_0_synth_1/runme.log
+opencldesign_xbar_1_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_xbar_1_synth_1/runme.log
+opencldesign_xlconstant_zero_38_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_xlconstant_zero_38_0_synth_1/runme.log
+opencldesign_xlconstant_zero_1_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_xlconstant_zero_1_0_synth_1/runme.log
+opencldesign_master_bridge_1_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_master_bridge_1_0_synth_1/runme.log
+opencldesign_master_bridge_0_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_master_bridge_0_0_synth_1/runme.log
+opencldesign_xlconstant_zero_8_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_xlconstant_zero_8_0_synth_1/runme.log
+opencldesign_slave_bridge_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_slave_bridge_0_synth_1/runme.log
+opencldesign_instance_paddingLayer_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_instance_paddingLayer_0_synth_1/runme.log
+opencldesign_instance_outputLayer_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_instance_outputLayer_0_synth_1/runme.log
+opencldesign_instance_poolingLayer_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_instance_poolingLayer_0_synth_1/runme.log
+opencldesign_instance_dataLayer_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_instance_dataLayer_0_synth_1/runme.log
+opencldesign_instance_convLayer_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_instance_convLayer_0_synth_1/runme.log
+opencldesign_instance_reluLayer_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_instance_reluLayer_0_synth_1/runme.log
+opencldesign_interconnect_sys_reset_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_interconnect_sys_reset_0_synth_1/runme.log
+opencldesign_kernel_sys_reset_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_kernel_sys_reset_0_synth_1/runme.log
+opencldesign_auto_cc_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_cc_0_synth_1/runme.log
+opencldesign_s02_regslice_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_s02_regslice_0_synth_1/runme.log
+opencldesign_s04_regslice_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_s04_regslice_0_synth_1/runme.log
+opencldesign_s03_regslice_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_s03_regslice_0_synth_1/runme.log
+opencldesign_xlconstant_zero_64_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_xlconstant_zero_64_0_synth_1/runme.log
+opencldesign_xlconstant_zero_512_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_xlconstant_zero_512_0_synth_1/runme.log
+opencldesign_xlconstant_zero_4_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_xlconstant_zero_4_0_synth_1/runme.log
+opencldesign_xlconstant_zero_2_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_xlconstant_zero_2_0_synth_1/runme.log
+opencldesign_xlconstant_zero_3_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_xlconstant_zero_3_0_synth_1/runme.log
+opencldesign_auto_us_2_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_us_2_synth_1/runme.log
+opencldesign_auto_rs_w_1_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_rs_w_1_synth_1/runme.log
+opencldesign_auto_us_1_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_us_1_synth_1/runme.log
+opencldesign_auto_rs_w_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_rs_w_0_synth_1/runme.log
+opencldesign_auto_us_0_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_us_0_synth_1/runme.log
+opencldesign_auto_rs_w_4_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_rs_w_4_synth_1/runme.log
+opencldesign_auto_us_4_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_us_4_synth_1/runme.log
+opencldesign_auto_rs_w_3_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_rs_w_3_synth_1/runme.log
+opencldesign_auto_us_3_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_us_3_synth_1/runme.log
+opencldesign_auto_rs_w_2_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_rs_w_2_synth_1/runme.log
+opencldesign_auto_cc_1_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_cc_1_synth_1/runme.log
+opencldesign_auto_rs_w_5_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_rs_w_5_synth_1/runme.log
+opencldesign_auto_us_5_synth_1: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/opencldesign_auto_us_5_synth_1/runme.log
+[Sat Oct 15 12:45:33 2016] Launched synth_1...
+Run output will be captured here: /home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/build/output/net_board_compilation_solution/impl/_xocc_bcontainer_link.dir/impl/build/system/bcontainer/bitstream/bcontainer_ipi/ipiprj/ipiprj.runs/synth_1/runme.log
+[Sat Oct 15 12:45:33 2016] Waiting for synth_1 to finish...
+[Sat Oct 15 14:00:57 2016] synth_1 finished
+wait_on_run: Time (s): cpu = 01:38:22 ; elapsed = 01:15:23 . Memory (MB): peak = 1538.195 ; gain = 7.914 ; free physical = 3996 ; free virtual = 5019
+ERROR: [Common 17-69] Command failed: Run 'synth_1' has not been launched. Unable to open
+INFO: [Common 17-206] Exiting sdaccel at Sat Oct 15 14:00:58 2016...

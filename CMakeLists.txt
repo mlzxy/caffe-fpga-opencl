@@ -19,7 +19,7 @@ include_directories( ${OPENCL_INCLUDE_DIR} )
 
 
 set(SOURCE_FILES cpp/main.cpp cpp/helper.cpp  cpp/fpganet.h cpp/network.cpp cpp/network.h cpp/custom.h cpp/helper.h  cpp/jsoncpp.cpp cpp/json/json.h  cpp/json/json-forwards.h
-        cpp/RunOpenCL/net/net.cpp   cpp/RunOpenCL/net/net.h cpp/RunOpenCL/net/mnist_data.h)
+        cpp/custom.cpp   cpp/other/mnist_data.h cpp/net_enum.h)
 add_executable(opencl_learning ${SOURCE_FILES})
 
 #MESSAGE(STATUS ${OPENCL_LIBRARIES})

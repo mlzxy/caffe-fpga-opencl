@@ -10,9 +10,9 @@
  *  Customization
  */
 #ifdef __xilinx__
-// #define BUFFER_SIZE 15680
+#define BUFFER_SIZE 15680
 #endif
-#define DEBUG
+// #define DEBUG
 typedef float dType;
 typedef int BOOL;
 //////////////////////////////////////////////////////////////////////
@@ -369,20 +369,40 @@ dType fmCache[2][BUFFER_SIZE];
       param->outputWidth, widthCounter)
 
 #define print2D(fm, height, width)                                             \
-  printf("\n\n");                                                              \
+  printf("\n");                                                                \
   for (int i = 0; i < height; i++) {                                           \
     for (int j = 0; j < width; j++) {                                          \
       printf("%.2f,", fm[i * width + j]);                                      \
     }                                                                          \
     printf("\n");                                                              \
   }                                                                            \
-  printf("\n\n");
+  printf("\n");
+
+#define NOP printf("")
+#define SOLID_LINE printf("==================================================\n");
+#define DOTTED_LINE printf("--------------------------------------------------\n");
+
 
 #ifdef DEBUG
-#define DEBUG_PRINT(type) printf("Global ID %d - %s Layer, phase = %d\n", GLOBAL_ID, type, phase[0])
+#define DEBUG_PRINT_INPUT                                                      \
+  printf("input:\n");                                                          \
+  print2D(readFmBuffer, param->inputHeight, param->inputWidth);                \
+  DOTTED_LINE
+#define DEBUG_PRINT_INFO(type)                                                 \
+  printf("Global ID %d -" #type " Layer, phase = %d\n", GLOBAL_ID, phase[0])
+#define DEBUG_PRINT_OUTPUT                                                     \
+  printf("output:\n");                                                         \
+  print2D(writeFmBuffer, param->outputHeight, param->outputWidth);             \
+  SOLID_LINE
 #else
-#define DEBUG_PRINT(type) printf("");
+#define DEBUG_PRINT_INPUT NOP
+#define DEBUG_PRINT_INFO(type) NOP
+#define DEBUG_PRINT_OUTPUT NOP
 #endif
+
+#define DEBUG_PRINT_DATA                                                       \
+  DEBUG_PRINT_INPUT;                                                           \
+  DEBUG_PRINT_OUTPUT
 
 /**
  * [dataLayer
@@ -397,12 +417,13 @@ dType fmCache[2][BUFFER_SIZE];
 __kernel void dataLayer(__global dType *inputFeatureMap,
                         __global dType *outputFeatureMap,
                         __global NetParam *param, __global BOOL *phase) {
-  DEBUG_PRINT("dataLayer");
+  DEBUG_PRINT_INFO("dataLayer");
   // printf("Global Size = %d, Global id %d in data\n", GLOBAL_SIZE, GLOBAL_ID);
   // writeFmBuffer -> ==1, phase = 0, so we write into fmCache[0]
   LOAD_DATA_SCALE(inputFeatureMap, writeFmBuffer, param->inputTotalDataNum,
                   GLOBAL_ID, GLOBAL_SIZE, param->scale);
   // print2D(writeFmBuffer, 28, 28);
+  DEBUG_PRINT_DATA;
 }
 
 /**
@@ -417,8 +438,9 @@ __kernel void dataLayer(__global dType *inputFeatureMap,
 __kernel void paddingLayer(__global dType *inputFeatureMap,
                            __global dType *outputFeatureMap,
                            __global NetParam *param, __global BOOL *phase) {
-  DEBUG_PRINT("paddingLayer");
-  // printf("phase = %d, writeBuffer choose %d, read Buffer Choose %d\n", phase[0], phase==1, phase==0);
+  DEBUG_PRINT_INFO("paddingLayer");
+  // printf("phase = %d, writeBuffer choose %d, read Buffer Choose %d\n",
+  // phase[0], phase==1, phase==0);
   // if (param->inputWidth == 28) {
   //   printf("before readFmBuffer");
   //   print2D(readFmBuffer, 28, 28);
@@ -436,6 +458,7 @@ __kernel void paddingLayer(__global dType *inputFeatureMap,
   //   printf("after writeFmBuffer, should have value");
   //   print2D(writeFmBuffer, 32, 32);
   // }
+  DEBUG_PRINT_DATA;
 }
 
 /**
@@ -449,7 +472,7 @@ __kernel void paddingLayer(__global dType *inputFeatureMap,
 __kernel void poolingLayer(__global dType *inputFeatureMap,
                            __global dType *outputFeatureMap,
                            __global NetParam *param, __global BOOL *phase) {
-  DEBUG_PRINT("poolingLayer");
+  DEBUG_PRINT_INFO("poolingLayer");
   __private dType maxValue, _temp;
   EASY_WORK_ITEM_3D_OUTPUT_BEGIN(channelCounter, heightCounter, widthCounter);
   maxValue = ELM(readFmBuffer, channelCounter, param->inputHeight,
@@ -464,6 +487,7 @@ __kernel void poolingLayer(__global dType *inputFeatureMap,
     }
   OUTPUT_ELM = maxValue;
   EASY_WORK_ITEM_3D_OUTPUT_END(channelCounter, heightCounter, widthCounter);
+  DEBUG_PRINT_DATA;
 }
 
 /**
@@ -478,10 +502,11 @@ __kernel void poolingLayer(__global dType *inputFeatureMap,
 __kernel void reluLayer(__global dType *inputFeatureMap,
                         __global dType *outputFeatureMap,
                         __global NetParam *param, __global BOOL *phase) {
-  DEBUG_PRINT("reluLayer");
+  DEBUG_PRINT_INFO("reluLayer");
   WORK_ITEM_BEGIN(reluCounter, param->inputTotalDataNum, GLOBAL_ID)
   writeFmBuffer[reluCounter] = RELU(readFmBuffer[reluCounter]);
   WORK_ITEM_END(reluCounter, GLOBAL_SIZE)
+  DEBUG_PRINT_DATA;
 }
 
 /**
@@ -498,7 +523,7 @@ __kernel void convLayer(__global dType *inputFeatureMap,
                         __global dType *outputFeatureMap,
                         __global dType *weight, __global dType *bias,
                         __global const NetParam *param, __global BOOL *phase) {
-  DEBUG_PRINT("convLayer");
+  DEBUG_PRINT_INFO("convLayer");
   __private int dilatedKernelSize =
       (param->kernelSize - 1) * param->dilation + 1;
   __private dType result;
@@ -521,6 +546,7 @@ __kernel void convLayer(__global dType *inputFeatureMap,
   result += bias[channelCounter];
   OUTPUT_ELM = result;
   EASY_WORK_ITEM_3D_OUTPUT_END(channelCounter, heightCounter, widthCounter);
+  DEBUG_PRINT_DATA;
 }
 
 /**
@@ -536,7 +562,8 @@ __kernel void convLayer(__global dType *inputFeatureMap,
 __kernel void outputLayer(__global dType *inputFeatureMap,
                           __global dType *outputFeatureMap,
                           __global NetParam *param, __global BOOL *phase) {
-  DEBUG_PRINT("convLayer");
+  DEBUG_PRINT_INFO("convLayer");
   LOAD_DATA(readFmBuffer, outputFeatureMap, param->inputTotalDataNum, GLOBAL_ID,
             GLOBAL_SIZE);
+  DEBUG_PRINT_DATA;
 }
