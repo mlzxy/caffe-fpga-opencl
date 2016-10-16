@@ -1,2 +1,45 @@
-${SDACCEL_GCC_BIN_PATH}
-${FPGA}
+# Environmental variable #
+FLOW := sw_emu # sw_emu, hw, hw_emu
+SDACCEL_HOME := $(shell echo $(SDACCEL_HOME))
+ROOT := $(shell echo $(CAFFE_FPGA_CL_HOME))
+GCC_HOME := $(shell echo $(SDACCEL_GCC_BIN_PATH))
+FPGA_DEVICE := $(shell echo $(FPGA))
+XILINX_SDACCEL := $(shell echo $(XILINX_SDACCEL))
+
+# Source code directory
+SOURCES := $(ROOT)/cpp/main.cpp $(ROOT)/cpp/helper.cpp  $(ROOT)/cpp/network.cpp   $(ROOT)/cpp/jsoncpp.cpp  $(ROOT)/cpp/custom.cpp
+kernelFile := $(ROOT)/kernels/net/net.cl
+
+
+# Important Compilation Flags, change it to your own machine specific paths #
+CPP := $(GCC_HOME)/g++
+CLCC:=xocc
+
+OPENCV_INC := $(XILINX_SDACCEL)/include
+OPENCV_LIB := $(XILINX_SDACCEL)/lnx64/tools/opencv
+OPENCL_INC := $(XILINX_SDACCEL)/runtime/include/1_2
+OPENCL_LIB := $(XILINX_OPENCL)/runtime/lib/x86_64
+
+LINK_FLAGS = -lxilinxopencl  -lopencv_core -lopencv_highgui -lopencv_imgproc -lavcodec -lavformat -lavutil -lswscale
+CXX_FLAGS := -Wall -Werror -fpermissive -Wno-missing-braces -Wmissing-field-initializers -DFPGA_DEVICE
+CLCC_FLAGS= --xdevice $(FPGA_DEVICE) -t $(FLOW)
+ifeq (${FLOW}, sw_emu)
+	CLCC_FLAGS += -g
+	CXX_FLAGS += -g
+endif
+OUTPUT = network_fpga.$(strip $(FLOW))
+OUTPUT_CL=fpga_binary.$(strip $(FLOW))
+
+
+build: host xclbin
+
+
+host:
+	$(CPP)  $(CXX_FLAGS) -I$(OPENCL_INC) -I$(OPENCV_INC) -L$(OPENCL_LIB) -L$(OPENCV_LIB)  $(LINK_FLAGS) $(SOURCES) -o $(OUTPUT).exe
+
+xclbin:
+	$(CLCC) $(CLCC_FLAGS) -o $(OUTPUT_CL).xclbin  $(kernelFile)
+
+
+clean:
+	rm -rf *.exe *.o  *.xclbin  *.dir

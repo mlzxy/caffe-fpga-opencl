@@ -1,1 +1,30 @@
-#TODO
+# Environmental variable #
+ROOT := $(shell echo $(CAFFE_FPGA_CL_HOME))
+
+# Source code directory
+SOURCES := $(ROOT)/cpp/main.cpp $(ROOT)/cpp/helper.cpp   $(ROOT)/cpp/network.cpp   $(ROOT)/cpp/jsoncpp.cpp  $(ROOT)/cpp/custom.cpp
+kernelFile := $(ROOT)/kernels/net/net.cl
+
+
+# Important Library Paths #
+CPP := clang++
+OPENCV_HOME := /usr/local/Cellar/opencv/2.4.13
+OPENCV_INC := $(OPENCV_HOME)/include
+OPENCV_LIB := $(OPENCV_HOME)/lib
+AV_LIB := /usr/local/lib
+
+LINK_FLAGS := -lopencv_core -lopencv_highgui -lopencv_imgproc -lavcodec -lavformat -lavutil -lswscale
+CXX_FLAGS := -Wall -Werror -fpermissive -Wno-missing-braces -Wmissing-field-initializers
+OUTPUT := network_cpu
+
+.PHONY: all
+
+all: exe
+
+exe:
+	$(CPP) $(CXX_FLAGS) -I$(OPENCV_INC) -L$(OPENCV_LIB)   -L$(AV_LIB)  $(LINK_FLAGS) $(SOURCES) -o $(OUTPUT).exe -framework OpenCL
+run:
+	./$(OUTPUT).exe -f $(ROOT)/kernels/net/net.cl  -k dataLayer,outputLayer,convLayer,paddingLayer,reluLayer,poolingLayer    -n $(ROOT)/convertor/output/mnist.json  -d cpu   -v 12
+
+clean:
+	rm -rf *.exe *.o

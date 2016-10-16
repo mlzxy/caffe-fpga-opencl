@@ -1,11 +1,6 @@
-//
-// Created by 张鑫语 on 9/24/16.
-//
-
 #include "custom.h"
 #include "fpganet.h"
 #include "./other/mnist_data.h"
-
 
 
 bool run(cmdArg arg, oclHardware hardware, oclSoftware software) {

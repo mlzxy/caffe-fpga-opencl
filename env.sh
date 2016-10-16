@@ -5,7 +5,7 @@ export FPGA=xilinx:adm-pcie-ku3:2ddr-xpr:3.1
 export SDACCEL_HOME=${HOME}/Applications/SDAccel/SDAccel/2016.2
 
 
-export CAFFE_FPGA_CL_HOME="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+export CAFFE_FPGA_CL_HOME="$(exec 2>/dev/null;cd -- $(dirname "$0"); unset PWD; /usr/bin/pwd || /bin/pwd || pwd)"
 export SDACCEL_GCC_BIN_PATH=${SDACCEL_HOME}/lnx64/tools/gcc/bin
 
 function test_pcie_fpga(){
@@ -50,4 +50,3 @@ function convert_net(){
     # make sure you install the correct dependencies
     python2.7 ${ROOT}/convertor/src/convert.py  -m ${ROOT}/convertor/data/${1}/model.caffemodel  -p ${ROOT}/convertor/data/${1}/train.prototxt  -o ${ROOT}/convertor/output  -n ${1}
 }
-

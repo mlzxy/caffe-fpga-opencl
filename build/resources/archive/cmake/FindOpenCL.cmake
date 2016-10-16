@@ -25,6 +25,7 @@ IF (APPLE)
     ELSE ()
         FIND_LIBRARY(OPENCL_LIBRARIES OpenCL DOC "OpenCL lib for OSX")
     ENDIF ()
+    
 
     # IF OpenCL_INCPATH is given use it and find for CL/cl.h and OpenCL/cl.h do not try to find default paths
     IF (DEFINED ENV{OpenCL_INCPATH})

@@ -382,7 +382,7 @@ dType fmCache[2][BUFFER_SIZE];
 
 #ifdef DEBUG
 #define DEBUG_PRINT_INFO(type)                                                 \
-  printf("From Hardware: Global ID %d -" #type " Layer, phase = %d\n",         \
+  printf("From Hardware: Global ID %d " #type " Layer, phase = %d\n",         \
          GLOBAL_ID, phase[0])
 #define DEBUG_DUMP_DATA_TO_CPU                                                 \
   LOAD_DATA(writeFmBuffer, outputFeatureMap, param->outputTotalDataNum,        \

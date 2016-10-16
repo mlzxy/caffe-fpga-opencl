@@ -22,6 +22,6 @@ set(SOURCE_FILES cpp/main.cpp cpp/helper.cpp  cpp/fpganet.h cpp/network.cpp cpp/
         cpp/custom.cpp   cpp/other/mnist_data.h cpp/net_enum.h)
 add_executable(opencl_learning ${SOURCE_FILES})
 
-#MESSAGE(STATUS ${OPENCL_LIBRARIES})
+MESSAGE(STATUS ${OPENCL_LIBRARIES})
 ## Linking
 target_link_libraries( opencl_learning ${OPENCL_LIBRARIES}  ${OpenCV_LIBS})

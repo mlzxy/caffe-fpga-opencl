@@ -407,7 +407,6 @@ cmdArg parseCmdArg(int argc, char **argv) {
 
     int ch;
     // must pass -n like short argument, but not --network
-    printTitle("Parsing Argument");
     bool kernelProvided = false, kernelFileProvided = false, networkProvided = false;
     int ocl_version;
     while ((ch = getopt_long(argc, argv, "d:k:f:h:i:n:p:r:l:v:", long_options, NULL)) !=
@@ -485,6 +484,7 @@ cmdArg parseCmdArg(int argc, char **argv) {
                 exit(1);
         }
     }
+
     if (!kernelFileProvided) {
         ERROR_LOG << "Kernel Source/Binary File is not provided, please use -f" << endl;
     }
@@ -494,6 +494,7 @@ cmdArg parseCmdArg(int argc, char **argv) {
     if (!networkProvided) {
         ERROR_LOG << "Network File is not provided, please use -n" << endl;
     }
+    printTitle("Parsing Argument");
     printArgument(arg);
     return arg;
 }
