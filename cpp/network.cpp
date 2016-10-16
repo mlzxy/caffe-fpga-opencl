@@ -1,7 +1,6 @@
 #include "network.h"
 #include "fpganet.h"
 
-
 WeightData createWeightData(Json::Value data) {
   WeightData learnedParam;
   learnedParam.weight_dim_num = data["weight"]["num_dim"].asInt();
