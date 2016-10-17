@@ -40,9 +40,15 @@ function gpu_env() {
     # this may differ for each machine, so take care and modify to your own.
 	export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/opt/lib:/usr/local/lib:/usr/lib64/nvidia/
 }
+##${SDACCEL_HOME}/lib/lnx64.o:
+function fpga_hw_env(){
+	export LD_LIBRARY_PATH=${SDACCEL_HOME}/lnx64/tools/opencv
+	source ${XILINX_OPENCL}/setup.sh
+}
 
-function fpga_env(){
-	export LD_LIBRARY_PATH=${SDACCEL_HOME}/lib/lnx64.o:${XILINX_OPENCL}/runtime/lib/x86_64/:${SDACCEL_HOME}/runtime/lib/x86_64:${SDACCEL_HOME}/lnx64/tools/opencv
+##
+function fpga_sw_env(){
+	export LD_LIBRARY_PATH=${SDACCEL_HOME}/lnx64/tools/opencv:${SDACCEL_HOME}/runtime/lib/x86_64:${SDACCEL_HOME}/lib/lnx64.o
 }
 
 function convert_net(){

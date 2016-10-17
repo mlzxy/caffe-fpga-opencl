@@ -1,5 +1,3 @@
-# SDAccel command script
-set projectName "net"
 ## cpu
 set flow "cpu"
 set networkJSON "convertor/output/mnist.json"
@@ -10,12 +8,12 @@ set root "../../"
 set absoluteRoot "/home/xy0/Dropbox/Centos_WorkSpace/OpenCL/C++_Version/"
 set networkFullPath "${absoluteRoot}${networkJSON}"
 set device "xilinx:adm-pcie-ku3:2ddr-xpr:3.1"
-set solutionName "${projectName}_board_compilation_solution"
-set cppList [list "cpp/main.cpp" "cpp/helper.cpp" "cpp/jsoncpp.cpp" "cpp/network.cpp"  "cpp/RunOpenCL/${projectName}/${projectName}.cpp"]
-set hList [list "cpp/helper.h" "cpp/json/json.h" "cpp/fpganet.h" "cpp/custom.h" "cpp/network.h"  "cpp/json/json-forwards.h" "cpp/RunOpenCL/${projectName}/${projectName}.h"   "cpp/RunOpenCL/${projectName}/mnist_data.h"]
+set solutionName "network_fpga"
+set cppList [list "cpp/main.cpp" "cpp/helper.cpp" "cpp/jsoncpp.cpp" "cpp/network.cpp"  "cpp/custom.cpp"]
+set hList [list "cpp/helper.h" "cpp/json/json.h" "cpp/fpganet.h" "cpp/custom.h" "cpp/network.h"  "cpp/json/json-forwards.h"  "cpp/other/mnist_data.h" "cpp/net_enum.h"]
 
 set kernelNameList {"convLayer" "reluLayer" "dataLayer" "poolingLayer" "paddingLayer" "outputLayer"}
-set kernelFile "kernels/${projectName}/${projectName}.cl"
+set kernelFile "kernels/net/net.cl"
 set containerName "bcontainer"
 set region "OCL_REGION_0"
 set cxxFlags "-g -O0 -std=c++0x -I$::env(PWD) -I$::env(XILINX_SDACCEL)/include -L$::env(XILINX_SDACCEL)/lnx64/tools/opencv -lopencv_core -lopencv_highgui -lopencv_imgproc -lavcodec -lavformat -lavutil -lswscale"
@@ -24,7 +22,7 @@ set xoccFlags ""
 
 set kernelNameString  [join $kernelNameList ","]
 puts "Kernels: $kernelNameString"
-set commandLineArgument "-f ${containerName}.xclbin -k ${kernelNameString} -d fpga  -n ${networkFullPath}"
+set commandLineArgument "-f ${containerName}.xclbin -k ${kernelNameString} -d fpga  -n ${networkFullPath} -v 20 -l debug"
 
 # puts ${cxxFlags}
 
@@ -67,6 +65,7 @@ compile_emulation -flow $flow -opencl_binary [get_opencl_binary ${containerName}
 
 # Generate the system estimate report
 # report_estimate
+
 
 # Run the design in CPU emulation mode
 run_emulation -flow $flow -args "${commandLineArgument}"
