@@ -38,7 +38,7 @@ function cpu_env(){
 
 function gpu_env() {
     # this may differ for each machine, so take care and modify to your own.
-	export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/opt/lib:/usr/local/lib
+	export LD_LIBRARY_PATH=/usr/local/cuda/lib64:/opt/lib:/usr/local/lib:/usr/lib64/nvidia/
 }
 
 function fpga_env(){

@@ -6,6 +6,7 @@ SOURCES := $(ROOT)/cpp/main.cpp $(ROOT)/cpp/helper.cpp  $(ROOT)/cpp/network.cpp 
 kernelFile := $(ROOT)/kernels/net/net.cl
 
 # Important Library Paths, change it to your own machine specific paths #
+# you need to follow http://superuser.com/a/1027865 to upgrade your g++ in centos6
 CPP := g++
 CUDA := /usr/local/cuda
 
@@ -16,7 +17,7 @@ OPENCV_LIB := /opt/lib
 AV_LIB := /usr/local/lib
 
 LINK_FLAGS := -lopencv_core -lopencv_highgui -lopencv_imgproc -lavcodec -lavformat -lavutil -lswscale -lOpenCL
-CXX_FLAGS := -Wall -Werror -fpermissive -Wno-missing-braces -Wmissing-field-initializers
+CXX_FLAGS := -std=c++11  -Wall -Werror -fpermissive -Wno-missing-braces -Wno-sign-compare -Wmissing-field-initializers
 OUTPUT := network_gpu
 
 
@@ -29,3 +30,6 @@ exe:
 
 clean:
 	rm -rf *.exe *.o
+
+run:
+	./$(OUTPUT).exe -f $(ROOT)/kernels/net/net.cl  -k dataLayer,outputLayer,convLayer,paddingLayer,reluLayer,poolingLayer    -n $(ROOT)/convertor/output/mnist.json  -d gpu   -v 12  -p "NVIDIA CUDA"
