@@ -385,8 +385,7 @@ cmdArg parseCmdArg(int argc, char **argv) {
     cmdArg arg;
     strcpy(arg.platformName, DEFAULT_PLATFORM);
     arg.deviceID = 0;
-    arg.networkLoggingLevel = NO;
-//    arg.debug = true;
+    arg.networkLoggingLevel = DEBUG;
     arg.openclVersion = OCL12;
     arg.deviceType = DEFAULT_DEVICE;
 
@@ -502,12 +501,38 @@ void printArgument(cmdArg arg){
     INFO_LOG<<"Kernel File        = "<<arg.mFileName<<endl;
     INFO_LOG<<"Kernels to compile = "<<arg.mKernelName<<endl;
     INFO_LOG<<"Network JSON File  = "<<arg.network<<endl;
-//    INFO_LOG<<"Debug              = "<<arg.debug<<endl;
-    INFO_LOG<<"Device Type        = "<<arg.deviceType<<endl;
+
+    string deviceType, openclVersion = "OpenCL 1.2", networkLoggingLevel = "debug";
+    switch(arg.deviceType){
+        case CL_DEVICE_TYPE_CPU:
+            deviceType = "CPU";
+            break;
+        case CL_DEVICE_TYPE_GPU:
+            deviceType = "GPU";
+            break;
+        case CL_DEVICE_TYPE_ACCELERATOR:
+            deviceType = "FPGA";
+            break;
+    }
+    if (arg.openclVersion == OCL20){
+        openclVersion = "OpenCL 2.0";
+    }
+    switch(arg.networkLoggingLevel){
+        case NO:
+            networkLoggingLevel = "no";
+            break;
+        case LAYER:
+            networkLoggingLevel = "layer";
+            break;
+        case NET:
+            networkLoggingLevel = "net";
+            break;
+    }
+    INFO_LOG<<"Device Type        = "<<deviceType<<endl;
     INFO_LOG<<"Device Id          = "<<arg.deviceID<<endl;
     INFO_LOG<<"Platform Name      = "<<arg.platformName<<endl;
-    INFO_LOG<<"OpenCL Version     = "<<arg.openclVersion<<endl;
-    INFO_LOG<<"Network Logging    = "<<arg.networkLoggingLevel<<endl;
+    INFO_LOG<<"OpenCL Version     = "<<openclVersion<<endl;
+    INFO_LOG<<"Network Logging    = "<<networkLoggingLevel<<endl;
     INFO_LOG<<"Extra Infomation   = "<<arg.info<<endl;
 }
 

@@ -38,6 +38,7 @@ using namespace std;
 #define ERR_CHECK(y)  if(err != CL_SUCCESS) {std::cout <<"ERROR: From " <<y <<" -> " << clErrorCode(err) << "\n"; exit(1);} else{cout<<"DEBUG: "<<y<<" -> Success"<<endl; }
 #define DEBUG_LOG  cout<<"DEBUG: "
 #define INFO_LOG  cout<<"INFO: "
+#define WARN_LOG  cout<<"WARN: "
 #define ERROR_LOG  cout<<"ERROR: "
 #define SOLID_LINE cout<<"==========================================\n"
 #define DOTTED_LINE cout<<"------------------------------------------\n"
@@ -146,5 +147,3 @@ inline void printCLConstant(){
  */
 bool run(cmdArg arg, oclHardware hardware, oclSoftware software);
 #endif
-
-

@@ -405,7 +405,7 @@ dType fmCache[2][BUFFER_SIZE];
 __kernel void dataLayer(__global dType *inputFeatureMap,
                         __global dType *outputFeatureMap,
                         __global NetParam *param, __global BOOL *phase) {
-  DEBUG_PRINT_INFO("dataLayer");
+  // DEBUG_PRINT_INFO("dataLayer");
   LOAD_DATA_SCALE(inputFeatureMap, writeFmBuffer, param->inputTotalDataNum,
                   GLOBAL_ID, GLOBAL_SIZE, param->scale);
   DEBUG_DUMP_DATA_TO_CPU;
@@ -423,7 +423,7 @@ __kernel void dataLayer(__global dType *inputFeatureMap,
 __kernel void paddingLayer(__global dType *inputFeatureMap,
                            __global dType *outputFeatureMap,
                            __global NetParam *param, __global BOOL *phase) {
-  DEBUG_PRINT_INFO("paddingLayer");
+  // DEBUG_PRINT_INFO("paddingLayer");
   LOAD_DATA_PAD_ENSURE_ZERO(readFmBuffer, writeFmBuffer, param->outputChannel,
                             GLOBAL_SIZE_0, GLOBAL_ID_0, param->inputHeight,
                             param->outputHeight, GLOBAL_SIZE_1, GLOBAL_ID_1,
@@ -443,7 +443,7 @@ __kernel void paddingLayer(__global dType *inputFeatureMap,
 __kernel void poolingLayer(__global dType *inputFeatureMap,
                            __global dType *outputFeatureMap,
                            __global NetParam *param, __global BOOL *phase) {
-  DEBUG_PRINT_INFO("poolingLayer");
+  // DEBUG_PRINT_INFO("poolingLayer");
   __private dType maxValue, _temp;
   EASY_WORK_ITEM_3D_OUTPUT_BEGIN(channelCounter, heightCounter, widthCounter);
   maxValue = ELM(readFmBuffer, channelCounter, param->inputHeight,
@@ -473,7 +473,7 @@ __kernel void poolingLayer(__global dType *inputFeatureMap,
 __kernel void reluLayer(__global dType *inputFeatureMap,
                         __global dType *outputFeatureMap,
                         __global NetParam *param, __global BOOL *phase) {
-  DEBUG_PRINT_INFO("reluLayer");
+  // DEBUG_PRINT_INFO("reluLayer");
   WORK_ITEM_BEGIN(reluCounter, param->inputTotalDataNum, GLOBAL_ID)
   writeFmBuffer[reluCounter] = RELU(readFmBuffer[reluCounter]);
   WORK_ITEM_END(reluCounter, GLOBAL_SIZE)
@@ -494,7 +494,7 @@ __kernel void convLayer(__global dType *inputFeatureMap,
                         __global dType *outputFeatureMap,
                         __global dType *weight, __global dType *bias,
                         __global const NetParam *param, __global BOOL *phase) {
-  DEBUG_PRINT_INFO("convLayer");
+  // DEBUG_PRINT_INFO("convLayer");
   __private int dilatedKernelSize =
       (param->kernelSize - 1) * param->dilation + 1;
   __private dType result;
@@ -530,7 +530,7 @@ __kernel void convLayer(__global dType *inputFeatureMap,
 __kernel void outputLayer(__global dType *inputFeatureMap,
                           __global dType *outputFeatureMap,
                           __global NetParam *param, __global BOOL *phase) {
-  DEBUG_PRINT_INFO("outputLayer");
+  // DEBUG_PRINT_INFO("outputLayer");
   LOAD_DATA(readFmBuffer, outputFeatureMap, param->inputTotalDataNum, GLOBAL_ID,
             GLOBAL_SIZE);
 }

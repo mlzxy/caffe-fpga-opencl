@@ -44,8 +44,6 @@ NetParam createNetParam(Json::Value data) {
   return param;
 }
 
-
-
 Layer::Layer(Json::Value data) {
   string ts = data.get("type", "").asString();
   if (ts == "Convolution") {
@@ -99,8 +97,6 @@ Layer::~Layer() {
   delete learnedParam.weightShape;
   delete learnedParam.biasShape;
 }
-
-
 
 bool Layer::freeCLMemory() {
   cl_int err = CL_SUCCESS;
@@ -196,13 +192,13 @@ bool Layer::forward(oclHardware hardware, oclSoftware software,
                            outputSize * sizeof(dType), outputBuffer, 0, NULL,
                            NULL);
     CL_FINISH(hardware.mQueue);
-    if(log == DEBUG){
-        cout<<"Input: "<<endl;
-        print2D(inputBuffer, param.inputHeight, param.inputWidth);
-        DOTTED_LINE;
-        cout<<"Output: "<<endl;
-        print2D(outputBuffer, param.outputHeight, param.outputWidth);
-        SOLID_LINE;
+    if (log == DEBUG) {
+      cout << "Input: " << endl;
+      print2D(inputBuffer, param.inputHeight, param.inputWidth);
+      DOTTED_LINE;
+      cout << "Output: " << endl;
+      print2D(outputBuffer, param.outputHeight, param.outputWidth);
+      SOLID_LINE;
     }
     freeCLMemory();
   }
@@ -217,12 +213,45 @@ bool Layer::forward(oclHardware hardware, oclSoftware software,
 Net::Net(Json::Value data, cmdArg arg) {
   name = string(arg.network);
   mode = arg.openclVersion;
-  if (mode == OCL12) {
-      INFO_LOG<<"Building Network with Opencl 1.2"<<endl;
+  if (arg.networkLoggingLevel == DEBUG) {
+    INFO_LOG << "Because the network logging = DEBUG, enable feature map transfer from hardware "
+                "(you have to enable this when compiling your net.cl!)"
+                " and printing in each layer"
+             << endl;
+  } else {
+    if (mode == OCL12) {
+      INFO_LOG << "Building Network with OpenCL 1.2" << endl;
+    } else {
+      INFO_LOG << "Building Network with OpenCL 2.0, with memory optimization "
+                  "with pingpong buffer."
+               << endl;
+    }
   }
-  else {
-      INFO_LOG<<"Building Network with Opencl 2.0, with memory optimization with pingpong buffer."<<endl;
+  DOTTED_LINE;
+  WARN_LOG << "READ THIS!! \n"
+              "- If you build you net.cl kernel with / without DEBUG flags,"
+              " then you have to set -l debug / -l [no/net/layer]. \n"
+              "- If you build you net.cl with / without pingpong buffer,"
+              " then you have to run the program in (-v 12) / (-v "
+              "20) correspondingly. \n"
+              "Otherwise, mismatch will produce severe memory error. You machine may "
+              "SHUTDOWN itself,"
+              " and your FPGA may corrupt and need reconfiguration.\n"
+           << endl;
+  DOTTED_LINE;
+  char type;
+  cout<<"Hint: You could scroll up to check your argument section."<<endl;
+  do
+  {
+    cout<<"Do you want to continue? [y/n]" <<endl;
+    cin >> type;
   }
+  while( !cin.fail() && type!='y' && type!='n' );
+  if(type == 'n'){
+      cout<<"Goodbye."<<endl;
+      exit(1);
+  }
+
   num_layers = data["num_layers"].asInt();
   layers = new Layer *[num_layers];
   Layer *current = NULL;
@@ -272,7 +301,7 @@ bool Net::forward(oclHardware hardware, oclSoftware software, dType *data,
   return result;
 }
 
-Layer* Net::outputLayer() { return layers[num_layers - 1]; }
+Layer *Net::outputLayer() { return layers[num_layers - 1]; }
 
 void softmax(dType *input, dType *output, int size) {
   dType sum = 0;
@@ -288,7 +317,7 @@ void print2D(dType *fm, int height, int width) {
   cout << "\n\n";
   for (int i = 0; i < height; i++) {
     for (int j = 0; j < width; j++) {
-      cout <<std::fixed << std::setprecision(2)<< fm[i * width + j] << ",";
+      cout << std::fixed << std::setprecision(2) << fm[i * width + j] << ",";
     }
     cout << endl;
   }
