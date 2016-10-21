@@ -17,7 +17,7 @@ OPENCV_LIB := /opt/lib
 AV_LIB := /usr/local/lib
 
 LINK_FLAGS := -lopencv_core -lopencv_highgui -lopencv_imgproc -lavcodec -lavformat -lavutil -lswscale -lOpenCL
-CXX_FLAGS := -std=c++11  -Wall -Werror -fpermissive -Wno-missing-braces -Wno-sign-compare -Wmissing-field-initializers
+CXX_FLAGS := -std=c++11  -Wall -Werror -fpermissive -Wno-missing-braces -Wno-sign-compare -Wmissing-field-initializers -Wno-switch
 OUTPUT := network_gpu
 
 

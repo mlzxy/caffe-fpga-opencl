@@ -14,7 +14,7 @@ OPENCV_LIB := $(OPENCV_HOME)/lib
 AV_LIB := /usr/local/lib
 
 LINK_FLAGS := -lopencv_core -lopencv_highgui -lopencv_imgproc -lavcodec -lavformat -lavutil -lswscale
-CXX_FLAGS := -Wall -Werror -fpermissive -Wno-missing-braces -Wmissing-field-initializers
+CXX_FLAGS := -Wall -Werror -fpermissive -Wno-missing-braces -Wmissing-field-initializers -Wno-switch
 OUTPUT := network_cpu
 
 .PHONY: all
