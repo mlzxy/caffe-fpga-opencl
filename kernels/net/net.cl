@@ -315,7 +315,7 @@ typedef struct {
 #define writeFmBufferId phase[0] == 1
 
 #ifdef BUFFER_SIZE
-dType fmCache[2][BUFFER_SIZE];
+__global dType fmCache[2][BUFFER_SIZE];
 #define readFmBuffer fmCache[readFmBufferId]  // read==0
 #define writeFmBuffer fmCache[writeFmBufferId] // write==1
 #else
