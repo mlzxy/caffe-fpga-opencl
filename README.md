@@ -6,10 +6,11 @@ This project provides
 
 - Python Tool to convert your trained caffe model into JSON
 - C++ code that read in your JSON file and run it with OpenCL in:
-  - Support CPU in any machine with CMakeLists.txt
-  - Nvidia GPU with custom Makefile
-  - Xilinx FPGA with custom tcl building script (So it means to **run a caffe model on FPGA** 😎).
-  - (no altera support, but I assume it could be extended easily)
+  - `CMakeLists.txt` for cpu in any OS
+  - `Makefile` for mac CPU
+  - `Makefile` for Nvidia GPU
+  - `Tcl building script` for Xilinx FPGA
+  - (Sorry for no altera support right now, but I assume it could be extended easily)
 
 
 ## How to Use
@@ -23,7 +24,7 @@ Please read the [Optimization Documentation](doc/Optimization.md)
 
 ## Contribution
 
-If you want to contribute, please read the [Contribution Guide](doc/Contribution_Guide.md), example provided!
+If you want to contribute, please read the [Contribution Guide](doc/Contribution_Guide.md), example provided.
 
 
 ## Limitation
@@ -31,13 +32,23 @@ If you want to contribute, please read the [Contribution Guide](doc/Contribution
 This project is experimental at this moment, it has following limitations:
 
 - Current only support limited layer types
-  - Conv, Pooling, Relu
-- Don't support `mergeLayer`, `concatLayer` that accepts multiple inputs.
+  - Conv
+  - Pooling
+  - Relu
+- Don't support `mergeLayer`, `concatLayer` that accepts multiple inputs, although they can be added with some work.
 
 
 
-## Plan
+## TODO
 
-My recent plan is to convert the caffe model from this paper [Multi-Scale Context Aggregation by Dilated Convolutions](http://arxiv.org/abs/1511.07122) to FPGA, which implements a scene segmentation network leveraging dilated convolution.
+Not actively developing right now, but here are my thoughts in the top todo list.
 
-If everything works out, the conversion process should be smooth. *Dilated convolution is very interesting idea* to increase the receptive field of convolution (because you want larger field on top layers, since there is more abstract information than bottom), which also succeed in audio processing from [wavenet](https://deepmind.com/blog/wavenet-generative-model-raw-audio/) paper that google recently published.
+
+
+- [ ] Contact Xilinx Support/Work with others to solve the on-chip cache buffer.
+- [ ] Apply some optimizing attributes for benchmarking, which could be good examples for optimization.
+
+- [ ] Implement `mergeLayer/concatLayer`, then it will basically be able to handle arbitrary structure network.
+
+
+Besides above, I sincerely think this project could be used as an research basis for OpenCL FPGA design parameter tuning for deep learning application, which I am very interested in.
