@@ -30,7 +30,7 @@ To use the first one:
 To use the second one:
 
 1. use `-v 20`
-2. uncomment
+2. uncomment that line above.
 
 
 
@@ -49,4 +49,4 @@ More details in [xilinx sdaccel optimization document](https://www.xilinx.com/su
 
 ### Mathematical model
 
-Use some model to find the best pipeline/unroll parameters, this paper is a very good start: [Optimizing FPGA-based Accelerator Design for Deep Convolutional Neural Networks](http://dl.acm.org/citation.cfm?id=2689060). 
+Use some model to find the best pipeline/unroll parameters, this paper is a very good start: [Optimizing FPGA-based Accelerator Design for Deep Convolutional Neural Networks](http://dl.acm.org/citation.cfm?id=2689060).

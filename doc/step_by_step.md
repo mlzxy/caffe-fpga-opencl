@@ -1,5 +1,12 @@
 # Step by Step of a MNIST Demo
 
+## 0. clone the code
+
+```shell
+git clone https://github.com/BenBBear/caffe-fpga-opencl
+cd caffe-fpga-opencl
+```
+
 ## a. Train your own network
 
 ```shell
@@ -23,10 +30,10 @@ caffe train --solver=solver.prototxt
 cd ./convertor/src
 python convert.py  -m  ../data/mnist/model.caffemodel  -p  ../data/mnist/train.prototxt  -o  ../output  --name mnist
 
-# this will generate
-# - ../output/mnist.json
-# - ../output/mnist-config.json
 ```
+this will generate
+- [../output/mnist.json](../convertor/output/mnist.json)
+- [../output/mnist-config.json](../convertor/output/mnist-config.json)
 
 You only need the `mnist.json` afterwards, but the `mnist-config.json` is used to define `OpenCL globalSize/localSize` for each layer.
 

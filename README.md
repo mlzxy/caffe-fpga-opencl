@@ -43,7 +43,7 @@ This project is experimental at this moment, it has following (big) :broken_hear
 
     > Because you can't implement a kernel to do a half convolution :disappointed: and data transmission is per-kernel and controlled by API.
 
-    I am willing to listen to others' ideas.
+    I am willing to listen to your ideas.
 
 
 ## TODO

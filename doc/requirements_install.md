@@ -13,9 +13,9 @@ Install these softwares on
 - Some configuration Tips
     - Use that lame Centos 6.8, don't take a chance with the superb Centos 7. Otherwise, you may redo everything again :cry:
     - Use [Net install](https://www.if-not-true-then-false.com/2011/centos-6-netinstall-network-installation/) could save you from lots of trouble
-    - Connect the Xilinx USB Cable Pins to FPGA in the right way (or try both way)!  Make sure the **Green Light** on the cable driver is ON!
+    - Connect the Xilinx USB Cable Pins to FPGA in the correct way (or try both way)!  Make sure the **Green Light** on the cable driver is ON!
 
-    - Suggest **Windows Machine** to program the OpenCL Framework to FPGA through USB Cable! Because the Windows version driver of the Xilinx USB Cable is more stable.
+    - Recommend **Windows Machine** to program the OpenCL Framework to FPGA through USB Cable! Because the Windows version driver of the Xilinx USB Cable is more stable.
 
     - Install the **right kernel source**!
         - Use `yum install kernel-devel` may install the wrong one! Centos 6.8 seems to be ambiguous with kernel source package versioning.
@@ -38,13 +38,13 @@ Install these softwares on
     ```
 
 
-## Host Machine: Linux `Centos 6.8` Machine
+## Host Machine: Linux `Centos 6.8` OS
 
 As stated above, for the host machine.
 
 
 
-## Host Machine: If you want to Run it on GPU
+## Host Machine: Cuda, If you want to Run it on GPU
 
 
 Install Nvidia GPU OpenCL Environment (guide online available)
