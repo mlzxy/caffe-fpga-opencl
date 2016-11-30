@@ -39,6 +39,11 @@ This project is experimental at this moment, it has following (big) :broken_hear
   - Relu
 - Don't support `mergeLayer`, `concatLayer` that accepts multiple inputs, although they can be added with some work.
 
+- The on-chip buffer size has to be the maximum feature map size among all layers, which is not efficient at all. But it's difficult to do further trick on memory transfer under the FPGA OpenCL framework.
+
+    > Because you can't implement a kernel to do a half convolution :disappointed: and data transmission is per-kernel and controlled by API.
+
+    I am willing to listen to others' ideas.
 
 
 ## TODO
@@ -48,8 +53,5 @@ Here are some of my thoughts in the top todo list.
 
 - [ ] Contact Xilinx Support/Work with others to solve the on-chip cache buffer.
 - [ ] Apply some optimizing attributes for benchmarking, which could be good examples for optimization.
-
 - [ ] Implement `mergeLayer/concatLayer`, then it will basically be able to handle arbitrary structure network.
-
-
-- [ ] Besides above, this project is good for an research basis for OpenCL FPGA design parameter tuning for neural network application, which I am very interested in and willing to dig in :smiley:
+- [ ] This project may be useful for an research about OpenCL FPGA design parameter tuning for neural network application, which is worthy to dig in :smiley:

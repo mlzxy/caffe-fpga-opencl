@@ -93,7 +93,6 @@ typedef struct cmdArg{
     char platformName[1024];
     int  deviceID;
     char network[1024];
-//    bool debug;
     NetLogging networkLoggingLevel;
     OpenCLVersion  openclVersion;
     char info[1024]; //custom information
