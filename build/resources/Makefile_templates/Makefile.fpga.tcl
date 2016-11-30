@@ -22,7 +22,7 @@ set xoccFlags ""
 
 set kernelNameString  [join $kernelNameList ","]
 puts "Kernels: $kernelNameString"
-set commandLineArgument "-f ${containerName}.xclbin -k ${kernelNameString} -d fpga  -n ${networkFullPath} -v 20 -l debug"
+set commandLineArgument "-f ${containerName}.xclbin -k ${kernelNameString} -d fpga  -n ${networkFullPath} -v 20 -l layer  -i 30"
 
 # puts ${cxxFlags}
 

@@ -1,5 +1,3 @@
-[Notice: I am working on my master thesis, not able to respond for this project actively.](doc/Notice.md)
-
 # Caffe OpenCL FPGA
 
 This project provides
@@ -13,23 +11,27 @@ This project provides
   - (Sorry for no altera support right now, but I assume it could be extended easily)
 
 
-## How to Use
+Send an issue if you have any problems, or email me if you want to collaborate.
 
-Please read the [Documentation](doc/Usage.md).
+#### How to Use
 
+Here is a brief [intro & example](doc/usage.md).  
 
-## How to Optimize
+#### How to Optimize
 
-Please read the [Optimization Documentation](doc/Optimization.md)
+[Some notes](doc/optimization.md)
 
-## Contribution
+#### How to Contribute
 
-If you want to contribute, please read the [Contribution Guide](doc/Contribution_Guide.md), example provided.
+[Some notes](doc/code_structure_explain.md) explaining this code base structure, which is helpful to you :smile: And two "how to add new feature" provided
+
+- [How to add new layer](doc/how_to_add_new_layer.md)
+- [How to support multiple branch network](doc/how_to_support_multiple_branches_network.md)
 
 
 ## Limitation
 
-This project is experimental at this moment, it has following limitations:
+This project is experimental at this moment, it has following (big) :broken_heart: limitations:
 
 - Current only support limited layer types
   - Conv
@@ -41,8 +43,7 @@ This project is experimental at this moment, it has following limitations:
 
 ## TODO
 
-Not actively developing right now, but here are my thoughts in the top todo list.
-
+Here are some of my thoughts in the top todo list.
 
 
 - [ ] Contact Xilinx Support/Work with others to solve the on-chip cache buffer.
@@ -51,4 +52,4 @@ Not actively developing right now, but here are my thoughts in the top todo list
 - [ ] Implement `mergeLayer/concatLayer`, then it will basically be able to handle arbitrary structure network.
 
 
-Besides above, I sincerely think this project could be used as an research basis for OpenCL FPGA design parameter tuning for deep learning application, which I am very interested in.
+- [ ] Besides above, this project is good for an research basis for OpenCL FPGA design parameter tuning for neural network application, which I am very interested in and willing to dig in :smiley:

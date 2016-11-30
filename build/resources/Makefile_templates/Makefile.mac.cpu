@@ -24,7 +24,7 @@ all: exe
 exe:
 	$(CPP) $(CXX_FLAGS) -I$(OPENCV_INC) -L$(OPENCV_LIB)   -L$(AV_LIB)  $(LINK_FLAGS) $(SOURCES) -o $(OUTPUT).exe -framework OpenCL
 run:
-	./$(OUTPUT).exe -f $(ROOT)/kernels/net/net.cl  -k dataLayer,outputLayer,convLayer,paddingLayer,reluLayer,poolingLayer    -n $(ROOT)/convertor/output/mnist.json  -d cpu   -v 12
+	./$(OUTPUT).exe -f $(ROOT)/kernels/net/net.cl  -k dataLayer,outputLayer,convLayer,paddingLayer,reluLayer,poolingLayer    -n $(ROOT)/convertor/output/mnist.json  -d cpu   -v 12 -l layer  -i 30
 
 clean:
 	rm -rf *.exe *.o

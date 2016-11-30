@@ -12,7 +12,7 @@ def configNet(net=None, config=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-n", "--net", help="network json file", default="")
-    parser.add_argument("-c", "--config", help="configuration yaml file", default="")
+    parser.add_argument("-c", "--config", help="configuration json file", default="")
     parser.add_argument("-o", "--output", help="output network json file", default="")
     args = parser.parse_args()
     if args.net == "" or args.config == "":

@@ -32,4 +32,4 @@ clean:
 	rm -rf *.exe *.o
 
 run:
-	./$(OUTPUT).exe -f $(ROOT)/kernels/net/net.cl  -k dataLayer,outputLayer,convLayer,paddingLayer,reluLayer,poolingLayer    -n $(ROOT)/convertor/output/mnist.json  -d gpu   -v 12  -p "NVIDIA CUDA"
+	./$(OUTPUT).exe -f $(ROOT)/kernels/net/net.cl  -k dataLayer,outputLayer,convLayer,paddingLayer,reluLayer,poolingLayer    -n $(ROOT)/convertor/output/mnist.json  -d gpu   -v 12  -p "NVIDIA CUDA" -l layer  -i 30
