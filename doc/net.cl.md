@@ -1,4 +1,4 @@
-## Source Structure
+# Source Structure
 
 ```shell
 └── net
@@ -6,31 +6,33 @@
 ```
 
 
-### Configuration Macro
+## Configuration Macro
+
+1. Buffer Size, if use on chip buffer, it should be the largest buffer needed for all those layers
+    ```cpp
+    #define BUFFER_SIZE 15680
+    ```
+
+2. whether
+    - print information during execution
+    - transfer feature map back to host memory even cache
+    ```cpp
+    #define DEBUG
+    ```
+
+3. Data type
+    ```cpp
+    // Data type for weight/bias/feature map
+    typedef float dType;
+
+    // Data type for Bool
+    typedef int BOOL;
+    ```
 
 
-```cpp
-// Buffer Size, if use on chip buffer,
-// should be the largest buffer needed
-// for all those layers
-#define BUFFER_SIZE 15680
+## On chip buffer Implementation
 
-
-// whether
-// - print information during execution
-// - transfer feature map back to host memory even cache
-//   is used
-#define DEBUG
-
-// Data type for weight/bias/feature map
-typedef float dType;
-
-// Data type for Bool
-typedef int BOOL;
-```
-
-
-On chip buffer is implemented in this way:
+On chip buffer is implemented in this way, so it could be easily switched by the `BUFFER_SIZE` macro.  
 
 ```cpp
 #define readFmBufferId phase[0] == 0
@@ -45,9 +47,9 @@ global dType fmCache[2][BUFFER_SIZE];
 #define writeFmBuffer outputFeatureMap
 #endif
 ```
+`phase` is the ping pong id.
 
-
-### Some utility Macros
+## Some utility Macros
 
 They have doc inside the source code, here I just list them:
 
@@ -66,7 +68,7 @@ They have doc inside the source code, here I just list them:
 
 ## Kernel code
 
-All layers kernel code are based on above utility macros, and you will find the kernel code is very minimal because of the help from those macros.  For example, convLayer:
+All layers kernel code are based on above utility macros, and you will find the kernel code is very minimal because of the help from those macros.  For example, if you are familiar with [how 2d convolution works](http://cs231n.stanford.edu/slides/winter1516_lecture7.pdf), code belong will be very relevant and understandable. 
 
 
 ```OpenCL

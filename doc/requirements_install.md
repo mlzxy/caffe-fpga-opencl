@@ -12,8 +12,8 @@ Install these softwares on
 - [Official Downloading & Installing & Configuration guide](https://www.xilinx.com/support/documentation/sw_manuals/xilinx2015_4/ug1020-sdaccel-installation-guide.pdf)
 - Some configuration Tips
     - Use that lame Centos 6.8, don't take a chance with the superb Centos 7. Otherwise, you may redo everything again :cry:
-    - Use [Net install](https://www.if-not-true-then-false.com/2011/centos-6-netinstall-network-installation/) could save you from lots of trouble
-    - Connect the Xilinx USB Cable Pins to FPGA in the correct way (or try both way)!  Make sure the **Green Light** on the cable driver is ON!
+    - Use [Centos 6.8 Net install](https://www.if-not-true-then-false.com/2011/centos-6-netinstall-network-installation/) could save you from lots of trouble
+    - Connect the Xilinx USB Cable Pins to FPGA in the correct way (or try both way)!  Make sure the **Green Light** on the cable driver is ON! Otherwise, it will give wierd error message because of the wrong voltage. 
 
     - Recommend **Windows Machine** to program the OpenCL Framework to FPGA through USB Cable! Because the Windows version driver of the Xilinx USB Cable is more stable.
 

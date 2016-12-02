@@ -1,4 +1,4 @@
-## Source Structure
+# Source Structure
 
 ```shell
 ├── custom.cpp
@@ -28,7 +28,7 @@ The code consists of four "modules":
 
 ## Helper
 
-[helper.cpp](../cpp/helper.cpp) / [helper.h](../cpp/helper.h)
+[helper.cpp](../cpp/helper.cpp) / [helper.h](../cpp/helper.h) contains the important entries that wrap opencl api and parse commandline arguments.
 
 ```cpp
 typedef std::map<std::string, cl_kernel>::iterator itKernelMap;
@@ -96,7 +96,7 @@ the program will first call `runProgram`, which will
     - `Net` contains a linkedlist of `Layer` objects
     - `Layer` contains `NetParam`, `WeightData`, `LayerType` and other related objects for example opencl `cl_mem`.
     - `Net.forward` method is the entry point we use to call network, which is just a wrapper to call `Layer.forward` iteratively.
-    - `Layer.forward` is the very method that communicate with opencl kernel.
+    - `Layer.forward` is **the very method that really communicate with opencl kernel**.
         1. create `cl_buffer` for input/output feature map (if use on-chip cache, then the input size = 0 except input/output layer)
         2. enqueue `read/kernel exec/write buffer` commands into queue, which kernel to call is determined by `layerType`
         3. assign `current_layer.output_buffer` to `next_layer.input_buffer`
@@ -105,7 +105,11 @@ the program will first call `runProgram`, which will
 
 [custom.cpp](../cpp/custom.cpp) / [custom.h](../cpp/custom.h)
 
-The user callback function `bool (*RunOpenCL)(cmdArg arg, oclHardware hardware, oclSoftware software)` when command line argument is parsed, opencl environment is setup.  The default one does following things:
+The user callback function `bool (*RunOpenCL)(cmdArg arg, oclHardware hardware, oclSoftware software)` get executed when
+ - command line argument is parsed
+ - opencl environment is setup.  
+
+The default callback function in `custom.cpp` does these following things:
 
 1. load network json file
     ```cpp
@@ -144,9 +148,11 @@ int main(int argc, char** argv) {
 
 ### json
 
-Download from C++ JSON library https://github.com/open-source-parsers/jsoncpp
+Download from C++ JSON library https://github.com/open-source-parsers/jsoncpp.
 
 ### fpganet.h
+
+Just a more semantical wrapper.
 
 ```cpp
 #include "helper.h"
